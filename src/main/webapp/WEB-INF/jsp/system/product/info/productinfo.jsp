@@ -210,6 +210,7 @@ em {
 													</c:forEach>
 													<th>市场价格</th>
 													<th>价格</th>
+													<th>库存</th>
 													<th style='width:20%;'>操作</th>
 												</tr>
 												<c:forEach items="${proSpecInfoList }" var="psil">
@@ -225,10 +226,10 @@ em {
 														</c:forEach>
 														<td>
 															<input type="hidden" name="skus" value="${psil.id }">
-															<input type="hidden" name="inventorynumbers" value='1'>
 															<input type="text" style="width:80px;" name="marketPrices" class="form-control ck_price" value="${psil.marketPrice }" oninput="OnInput(event)" onpropertychange="OnPropChanged(event)">
 														</td>
 														<td><input type='text' style='width:80px;' name="prices" class='form-control ck_price' value="${psil.price }" oninput="OnInput(event)" onpropertychange="OnPropChanged(event)"></td>
+														<td><input type='text' style='width:80px;' name="inventorynumbers" class='form-control' value="${psil.inventorynumber }" oninput="CkOnInputNum(event)" onpropertychange="CkOnPropChangedNum(event)"></td>
 														<td><a onclick="delguige(this)" href='javascript:void(0)'> 删除</a></td>
 													</tr>
 												</c:forEach>
@@ -567,6 +568,30 @@ em {
         }
     }
 
+    function CkOnInputNum (event) {
+        var cur_v = event.target.value;
+		var cru_len = cur_v.length;
+		var cur_last_v = cur_v.substring((cru_len-1),cru_len);
+		var cur_except_last_v = cur_v.substring(0,(cru_len - 1));
+		var reg = /^\d$/;
+		if(!reg.test(cur_last_v)){
+            event.target.value = cur_except_last_v;
+		}
+    }
+    // Internet Explorer
+    function CkOnPropChangedNum (event) {
+        if (event.propertyName.toLowerCase () == "value") {
+            var cur_v = event.srcElement.value;
+			var cru_len = cur_v.length;
+			var cur_last_v = cur_v.substring((cru_len-1),cru_len);
+			var cur_except_last_v = cur_v.substring(0,(cru_len - 1));
+			var reg = /^\d$/;
+			if(!reg.test(cur_last_v)){
+                event.target.value = cur_except_last_v;
+			}
+        }
+    }
+
 	function changeProBasic() {
 		var vunit = $(".prodBasicsIds").find("option:selected").text().split(
 				"-")[1];
@@ -601,8 +626,9 @@ em {
 		    	prodSpecDetalHTMLSon += "<td class='th"+tid_t+" hidden'>"+specDetalSelHTML+"</td>";
 		    }
 		});
-		prodSpecDetalHTMLSon += "<td><input type='hidden' name='skus'><input type='hidden' name='inventorynumbers' value='1'><input type='text' style='width:80px;' name='marketPrices' class='form-control' oninput='OnInput(event)' onpropertychange='OnPropChanged(event)'></td>"
+		prodSpecDetalHTMLSon += "<td><input type='hidden' name='skus'><input type='text' style='width:80px;' name='marketPrices' class='form-control' oninput='OnInput(event)' onpropertychange='OnPropChanged(event)'></td>"
 								+"<td><input type='text' style='width:80px;' name='prices' class='form-control' oninput='OnInput(event)' onpropertychange='OnPropChanged(event)'></td>"
+								+"<td><input type='text' style='width:80px;' name=\"inventorynumbers\" class='form-control'  oninput=\"CkOnInputNum(event)\" onpropertychange=\"CkOnPropChangedNum(event)\"></td>"
 								+"<td><a onclick='delguige(this)' href='javascript:void(0)'> 删除</a></td></tr>";
 		
 		$("#prodSpec_tb").append(prodSpecDetalHTMLSon);
