@@ -229,7 +229,7 @@ em {
 															<input type="text" style="width:80px;" name="marketPrices" class="form-control ck_price" value="${psil.marketPrice }" oninput="OnInput(event)" onpropertychange="OnPropChanged(event)">
 														</td>
 														<td><input type='text' style='width:80px;' name="prices" class='form-control ck_price' value="${psil.price }" oninput="OnInput(event)" onpropertychange="OnPropChanged(event)"></td>
-														<td><input type='text' style='width:80px;' name="inventorynumbers" class='form-control' value="${psil.inventorynumber }" oninput="CkOnInputNum(event)" onpropertychange="CkOnPropChangedNum(event)"></td>
+														<td><input type='text' style='width:80px;'maxlength="8" name="inventorynumbers" class='form-control' value="${psil.inventorynumber }" oninput="CkOnInputNum(event)" onpropertychange="CkOnPropChangedNum(event)"></td>
 														<td><a onclick="delguige(this)" href='javascript:void(0)'> 删除</a></td>
 													</tr>
 												</c:forEach>
@@ -255,9 +255,18 @@ em {
 							</label>
 							<div class="col-md-4">
 								<input type="hidden" name="remark" value="1">
-								<input type="hidden" name="inventorynumber" value="1">
 								<input type="text" class="form-control"
 									value="${prodctInfo.price }" name="price" style="width: 150px;">元
+							</div>
+						</div>
+
+						<div class="form-group noguige_div hidden">
+							<label class="control-label col-md-3">库存： <span
+								class="required"> * </span>
+							</label>
+							<div class="col-md-4">
+								<input type="text" class="form-control" maxlength="8"
+									value="${prodctInfo.inventorynumber }" name="inventorynumber" style="width: 150px;" oninput="CkOnInputNum(event)" onpropertychange="CkOnPropChangedNum(event)">
 							</div>
 						</div>
 						
@@ -628,7 +637,7 @@ em {
 		});
 		prodSpecDetalHTMLSon += "<td><input type='hidden' name='skus'><input type='text' style='width:80px;' name='marketPrices' class='form-control' oninput='OnInput(event)' onpropertychange='OnPropChanged(event)'></td>"
 								+"<td><input type='text' style='width:80px;' name='prices' class='form-control' oninput='OnInput(event)' onpropertychange='OnPropChanged(event)'></td>"
-								+"<td><input type='text' style='width:80px;' name=\"inventorynumbers\" class='form-control'  oninput=\"CkOnInputNum(event)\" onpropertychange=\"CkOnPropChangedNum(event)\"></td>"
+								+"<td><input type='text' maxlength=\"8\" style='width:80px;' name=\"inventorynumbers\" class='form-control'  oninput=\"CkOnInputNum(event)\" onpropertychange=\"CkOnPropChangedNum(event)\"></td>"
 								+"<td><a onclick='delguige(this)' href='javascript:void(0)'> 删除</a></td></tr>";
 		
 		$("#prodSpec_tb").append(prodSpecDetalHTMLSon);

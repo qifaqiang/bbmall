@@ -239,4 +239,14 @@ id=#{id},spec_id=#{specId},value=#{value},price=#{price},inventorynumber=#{inven
 		(SELECT 0 as id,p.price,p.market_price,p.id as product_id,p.name as product_name,p.unit,0 as type from product p
 		where p.del_flag = 0 AND p.sell_status = 1 AND (p.is_specification = 0 or p.is_specification IS NULL) )
 	</select>
+
+	<select id="selectTotalInvcountByProid" parameterType="int" resultType="int">
+		SELECT
+		IFNULL(SUM(inventorynumber), 0) total
+		FROM
+		product_specification_info
+		WHERE
+		del_flag = 0
+		AND product_id = #{prodid}
+	</select>
 </mapper>

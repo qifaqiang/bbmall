@@ -267,7 +267,7 @@ public class IndexController extends BaseController {
 			HttpSession session) {
 		JSONObject json = new JSONObject();
 		List<Integer> canNotSaleProduct = productService
-				.getKuCunByProductIdsVsCompanyId(prodIds, companyId, null, null);
+				.getKuCunByProductIdsVsCompanyId(prodIds, null, null, null);
 		json.put(BaseConfig.RESCODE, "0");
 		json.put(BaseConfig.RESMESSAGE, "success");
 		json.put(BaseConfig.RESLIST, canNotSaleProduct);

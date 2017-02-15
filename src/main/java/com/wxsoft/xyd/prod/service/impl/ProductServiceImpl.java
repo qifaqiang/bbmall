@@ -51,8 +51,6 @@ public class ProductServiceImpl implements ProductService {
 	@Autowired
 	private ProductPackageMapper productPackageMapper;
 	@Autowired
-	private CompanyStockMapper companyStockMapper;
-	@Autowired
 	private ProductSpecificationInfoDetailMapper productSpecificationInfoDetailMapper;
 	@Autowired
 	private ProductSpecificationStockMapper productSpecificationStockMapper;
@@ -470,22 +468,23 @@ public class ProductServiceImpl implements ProductService {
 		List<Product> p = productMapper.getStockByProductId(prodId);// 临时获取所有商品
 		
 		if(null != p && p.size() > 0){
-			List<Map<String,Object>> prodStockList = new ArrayList<Map<String,Object>>();
-			ProductSpecificationStock pss = new ProductSpecificationStock();
-			pss.setCompanyId(companyId);
-			prodStockList = productSpecificationStockMapper.selectStockByClass(pss);//获取该基地的所有产品的库存信息
+//			ProductSpecificationStock pss = new ProductSpecificationStock();
+//			pss.setCompanyId(companyId);
+//			List<Map<String,Object>> prodStockList = productSpecificationStockMapper.selectStockByClass(pss);//获取该基地的所有产品的库存信息
 			for (Product product : p) {
-				if (product.getType() == 0) {// 普通商品
-					String prodId_t = product.getId()+"";
-					int cur_count = 0;
-					for (Map<String, Object> map : prodStockList) {
-						if(prodId_t.equals(String.valueOf(map.get("productId")))){
-							cur_count = Integer.parseInt(String.valueOf(map.get("inventorycount")));
-							break;
+				if (product.getType() == 0) {
+					// 普通商品
+					if ( 0 == product.getIsSpecification().intValue() ) {
+						//不启用规格
+						if(product.getInventorynumber() <= 0){
+							result.add(product.getId());
 						}
-					}
-					if(cur_count <= 0){
-						result.add(product.getId());
+					} else if ( 1 == product.getIsSpecification().intValue() ) {
+						//启用规格  根据商品ID 去规格表里面查询是否存在
+						int cur_count = productSpecificationInfoMapper.selectTotalInvcountByProid(product.getId());
+						if(cur_count <= 0){
+							result.add(product.getId());
+						}
 					}
 				}else{//礼盒包
 					ProductPackage pPack = new ProductPackage();
