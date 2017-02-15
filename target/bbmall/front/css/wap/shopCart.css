@@ -1,9 +1,0 @@
-body{padding-bottom: 0;}
-#w-header{background: #fca815;}
-.details h1{color: #fff;}
-.kill{background: #bbbbbb;border: 1px solid #bbbbbb;}
-.shopping{border-top: 1px solid #e5e5e5;}
-.w-noOrder{margin-top: 100px;text-align: center;color: #CCCCCC;}
-.w-noOrder .w-prompt{font-size: 30px;padding: 15px 0;}
-.w-noOrder .w-guide{font-size: 18px;padding: 10px 0;}
-.w-noOrder .w-randomBtn{font-size: 20px;padding: 12px 15px;border: 1px solid #CCCCCC;border-radius: 5px;color: #CCCCCC;background: #FFFFFF;margin: 20px 0;font-family: "Microsoft YaHei"}
