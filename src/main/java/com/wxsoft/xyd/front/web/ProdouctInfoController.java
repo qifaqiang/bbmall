@@ -224,25 +224,26 @@ public class ProdouctInfoController extends BaseController {
 			json.put(BaseConfig.RESCODE, "0");
 			json.put(BaseConfig.RESMESSAGE, "success");
 
-			Map<String, Object> SKU = new HashMap<String, Object>();
-			Map<String, Object> SKUAll = new HashMap<String, Object>();
+			Map<String, Object> SKU = new HashMap<>();
+			Map<String, Object> SKUAll = new HashMap<>();
 
-			Map<String, Object> Discount = new HashMap<String, Object>();
-			List<Object> DisInfoList = new ArrayList<Object>();
+			Map<String, Object> Discount = new HashMap<>();
+			List<Object> DisInfoList = new ArrayList<>();
 
-			Map<String, Object> lstSKUVal = new HashMap<String, Object>();
-			List<Object> lstSKUValList = new ArrayList<Object>();
-			Map<String, Object> lstProductJson = new HashMap<String, Object>();
-			List<Object> lstProductJsonList = new ArrayList<Object>();
+			Map<String, Object> lstSKUVal = new HashMap<>();
+			List<Object> lstSKUValList = new ArrayList<>();
+			Map<String, Object> lstProductJson = new HashMap<>();
+			List<Object> lstProductJsonList = new ArrayList<>();
 			CompanyStock csTemp = null;
 			
-			if (rplist.get("type").toString().equals("0")) {// 普通商品
-				List<ProductSpecification> prodSpecList = new ArrayList<ProductSpecification>();//该商品的主规格
-				List<ProductSpecificationDetail> prodSpecDetailList = new ArrayList<ProductSpecificationDetail>();//该商品的详细规格
-				List<Object> prodSpecInfoList = new ArrayList<Object>();//该规格的具体值包括价格、库存等
+			if (rplist.get("type").toString().equals("0")) {
+				// 普通商品
+				List<ProductSpecification> prodSpecList = new ArrayList<>();//该商品的主规格
+				List<ProductSpecificationDetail> prodSpecDetailList = new ArrayList<>();//该商品的详细规格
+				List<Object> prodSpecInfoList = new ArrayList<>();//该规格的具体值包括价格、库存等
 				
-				Set<String> mainSpecSet = new HashSet<String>();
-				Set<String> detalSpecSet = new HashSet<String>();
+				Set<String> mainSpecSet = new HashSet<>();
+				Set<String> detalSpecSet = new HashSet<>();
 				// 规格信息
 				ProductSpecificationInfo psi = new ProductSpecificationInfo();
 				psi.setProductId(prodId);
@@ -306,7 +307,8 @@ public class ProdouctInfoController extends BaseController {
 				json.put("prodSpecDetailList", prodSpecDetailList);
 				json.put("prodSpecInfoList", prodSpecInfoList);
 				
-			} else {// 礼盒商品
+			} else {
+				// 礼盒商品
 				ProductPackage pp = new ProductPackage();
 				pp.setProdId(prodId);
 				List<ProductPackage> pplist = productPackageService
@@ -334,74 +336,6 @@ public class ProdouctInfoController extends BaseController {
 						}
 					}
 				}
-				
-				
-				/**
-				StringBuffer sb = new StringBuffer();
-
-				List<Integer> tempCount = new ArrayList<Integer>();// 礼盒中每一个商品的最大数量
-				boolean canSale = true;
-				Map<String, Object> lstVal = null;
-				for (ProductPackage p1 : pplist) {
-					csTemp = new CompanyStock();
-					csTemp.setCompanyId(companyid);
-					csTemp.setProdBasicId(p1.getProdBaseicId());
-					csTemp = companyStockService.selectByCompanyStock(csTemp);// 获取礼盒中每一个字典的id对应的系统库存表
-
-					sb.append(
-							BaseConfig.productBasicMap
-									.get(p1.getProdBaseicId()).getName())
-							.append(":")
-							.append(p1.getInventorynumber())
-							.append(BaseConfig.productBasicMap.get(
-									p1.getProdBaseicId()).getUnit())
-							.append("+");
-
-					if (canSale
-							&& null != csTemp
-							&& (csTemp.getInventorynumber() - p1
-									.getInventorynumber()) >= 0) {// 基地商品库存不足
-						int count = csTemp.getInventorynumber()
-								/ p1.getInventorynumber();
-						// maxInventory += count;
-						tempCount.add(count);
-					} else {
-						tempCount = null;
-						canSale = false;
-					}
-				}
-				json.put("packageInfo",
-						sb.toString().substring(0, sb.toString().length() - 1));// 礼盒中商品信息
-
-				lstVal = new HashMap<String, Object>();
-				lstProductJson = new HashMap<String, Object>();
-				List<Object> lstValList = new ArrayList<Object>();
-				lstVal.put("key", prodId);
-				lstVal.put("val", "礼盒");
-
-				lstProductJson.put("key", prodId);
-				lstProductJson.put("price", rplist.get("price"));
-				lstProductJson.put("OriginalPrice", rplist.get("market_price"));
-				lstProductJson.put("id", prodId);
-				lstProductJsonList.add(lstProductJson);
-				lstValList.add(lstVal);
-				if (canSale) {
-					lstProductJson.put("inventory",
-							tempCount.size() > 0 ? Collections.min(tempCount)
-									: 0);
-					lstProductJson.put("BuyMaxNum",
-							tempCount.size() > 0 ? Collections.min(tempCount)
-									: 0);
-					maxInventory = tempCount.size() > 0 ? Collections
-							.min(tempCount) : 0;
-				} else {
-					lstProductJson.put("inventory", 0);
-					lstProductJson.put("BuyMaxNum", 0);
-				}
-
-				lstSKUVal.put("name", "规格");
-				lstSKUVal.put("lstVal", lstValList);
-				**/
 			}
 
 			// 促销信息

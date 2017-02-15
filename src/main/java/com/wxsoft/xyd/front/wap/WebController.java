@@ -39,7 +39,6 @@ public class WebController extends BaseController {
 	/**
 	 * 商品页面
 	 * 
-	 * @param session
 	 * @return
 	 */
 	@RequestMapping(value = "/productDetail")
@@ -53,7 +52,6 @@ public class WebController extends BaseController {
 	/**
 	 * 普通页面
 	 * 
-	 * @param session
 	 * @return
 	 */
 	@RequestMapping(value = "/{page}")
