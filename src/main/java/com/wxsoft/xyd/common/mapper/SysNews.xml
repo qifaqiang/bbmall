@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>  <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wxsoft.xyd.common.mapper.SysNewsMapper">
+	<resultMap type="SysNews" id="SysNewsMap">
+		<id property="id" column="id" />
+		<result property="id" column="id" />
+		<result property="title" column="title" />
+		<result property="content" column="content" />
+		<result property="addtime" column="addtime" />
+		<result property="catalogId" column="catalog_id" />
+	</resultMap>
+	<select id="selectByPrimaryKey" parameterType="Integer"
+		resultMap="SysNewsMap"><![CDATA[  SELECT id,title,content,addtime,catalog_id FROM sys_news tmp WHERE tmp.id = #{id} ]]>
+	</select>
+	<select id="selectBySysNews" parameterType="SysNews" resultMap="SysNewsMap">
+		SELECT id,title,content,addtime,catalog_id FROM sys_news tmp
+		<where>
+			<if test="id != null"> AND id = #{id} </if>
+			<if test="title !=null and title != ''"> AND title like '%${title}%' </if>
+			<if test="content != null"> AND content = #{content} </if>
+			<if test="addtime != null"> AND addtime = #{addtime} </if>
+			<if test="catalogId != null"> AND catalog_id = #{catalogId} </if>
+ 		</where>
+	</select>
+	<!-- <select id="listPageBySysNews" parameterType="SysNews"
+		resultMap="SysNewsMap">
+		SELECT a.id,a.title,a.content,a.addtime,a.catalog_id,a.name,b.name pname
+         FROM
+        (SELECT b.id,b.title,b.content,b.addtime,b.catalog_id ,a.name,a.pid FROM sys_news b left JOIN sys_news_catalog  a ON a.id=b.catalog_id) a
+        JOIN sys_news_catalog b
+        ON a.pid=b.id
+			<if test="id != null"> AND id = #{id} </if>
+			<if test="title !=null and title != ''"> AND a.title like '%${title}%' </if>
+			<if test="name !=null and name != ''"> AND ( a.name like '${name}' or b.name like '${name}') </if>
+ 		ORDER BY id DESC
+	</select> -->
+	<select id="listPageBySysNews" parameterType="SysNews"
+		resultMap="SysNewsMap">
+		SELECT b.id,b.title,b.content,b.addtime,b.catalog_id ,a.name,a.pid FROM sys_news b JOIN sys_news_catalog  a ON a.id=b.catalog_id
+			<if test="id != null"> AND id = #{id} </if>
+			<if test="title !=null and title != ''"> AND b.title like '%${title}%' </if>
+			<if test="name !=null and name != ''"> AND  a.name like '${name}' </if>
+ 		ORDER BY id DESC
+	</select>
+	<select id="getAllBySysNews" parameterType="SysNews" resultMap="SysNewsMap">
+		SELECT id,title,content,addtime,catalog_id from sys_news tmp
+		<where>
+			<if test="id != null"> AND id = #{id} </if>
+			<if test="title != null"> AND title = #{title} </if>
+			<if test="content != null"> AND content = #{content} </if>
+			<if test="addtime != null"> AND addtime = #{addtime} </if>
+			<if test="catalogId != null"> AND catalog_id = #{catalogId} </if>
+ 		</where>
+ 	    ORDER BY id DESC 
+	</select>
+	<insert id="insertSelective" parameterType="SysNews">
+		INSERT INTO sys_news
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">id,</if>
+			<if test="title != null">title,</if>
+			<if test="content != null">content,</if>
+			<if test="addtime != null">addtime,</if>
+			<if test="catalogId != null">catalog_id,</if>
+		</trim>
+		values
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">#{id},</if>
+			<if test="title != null">#{title},</if>
+			<if test="content != null">#{content},</if>
+			<if test="addtime != null">now(),</if>
+			<if test="catalogId != null">#{catalogId},</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="SysNews">
+		update sys_news
+		<set>
+			<if test="id != null">id=#{id},</if>
+			<if test="title != null">title=#{title},</if>
+			<if test="content != null">content=#{content},</if>
+			<if test="addtime != null">addtime=#{addtime},</if>
+			<if test="catalogId != null">catalog_id=#{catalogId},</if>
+		</set>
+		where id = #{id}
+	</update>
+	<delete id="deleteByPrimaryKey" parameterType="SysNews"><![CDATA[delete from sys_news where id=#{id}
+]]></delete>
+</mapper>

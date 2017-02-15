@@ -1,0 +1,57 @@
+@charset "utf-8";
+
+.helpCenterbreadNav{
+    height: 40px;
+    line-height: 40px;
+    color: #999999;
+    font-size: 14px;
+    padding-left: 20px;
+}
+.helpCenterbreadNav a{
+    color: #999999;
+}
+.bordere5{
+    border: 1px solid #e5e5e5;
+}
+.width958{
+    width: 958px;
+
+}
+.width918Padding{
+    width: 914px;
+    padding: 22px;
+    min-height: 800px;
+}
+.help-tit-l2 {
+    font-size: 14px;
+    color: #999;
+    margin-bottom: 15px;
+}
+.tabs-01 .help-tit-l2 {
+    color: #e70012;
+    font-family: "microsoft yahei";
+    margin-bottom: 15px;
+}
+.tabs-01 .help_list {
+    line-height: 35px;
+    font-size: 14px;
+    color: #999999;
+}
+.content .help_list li {
+    line-height: 35px;
+    font-size: 14px;
+}
+
+.content .help_list li a{
+    font-size: 14px;
+}
+.detailsHelp{
+    padding:50px 60px;
+}
+.detailsWord{
+    word-break: break-all;
+    word-wrap: break-word;
+    font-size: 14px;
+    line-height: 22px;
+
+}

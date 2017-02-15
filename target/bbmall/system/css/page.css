@@ -1,0 +1,58 @@
+@charset "utf-8";
+.page_and_btn {
+    background-color: #fafbfd;
+    bottom: 100px;
+    clear: both;
+    font-family: Microsoft Yahei,Arial,sans-serif;
+    font-size: 14px;
+    height: auto;
+    left: 0;
+    margin: 0;
+    overflow: hidden;
+    padding: 10px 0 0;
+    right: 0;
+    text-align: center;
+    width: 100%;
+}
+.page_and_btn .selected2, .page_and_btn input, .page_and_btn .pageinfo, .page_and_btn .selected, .page_and_btn .current, .page_and_btn ul li {
+    border: 1px solid #ccc;
+    cursor: pointer;
+    display: inline-block;
+    line-height: 25px;
+    padding: 0 10px;
+    text-align: center;
+}
+.page_and_btn input {
+    margin: 0 8px;
+}
+.page_and_btn .selected, .page_and_btn .current {
+    color: #ff0000;
+    font-weight: 600;
+}
+.page_and_btn ul {
+    float: right;
+    height: 28px;
+    list-style: outside none none;
+    margin: 0;
+    overflow: hidden;
+    padding: 0;
+    width: auto;
+}
+.page_and_btn ul li {
+    border: 1px solid #cccccc;
+    float: left;
+    margin: 0 2px;
+}
+.page_and_btn ul li a {
+    color: #333333;
+    text-decoration: none;
+}
+.page_and_btn ul li a, .pageinfo {
+    display: block;
+}
+.page_and_btn {
+    color: #555555;
+}
+.page_and_btn div {
+    float: left;
+}

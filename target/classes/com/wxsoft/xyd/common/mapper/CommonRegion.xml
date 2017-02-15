@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wxsoft.xyd.common.mapper.RegionMapper">
+
+	<resultMap type="Region"        id="regionResultMap">
+		<id column="regionid"       property="regionid"/>
+		<result column="regionname" property="regionname"/>
+		<result column="parentid"   property="parentid"/>
+		<result column="levels"     property="levels"/>
+		<result column="sn"         property="sn"/>
+		<result column="alphabetic" property="alphabetic"/>
+	</resultMap>
+
+	<!-- 查看所有省份信息 -->
+	<select id="listAllProvince" resultMap="regionResultMap">
+		select regionid, regionname, parentid, levels, sn, alphabetic from sys_region where levels = 1 order by regionid asc 
+	</select>
+	<!-- 根据省份编号查询地市信息 -->
+	<select id="listAllCityByProvinceId" parameterType="int" resultMap="regionResultMap">
+		select regionid, regionname, parentid, levels, sn, alphabetic from sys_region where parentid = #{provinceid} and levels = 2 order by regionid asc 
+	</select>
+	<!-- 根据地市编号查询地区信息 -->
+	<select id="listAllAreaByCityId" parameterType="int" resultMap="regionResultMap">
+		select regionid, regionname, parentid, levels, sn, alphabetic from sys_region where parentid = #{cityid} and levels = 3 order by regionid asc
+	</select>
+	<!-- 根据地市编号查询地区信息 -->
+	<select id="getByRegionId" parameterType="int" resultMap="regionResultMap">
+		select regionid, regionname, parentid, levels, sn, alphabetic from sys_region where regionid = #{regionid}
+	</select>
+	
+	<!-- 根据地市编号查询地区信息 -->
+	<select id="getRegionName" parameterType="int" resultType="String">
+		select regionname  from sys_region where regionid = #{regionid}
+	</select>
+	
+	<select id="getAlphabetic" parameterType="int" resultType="String">
+		select alphabetic  from sys_region where regionid = #{regionid}
+	</select>
+
+	<!-- 列表 -->
+	<select id="getlist" parameterType="Region" resultType="Region">
+		select regionid, regionname, parentid, levels, sn, alphabetic  from sys_region where 1=1 and parentid=#{parentid}
+	</select>
+
+	<select id="getById" parameterType="String" resultType="Region">
+		select regionid, regionname, parentid, levels, sn, alphabetic  from sys_region where regionid=#{regionid}
+	</select>
+</mapper>

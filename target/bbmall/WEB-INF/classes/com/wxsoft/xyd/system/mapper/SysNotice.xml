@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>  <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wxsoft.xyd.system.mapper.SysNoticeMapper">
+	<resultMap type="SysNotice" id="SysNoticeMap">
+		<id property="id" column="id" />
+		<result property="id" column="id" />
+		<result property="title" column="title" />
+		<result property="content" column="content" />
+		<result property="source" column="source" />
+		<result property="author" column="author" />
+		<result property="addtime" column="addtime" />
+		<result property="sortn" column="sortn" />
+		<result property="isVisable" column="is_visable" />
+	</resultMap>
+	<select id="selectByPrimaryKey" parameterType="Integer"
+		resultMap="SysNoticeMap"><![CDATA[  SELECT id,title,content,source,author,addtime,sortn,is_visable FROM sys_notice tmp WHERE tmp.id = #{id} ]]>
+	</select>
+	<!-- PC端得到公告列表分页 -->
+	<select id="listAjaxPageCoupons" parameterType="SysNotice"
+	resultMap="SysNoticeMap">
+	SELECT id,title,addtime,DATE_FORMAT(addtime,'%Y/%m/%d  %h:%i:%s') addtimeString,sortn,is_visable from
+		sys_notice tmp order by  addtime desc
+</select>
+	<select id="selectBySysNotice" parameterType="SysNotice"
+		resultMap="SysNoticeMap">
+		SELECT id,title,content,source,author,addtime,sortn,is_visable FROM
+		sys_notice tmp
+		<where>
+			<if test="id != null"> AND id = #{id} </if>
+			<if test="title != null"> AND title = #{title} </if>
+			<if test="content != null"> AND content = #{content} </if>
+			<if test="source != null"> AND source = #{source} </if>
+			<if test="author != null"> AND author = #{author} </if>
+			<if test="addtime != null"> AND addtime = #{addtime} </if>
+			<if test="sortn != null"> AND sortn = #{sortn} </if>
+			<if test="isVisable != null"> AND is_visable = #{isVisable} </if>
+		</where>
+	</select>
+	<select id="listPageBySysNotice" parameterType="SysNotice"
+		resultMap="SysNoticeMap">
+		SELECT id,title,content,source,author,addtime,DATE_FORMAT(addtime,'%Y/%m/%d  %h:%i:%s') addtimeString,sortn,is_visable from
+		sys_notice tmp
+		<where>
+			<if test="id != null"> AND id = #{id} </if>
+			<if test="title != null">title like CONCAT('%',#{title},'%') and </if>
+			<if test="content != null"> AND content = #{content} </if>
+			<if test="source != null"> AND source = #{source} </if>
+			<if test="author != null"> AND author = #{author} </if>
+			<if test="addtime != null"> AND addtime = #{addtime} </if>
+			<if test="sortn != null"> AND sortn = #{sortn} </if>
+			<if test="isVisable != null"> AND is_visable = #{isVisable} </if>
+		</where>
+		ORDER BY id DESC
+	</select>
+	<select id="getAllBySysNotice" parameterType="SysNotice"
+		resultType="map">
+		SELECT id,title from
+		sys_notice tmp ORDER BY id DESC
+	</select>
+	<insert id="insertSelective" parameterType="SysNotice">
+		INSERT INTO sys_notice
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">id,</if>
+			<if test="title != null">title,</if>
+			<if test="content != null">content,</if>
+			<if test="source != null">source,</if>
+			<if test="author != null">author,</if>
+			<if test="addtime != null">addtime,</if>
+			<if test="sortn != null">sortn,</if>
+			<if test="isVisable != null">is_visable,</if>
+		</trim>
+		values
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">#{id},</if>
+			<if test="title != null">#{title},</if>
+			<if test="content != null">#{content},</if>
+			<if test="source != null">#{source},</if>
+			<if test="author != null">#{author},</if>
+			<if test="addtime != null">#{addtime},</if>
+			<if test="sortn != null">#{sortn},</if>
+			<if test="isVisable != null">#{isVisable},</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="SysNotice">
+		update sys_notice
+		<set>
+			<if test="id != null">id=#{id},</if>
+			<if test="title != null">title=#{title},</if>
+			<if test="content != null">content=#{content},</if>
+			<if test="source != null">source=#{source},</if>
+			<if test="author != null">author=#{author},</if>
+			<if test="addtime != null">addtime=#{addtime},</if>
+			<if test="sortn != null">sortn=#{sortn},</if>
+			<if test="isVisable != null">is_visable=#{isVisable},</if>
+		</set>
+		where id = #{id}
+	</update>
+	<delete id="deleteByPrimaryKey" parameterType="SysNotice"><![CDATA[delete from sys_notice where id=#{id}
+]]></delete>
+</mapper>

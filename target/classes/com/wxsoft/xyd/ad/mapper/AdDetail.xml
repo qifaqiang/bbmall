@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8" ?>  <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wxsoft.xyd.ad.mapper.AdDetailMapper">
+	<resultMap type="AdDetail" id="AdDetailMap">
+		<id property="id" column="id" />
+		<result property="id" column="id" />
+		<result property="name" column="name" />
+		<result property="addtime" column="addtime" />
+		<result property="startTime" column="start_time" />
+		<result property="endTime" column="end_time" />
+		<result property="state" column="state" />
+		<result property="clickCount" column="click_count" />
+		<result property="type" column="type" />
+		<result property="picUrl" column="pic_url" />
+		<result property="showCount" column="show_count" />
+		<result property="url" column="url" />
+		<result property="usepicurl" column="usepicurl" />
+	</resultMap>
+	
+	<select id="getStockByDetailId" resultMap="AdDetailMap">
+		SELECT * FROM
+		ad_detail p
+		where
+		p.id in
+		<foreach item="item" index="index" collection="array" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+		order by p.id
+	</select>
+	<select id="selectByPrimaryKey" parameterType="Integer"
+		resultMap="AdDetailMap"><![CDATA[  SELECT id,name,addtime,start_time,end_time,state,click_count,type,pic_url,show_count,url,usepicurl FROM ad_detail tmp WHERE tmp.id = #{id} ]]>
+	</select>
+	<select id="selectByAdDetail" parameterType="AdDetail"
+		resultMap="AdDetailMap">
+		SELECT
+		id,name,addtime,start_time,end_time,state,click_count,type,pic_url,show_count,url,usepicurl
+		FROM ad_detail tmp
+		<where>
+			<if test="id != null"> AND id = #{id} </if>
+			<if test="name != null"> AND name = #{name} </if>
+			<if test="addtime != null"> AND addtime = #{addtime} </if>
+			<if test="startTime != null"> AND start_time = #{startTime} </if>
+			<if test="endTime != null"> AND end_time = #{endTime} </if>
+			<if test="state != null"> AND state = #{state} </if>
+			<if test="clickCount != null"> AND click_count = #{clickCount} </if>
+			<if test="type != null"> AND type = #{type} </if>
+			<if test="picUrl != null"> AND pic_url = #{picUrl} </if>
+			<if test="showCount != null"> AND show_count = #{showCount} </if>
+			<if test="url != null"> AND url = #{url} </if>
+			<if test="usepicurl != null"> AND usepicurl = #{usepicurl} </if>
+		</where>
+	</select>
+	<select id="listPageByAdDetail" parameterType="AdDetail"
+		resultMap="AdDetailMap">
+		SELECT
+		id,name,addtime,start_time,end_time,state,click_count,type,pic_url,show_count,url,usepicurl
+		from ad_detail tmp
+		<where>
+			<if test="id != null"> AND id = #{id} </if>
+			<if test="name != null"> AND name = #{name} </if>
+			<if test="addtime != null"> AND addtime = #{addtime} </if>
+			<if test="startTime != null"> AND start_time = #{startTime} </if>
+			<if test="endTime != null"> AND end_time = #{endTime} </if>
+			<if test="state != null"> AND state = #{state} </if>
+			<if test="clickCount != null"> AND click_count = #{clickCount} </if>
+			<if test="type != null"> AND type = #{type} </if>
+			<if test="picUrl != null"> AND pic_url = #{picUrl} </if>
+			<if test="showCount != null"> AND show_count = #{showCount} </if>
+			<if test="url != null"> AND url = #{url} </if>
+			<if test="usepicurl != null"> AND usepicurl = #{usepicurl} </if>
+		</where>
+		ORDER BY id DESC
+	</select>
+	<select id="getAllByAdDetail" parameterType="AdDetail"
+		resultMap="AdDetailMap">
+		SELECT
+		id,name,addtime,start_time,end_time,state,click_count,type,pic_url,show_count,url,usepicurl
+		from ad_detail tmp
+		<where>
+			<if test="id != null"> AND id = #{id} </if>
+			<if test="name != null"> AND name = #{name} </if>
+			<if test="addtime != null"> AND addtime = #{addtime} </if>
+			<if test="startTime != null"> AND start_time = #{startTime} </if>
+			<if test="endTime != null"> AND end_time = #{endTime} </if>
+			<if test="state != null"> AND state = #{state} </if>
+			<if test="clickCount != null"> AND click_count = #{clickCount} </if>
+			<if test="type != null"> AND type = #{type} </if>
+			<if test="picUrl != null"> AND pic_url = #{picUrl} </if>
+			<if test="showCount != null"> AND show_count = #{showCount} </if>
+			<if test="url != null"> AND url = #{url} </if>
+			<if test="usepicurl != null"> AND usepicurl = #{usepicurl} </if>
+		</where>
+		ORDER BY id DESC
+	</select>
+
+	<select id="getAllByMap" parameterType="AdDetail" resultType="map">
+		SELECT id,name,usepicurl,url from ad_detail tmp
+		where now() between
+		start_time and end_time and state=1
+		<if test="type != null"> AND type = #{type} </if>
+		ORDER BY id DESC
+	</select>
+
+
+	<insert id="insertSelective" parameterType="AdDetail">
+		INSERT INTO ad_detail
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">id,</if>
+			<if test="name != null">name,</if>
+			<if test="addtime != null">addtime,</if>
+			<if test="startTime != null">start_time,</if>
+			<if test="endTime != null">end_time,</if>
+			<if test="state != null">state,</if>
+			<if test="clickCount != null">click_count,</if>
+			<if test="type != null">type,</if>
+			<if test="picUrl != null">pic_url,</if>
+			<if test="showCount != null">show_count,</if>
+			<if test="url != null">url,</if>
+			<if test="usepicurl != null">usepicurl,</if>
+		</trim>
+		values
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">#{id},</if>
+			<if test="name != null">#{name},</if>
+			<if test="addtime != null">#{addtime},</if>
+			<if test="startTime != null">#{startTime},</if>
+			<if test="endTime != null">#{endTime},</if>
+			<if test="state != null">#{state},</if>
+			<if test="clickCount != null">#{clickCount},</if>
+			<if test="type != null">#{type},</if>
+			<if test="picUrl != null">#{picUrl},</if>
+			<if test="showCount != null">#{showCount},</if>
+			<if test="url != null">#{url},</if>
+			<if test="usepicurl != null">#{usepicurl},</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="AdDetail">
+		update ad_detail
+		<set>
+			<if test="id != null">id=#{id},</if>
+			<if test="name != null">name=#{name},</if>
+			<if test="addtime != null">addtime=#{addtime},</if>
+			<if test="startTime != null">start_time=#{startTime},</if>
+			<if test="endTime != null">end_time=#{endTime},</if>
+			<if test="state != null">state=#{state},</if>
+			<if test="clickCount != null">click_count=#{clickCount},</if>
+			<if test="type != null">type=#{type},</if>
+			<if test="picUrl != null">pic_url=#{picUrl},</if>
+			<if test="showCount != null">show_count=#{showCount},</if>
+			<if test="url != null">url=#{url},</if>
+			<if test="usepicurl != null">usepicurl=#{usepicurl},</if>
+		</set>
+		where id = #{id}
+	</update>
+	<delete id="deleteByPrimaryKey" parameterType="AdDetail"><![CDATA[delete from ad_detail where id=#{id}
+]]></delete>
+</mapper>

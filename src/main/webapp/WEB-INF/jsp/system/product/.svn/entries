@@ -1,0 +1,47 @@
+10
+
+dir
+7665
+svn://42.121.129.188/repos/trunk/xyd/WebRoot/WEB-INF/jsp/system/product
+svn://42.121.129.188/repos
+
+
+
+2016-04-06T08:35:57.169383Z
+7338
+kyz
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+42403b8e-ba5f-489c-9906-e8dd922b5820
+
+info
+dir
+
+prodBasic
+dir
+
+prodCatalog
+dir
+
+prodSpec
+dir
+
+
+
+add
+
+prodTags
+dir
+

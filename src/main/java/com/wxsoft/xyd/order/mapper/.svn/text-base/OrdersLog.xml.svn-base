@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>  <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wxsoft.xyd.order.mapper.OrdersLogMapper">
+	<resultMap type="OrdersLog" id="ordersLogMap">
+		<id property="id" column="id" />
+		<result property="logId" column="log_id" />
+		<result property="orderId" column="order_id" />
+		<result property="operator" column="operator" />
+		<result property="orderStatus" column="order_status" />
+		<result property="changedStatus" column="changed_status" />
+		<result property="remark" column="remark" />
+		<result property="logTime" column="log_time" />
+	</resultMap>
+	<select id="selectByPrimaryKey" parameterType="Integer"
+		resultMap="ordersLogMap"><![CDATA[  SELECT log_id,order_id,operator,order_status,changed_status,remark,log_time from orders_log tmp WHERE tmp.log_id = #{id} ]]>
+	</select>
+	<select id="selectByOrdersLog" parameterType="OrdersLog"
+		resultMap="ordersLogMap">
+		SELECT
+		log_id,order_id,operator,order_status,changed_status,remark,log_time
+		from orders_log tmp WHERE
+		<if test="logId != null">log_id = #{logId} and </if>
+		<if test="orderId != null">order_id = #{orderId} and </if>
+		<if test="operator != null">operator = #{operator} and </if>
+		<if test="orderStatus != null">order_status = #{orderStatus} and </if>
+		<if test="changedStatus != null">changed_status = #{changedStatus} and </if>
+		<if test="remark != null">remark = #{remark} and </if>
+		<if test="logTime != null">log_time = #{logTime} and </if>
+		1=1
+	</select>
+	<select id="listPageByOrdersLog" parameterType="OrdersLog"
+		resultMap="ordersLogMap">
+		SELECT
+		log_id,order_id,operator,order_status,changed_status,remark,log_time
+		from orders_log tmp WHERE
+		<if test="logId != null">log_id = #{logId} and </if>
+		<if test="orderId != null">order_id = #{orderId} and </if>
+		<if test="operator != null">operator = #{operator} and </if>
+		<if test="orderStatus != null">order_status = #{orderStatus} and </if>
+		<if test="changedStatus != null">changed_status = #{changedStatus} and </if>
+		<if test="remark != null">remark = #{remark} and </if>
+		<if test="logTime != null">log_time = #{logTime} and </if>
+		1=1
+	</select>
+	<select id="getAllByOrdersLog" parameterType="OrdersLog"
+		resultMap="ordersLogMap">
+		SELECT
+		log_id,order_id,operator,order_status,changed_status,remark,log_time
+		from orders_log tmp WHERE
+		<if test="logId != null">log_id = #{logId} and </if>
+		<if test="orderId != null">order_id = #{orderId} and </if>
+		<if test="operator != null">operator = #{operator} and </if>
+		<if test="orderStatus != null">order_status = #{orderStatus} and </if>
+		<if test="changedStatus != null">changed_status = #{changedStatus} and </if>
+		<if test="remark != null">remark = #{remark} and </if>
+		<if test="logTime != null">log_time = #{logTime} and </if>
+		1=1 order by log_id desc
+	</select>
+
+	<select id="getAllByOrdersLogMap" parameterType="OrdersLog"
+		resultType="map">
+		SELECT
+		tmp.log_id,tmp.operator,tmp.order_status,tmp.changed_status,tmp.remark,tmp.log_time
+		from orders_log tmp WHERE
+		<if test="orderId != null">order_id = #{orderId} and </if>
+		<if test="operator != null">operator = #{operator} and </if>
+		<if test="orderStatus != null">order_status = #{orderStatus} and </if>
+		<if test="changedStatus != null">changed_status = #{changedStatus} and </if>
+		1=1
+	</select>
+
+
+	<insert id="insertSelective" parameterType="OrdersLog">
+		insert into orders_log
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="logId != null">log_id,</if>
+			<if test="orderId != null">order_id,</if>
+			<if test="operator != null">operator,</if>
+			<if test="orderStatus != null">order_status,</if>
+			<if test="changedStatus != null">changed_status,</if>
+			<if test="remark != null">remark,</if>
+			log_time
+		</trim>
+		value
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="logId != null">#{logId},</if>
+			<if test="orderId != null">#{orderId},</if>
+			<if test="operator != null">#{operator},</if>
+			<if test="orderStatus != null">#{orderStatus},</if>
+			<if test="changedStatus != null">#{changedStatus},</if>
+			<if test="remark != null">#{remark},</if>
+			now()
+		</trim>
+	</insert>
+	<insert id="insert" parameterType="OrdersLog"><![CDATA[insert into orders_log( 
+log_id,order_id,operator,order_status,changed_status,remark,log_time) values (#{logId},#{orderId},#{operator},#{orderStatus},#{changedStatus},#{remark},#{logTime})
+]]></insert>
+	<update id="updateByPrimaryKeySelective" parameterType="OrdersLog">
+		update orders_log
+		<set>
+			<if test="logId != null">log_id = #{logId},</if>
+			<if test="orderId != null">order_id = #{orderId},</if>
+			<if test="operator != null">operator = #{operator},</if>
+			<if test="orderStatus != null">order_status = #{orderStatus},</if>
+			<if test="changedStatus != null">changed_status = #{changedStatus},</if>
+			<if test="remark != null">remark = #{remark},</if>
+			<if test="logTime != null">log_time = #{logTime},</if>
+		</set>
+		where log_id = #{id}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="OrdersLog"><![CDATA[update orders_log set 
+log_id=#{logId},order_id=#{orderId},operator=#{operator},order_status=#{orderStatus},changed_status=#{changedStatus},remark=#{remark},log_time=#{logTime} where id = #{id}
+]]></update>
+	<delete id="deleteByPrimaryKey" parameterType="OrdersLog"><![CDATA[delete from orders_log where log_id=#{id} 
+]]></delete>
+</mapper>

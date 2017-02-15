@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>  <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wxsoft.xyd.ad.mapper.AdClickRecordMapper">
+	<resultMap type="AdClickRecord" id="AdClickRecordMap">
+		<id property="id" column="ID" />
+		<result property="id" column="ID" />
+		<result property="detailId" column="DETAIL_ID" />
+		<result property="ip" column="IP" />
+		<result property="addtime" column="ADDTIME" />
+	</resultMap>
+	<select id="selectByPrimaryKey" parameterType="Integer"
+		resultMap="AdClickRecordMap"><![CDATA[  SELECT ID,DETAIL_ID,IP,ADDTIME FROM ad_click_record tmp WHERE tmp.ID = #{id} ]]>
+	</select>
+	<select id="selectByAdClickRecord" parameterType="AdClickRecord"
+		resultMap="AdClickRecordMap">
+		SELECT ID,DETAIL_ID,IP,ADDTIME FROM ad_click_record tmp
+		<where>
+			<if test="id != null"> ID = #{id} AND</if>
+			<if test="detailId != null"> DETAIL_ID = #{detailId} AND</if>
+			<if test="ip != null"> IP = #{ip} AND</if>
+			<if test="addtime != null"> ADDTIME = #{addtime} AND</if>
+		</where>
+	</select>
+	<select id="getPageListAdClickRecord" parameterType="AdClickRecord"
+		resultMap="AdClickRecordMap">
+		SELECT ID,DETAIL_ID,IP,ADDTIME from ad_click_record tmp
+		<where>
+			<if test="id != null">ID = #{id} AND </if>
+			<if test="detailId != null">DETAIL_ID = #{detailId} AND </if>
+			<if test="ip != null">IP = #{ip} AND </if>
+			<if test="addtime != null">ADDTIME = #{addtime} AND </if>
+		</where>
+		ORDER BY ID DESC
+	</select>
+	<select id="getAllByAdClickRecord" parameterType="AdClickRecord"
+		resultMap="AdClickRecordMap">
+		SELECT ID,DETAIL_ID,IP,ADDTIME from ad_click_record tmp
+		<where>
+			<if test="id != null"> ID = #{id} AND</if>
+			<if test="detailId != null"> DETAIL_ID = #{detailId} AND</if>
+			<if test="ip != null"> IP = #{ip} AND</if>
+			<if test="addtime != null"> ADDTIME = #{addtime} AND</if>
+		</where>
+		ORDER BY ID DESC
+	</select>
+	<insert id="insertSelective" parameterType="AdClickRecord">
+		INSERT INTO ad_click_record
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">ID,</if>
+			<if test="detailId != null">DETAIL_ID,</if>
+			<if test="ip != null">IP,</if>
+			<if test="addtime != null">ADDTIME,</if>
+		</trim>
+		values
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">#{id},</if>
+			<if test="detailId != null">#{detailId},</if>
+			<if test="ip != null">#{ip},</if>
+			<if test="addtime != null">#{addtime},</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="AdClickRecord">
+		update ad_click_record
+		<set>
+			<if test="id != null">ID=#{id},</if>
+			<if test="detailId != null">DETAIL_ID=#{detailId},</if>
+			<if test="ip != null">IP=#{ip},</if>
+			<if test="addtime != null">ADDTIME=#{addtime},</if>
+		</set>
+		where ID = #{id}
+	</update>
+	<delete id="deleteByPrimaryKey" parameterType="AdClickRecord"><![CDATA[delete from ad_click_record where ID=#{id}
+]]></delete>
+</mapper>

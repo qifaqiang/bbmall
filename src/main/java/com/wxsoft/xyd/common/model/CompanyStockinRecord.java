@@ -1,0 +1,147 @@
+package com.wxsoft.xyd.common.model;
+
+import java.util.Date;
+import java.util.List;
+
+import com.wxsoft.framework.bean.BaseBean;
+import com.wxsoft.xyd.prod.model.ProductSpecificationDetail;
+import com.wxsoft.xyd.prod.model.ProductSpecificationInfoDetail;
+import com.wxsoft.xyd.system.model.CommonPage;
+import com.wxsoft.xyd.system.model.AjaxPage;
+
+
+/**
+ * @文件名称: CompanyStockinRecord.java
+ * @类路径: com/wxsoft/xyd/common/model/
+ * @描述: TODO
+ * @作者：kyz
+ * @公司：wxltsoft
+ * @时间：2015-12-02 09:54:53
+ */
+public class CompanyStockinRecord extends BaseBean {
+	private static final long serialVersionUID = 1L;
+	
+	private Integer id;// 主键 
+	private Integer basicId;// 商品字典id 
+	private String basicIdName;//商品字典名称
+	private Integer count;// 数量 
+	private Integer companyId;// 基地id 
+	private String companyIdName;//基地名称
+	private Integer adduserid;// 操作人 
+	private String adduseridName;
+	private String unit;//商品单位
+	private Integer specificationInfoId;
+	private Integer productId;
+	private String productName;//商品名称
+	private Integer type;
+	
+	private List<ProductSpecificationInfoDetail> specDetailList;//包含的规格具体值
+	
+	public String getUnit() {
+		return unit;
+	}
+	public void setUnit(String unit) {
+		this.unit = unit;
+	}
+	private Date addtime;// 操作时间 
+	private CommonPage page;// 普通分页 
+	private AjaxPage ajaxPage;// ajax分页 
+  
+	public String getAdduseridName() {
+		return adduseridName;
+	}
+	public void setAdduseridName(String adduseridName) {
+		this.adduseridName = adduseridName;
+	}
+	public Integer getId(){  
+		return id;  
+	}  
+	public void setId(Integer id){  
+		this.id = id;  
+	}  
+	public Integer getBasicId(){  
+		return basicId;  
+	}  
+	public void setBasicId(Integer basicId){  
+		this.basicId = basicId;  
+	}  
+	public Integer getCount(){  
+		return count;  
+	}  
+	public void setCount(Integer count){  
+		this.count = count;  
+	}  
+	public Integer getCompanyId(){  
+		return companyId;  
+	}  
+	public void setCompanyId(Integer companyId){  
+		this.companyId = companyId;  
+	}  
+	public Integer getAdduserid(){  
+		return adduserid;  
+	}  
+	public void setAdduserid(Integer adduserid){  
+		this.adduserid = adduserid;  
+	}  
+	public Date getAddtime(){  
+		return addtime;  
+	}  
+	public void setAddtime(Date date){  
+		this.addtime = date;  
+	}  
+	public CommonPage getPage(){  
+		return page;  
+	}  
+	public void setPage(CommonPage page){  
+		this.page = page;  
+	}  
+	public AjaxPage getAjaxPage(){  
+		return ajaxPage;  
+	}  
+	public void setAjaxPage(AjaxPage ajaxPage){  
+		this.ajaxPage = ajaxPage;  
+	}  
+	public String getBasicIdName() {
+		return basicIdName;
+	}
+	public void setBasicIdName(String basicIdName) {
+		this.basicIdName = basicIdName;
+	}
+	public String getCompanyIdName() {
+		return companyIdName;
+	}
+	public String getProductName() {
+		return productName;
+	}
+	public void setProductName(String productName) {
+		this.productName = productName;
+	}
+	public void setCompanyIdName(String companyIdName) {
+		this.companyIdName = companyIdName;
+	}
+	public Integer getSpecificationInfoId() {
+		return specificationInfoId;
+	}
+	public void setSpecificationInfoId(Integer specificationInfoId) {
+		this.specificationInfoId = specificationInfoId;
+	}
+	public List<ProductSpecificationInfoDetail> getSpecDetailList() {
+		return specDetailList;
+	}
+	public void setSpecDetailList(List<ProductSpecificationInfoDetail> specDetailList) {
+		this.specDetailList = specDetailList;
+	}
+	public Integer getProductId() {
+		return productId;
+	}
+	public void setProductId(Integer productId) {
+		this.productId = productId;
+	}
+	public Integer getType() {
+		return type;
+	}
+	public void setType(Integer type) {
+		this.type = type;
+	}
+
+}

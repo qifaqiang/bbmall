@@ -1,0 +1,297 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<jsp:include page="top.jsp"></jsp:include>
+<jsp:include page="top2.jsp"></jsp:include>
+<script src="${SHOPDOMAIN}/front/js/web/ntab.js"></script>
+<link href="${SHOPDOMAIN}/front/css/web/share.css" rel="stylesheet"
+	type="text/css">
+<link href="${SHOPDOMAIN}/front/css/web/Personal.css" rel="stylesheet"
+	type="text/css">
+<div class="per_main">
+	<jsp:include page="centerLeft.jsp"></jsp:include>
+	<!--Personal center right-->
+	<div class="per_mainright flW">
+		<!--位置-->
+		<div class="per_main_title">我的优惠券</div>
+		<div class="per_order_title">
+			<ul id="myTab0">
+				<li class=" active" id="can" onclick="nTabs(this,0)"
+					style="cursor:pointer">未使用(<span id="1"></span>)
+				</li>
+				<li class=" normal" id="over" onclick="nTabs(this,1)"
+					style="cursor:pointer">已使用(<span id="3"></span>)
+				</li>
+				<li class=" normal" id="expire" onclick="nTabs(this,2)"
+					style="cursor:pointer">已过期(<span id="2"></span>)
+				</li>
+			</ul>
+		</div>
+		<div class="active" id="myTab0_Content0">
+			<div class="per_order_con Can"></div>
+		</div>
+		<div class="none" id="myTab0_Content1">
+			<div class="per_order_con Over"></div>
+		</div>
+		<div class="none" id="myTab0_Content2">
+			<div class="per_order_con Expire"></div>
+		</div>
+	</div>
+</div>
+<div style="clear:both"></div>
+<jsp:include page="footShop.jsp"></jsp:include>
+<!-- 未使用优惠券 -->
+<script id="mycouponsCan" type="text/x-dot-template">
+<div class="per_coupon ">
+<ul>
+	{{ if(it.list&&it.list.length>0){  }}
+   		{{ for(var i=0; i<it.list.length;i++){ }}
+    		{{var obj=it.list[i];}}
+   			<li class="per_couponpic1">
+				<h3>￥{{=obj.substractPrice}}</h3>
+				{{if(obj.needPrice==0){}}
+					<h4>【不限额使用】</h4>
+				{{}else{}}
+					<h4>【满减：满{{=obj.needPrice}}减{{=obj.substractPrice}}】</h4>
+				{{}}}
+					<h4>{{=obj.startTimeS}}-{{=obj.endTimeS}}</h4>
+			</li>
+		{{}}}
+	{{}}}
+</ul>
+<div class="fox"></div>
+</div>
+{{if(it.list.length!=0){}}
+	<div class="page_and_btn">
+		<div></div>{{=it.pageStr}}
+	</div>
+	<div style="clear:both"></div>
+{{}}}
+</script>
+<!-- 过期优惠券 -->
+<script id="mycouponsExpire" type="text/x-dot-template">
+<div class="per_coupon">
+<ul>
+	{{ if(it.list&&it.list.length>0){  }}
+		{{ for(var i=0; i<it.list.length;i++){ }}
+			{{var obj=it.list[i];}}
+				<li class="per_couponpic2">
+					<h3>￥{{=obj.substractPrice}}</h3>
+					{{if(obj.needPrice==0){}}
+                    	<h4>【不限额使用】</h4>
+                   	{{}else{}}
+						<h4>【满减：满{{=obj.needPrice}}减{{=obj.substractPrice}}】</h4>
+					{{}}}
+					<h4>{{=obj.startTimeS}}-{{=obj.endTimeS}}</h4>
+					<div class="per_overdue">
+						<img src="${SHOPDOMAIN}/front/images/web/per_coupon3.png"
+								width="100" height="100" alt="" />
+					</div>
+				</li>
+		{{}}}
+	{{}}}
+</ul>
+</div>
+<div class="fox"></div>
+</div>
+{{if(it.list.length!=0){}}
+<div class="page_and_btn">
+		<div></div>{{=it.pageStr}}
+</div>
+<div style="clear:both"></div>
+{{}}}
+</script>
+<!-- 已使用优惠券 -->
+<script id="mycouponsOver" type="text/x-dot-template">
+<div class="per_coupon">
+<ul>
+	{{ if(it.list&&it.list.length>0){  }}
+		{{ for(var i=0; i<it.list.length;i++){ }}
+			{{var obj=it.list[i];}}
+				<li class="per_couponpic1">
+					<h3>￥{{=obj.substractPrice}}</h3>
+					<h4>【满减：满{{=obj.needPrice}}减{{=obj.substractPrice}}】</h4>
+					<h4>{{=obj.startTimeS}}-{{=obj.endTimeS}}</h4>
+					<div class="per_use">
+						<img src="${SHOPDOMAIN}/front/images/web/per_coupon4.png"
+							width="114" height="62" alt="" />
+					</div>
+				</li>
+		{{}}}
+	{{}}}
+</ul>
+<div class="fox"></div>
+</div>
+{{if(it.list.length!=0){}}
+<div class="page_and_btn per_order_bgcolor">
+		<div></div>{{=it.pageStr}}
+</div>
+<div style="clear:both"></div>
+{{}}}
+</script>
+<script>
+	document.title = "个人中心-优惠券";
+	$("#lingquan").html("个人中心");
+	$(".youhui").addClass("per_nowcolor");
+	$('.w-orderListUl>div').click(
+			function() {
+				$(this).addClass('active').siblings().removeClass('active');
+				$('.w-content>.w-orderStatusNav').eq($(this).index()).show()
+						.siblings().hide();
+			});
+	$(function() {
+		currentNum = 1;
+		mycouponsCan(1);
+		mycouponsExpire(1);
+		mycouponsOver(1);
+	});
+
+	var step1 = true;
+	var step2 = true;
+	var step3 = true;
+	var step1can = true;
+	var step2can = true;
+	var step3can = true;
+	var currentNum1 = 1;
+	var currentNum2 = 1;
+	var currentNum3 = 1;
+	var totalPage = 0;
+	//可以使用的优惠券
+	function mycouponsCan(num1) {
+		$
+				.ajax({
+					url : "${SHOPDOMAIN}/interfaces/Coup/mycouponsCan.html",
+					type : "post",
+					data : {
+						"currentPage" : num1,
+						zu : 8
+					},
+					dataType : "json",
+					async : false,
+					success : function(result) {
+						if (result.res_code == '0') {
+							step1can = true;
+							$("#1").html(result.type);
+							var totalNum = parseInt(result.pageCount);
+							totalPage = totalNum;
+							var productList = doT.template(
+									$("#mycouponsCan").html())(result);
+							$(".Can").empty();
+							if (result.list.length == 0) {
+								$(".Can")
+										.html(
+												"<div class='per_noorder'>"
+														+ "<div class=' per_ per_noorderleft flW'><img src='${SHOPDOMAIN}/front/images/web/per_noorder.png' width='104' height='48' alt=''/></div>"
+														+ "<div class='per_noorderright flW'>"
+														+ "<ul>"
+														+ "<li>SORRY~暂时没有该优惠券~</li>"
+														+ "<li>看看其他的吧！^_^</li>"
+														+ "</ul>"
+														+ "</div>"
+														+ "<div class='fox'></div>"
+														+ "</div>");
+							} else {
+								$(".Can").append(productList);
+								$(".page_and_btn ul li span").css("background-color", "#e70012");
+								$(".page_and_btn ul li span").css("color", "#fff");
+							}
+						} else {
+							showMessage("您还没有登录,点击确定去登录", 35000);
+							window.location.href = "login.html";
+						}
+					}
+				});
+	}
+	//过期失效的优惠券
+	function mycouponsExpire(num2) {
+		$
+				.ajax({
+					url : "${SHOPDOMAIN}/interfaces/Coup/mycouponsExpire.html",
+					type : "post",
+					data : {
+						"currentPage" : num2,
+						zu : 8
+					},
+					dataType : "json",
+					async : false,
+					success : function(result) {
+						$(".jiazai").hide();
+						if (result.res_code == '0') {
+							step2can = true;
+							$("#2").html(result.type);
+							var totalNum = parseInt(result.pageCount);
+							totalPage = totalNum;
+							var productList = doT.template(
+									$("#mycouponsExpire").html())(result);
+							$(".Expire").empty();
+							if (result.list.length == 0) {
+								$(".Expire")
+										.html(
+												"<div class='per_noorder'>"
+														+ "<div class=' per_ per_noorderleft flW'><img src='${SHOPDOMAIN}/front/images/web/per_noorder.png' width='104' height='48' alt=''/></div>"
+														+ "<div class='per_noorderright flW'>"
+														+ "<ul>"
+														+ "<li>SORRY~暂时没有该优惠券~</li>"
+														+ "<li>看看其他的吧！^_^</li>"
+														+ "</ul>"
+														+ "</div>"
+														+ "<div class='fox'></div>"
+														+ "</div>");
+							} else {
+								$(".Expire").append(productList);
+								$(".page_and_btn ul li span").css("background-color", "#e70012");
+								$(".page_and_btn ul li span").css("color", "#fff");
+							}
+						} else {
+						}
+						currentNum2++;
+					}
+				});
+	}
+	//已使用的优惠券
+	function mycouponsOver(num3) {
+		$
+				.ajax({
+					url : "${SHOPDOMAIN}/interfaces/Coup/mycouponsOver.html",
+					type : "post",
+					async : false,
+					data : {
+						"currentPage" : num3,
+						zu : 8
+					},
+					dataType : "json",
+					success : function(result) {
+						$(".jiazai").hide();
+						if (result.res_code == '0') {
+							$("#3").html(result.type);
+							step3can = true;
+							var totalNum = parseInt(result.pageCount);
+							totalPage = totalNum;
+							var productList = doT.template(
+									$("#mycouponsOver").html())(result);
+							$(".Over").empty();
+							if (result.list.length == 0) {
+								$(".Over")
+										.html(
+												"<div class='per_noorder'>"
+														+ "<div class=' per_ per_noorderleft flW'><img src='${SHOPDOMAIN}/front/images/web/per_noorder.png' width='104' height='48' alt=''/></div>"
+														+ "<div class='per_noorderright flW'>"
+														+ "<ul>"
+														+ "<li>SORRY~暂时没有该优惠券~</li>"
+														+ "<li>看看其他的吧！^_^</li>"
+														+ "</ul>"
+														+ "</div>"
+														+ "<div class='fox'></div>"
+														+ "</div>");
+							} else {
+								$(".Over").append(productList);
+								$(".page_and_btn ul li span").css("background-color", "#e70012");
+								$(".page_and_btn ul li span").css("color", "#fff");
+							}
+						} else {
+						}
+						currentNum3++;
+					}
+				});
+	}
+</script>
+

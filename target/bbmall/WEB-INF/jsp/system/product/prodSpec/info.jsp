@@ -1,0 +1,122 @@
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<jsp:include page="../../top.jsp"></jsp:include>
+<style>
+.green1 {padding: 10px 17px 9px}
+.form-control, .help-block {display: inline;}
+em {font-style: normal;}
+</style>
+<!-- BEGIN PAGE HEADER-->
+<div class="row">
+	<div class="col-md-12">
+		<!-- BEGIN PAGE TITLE & BREADCRUMB-->
+		<h3 class="page-title">
+			商品规格设置 <small>分类</small>
+		</h3>
+		<ul class="page-breadcrumb breadcrumb">
+			<li><i class="fa fa-home"></i> <a href="javascript:void(0)">
+					商品管理 </a> <i class="fa fa-angle-right"></i></li>
+			<li><a href="javascript:void(0)"> 规格信息 </a></li>
+		</ul>
+		<!-- END PAGE TITLE & BREADCRUMB-->
+	</div>
+</div>
+<!-- END PAGE HEADER-->
+<!-- BEGIN PAGE CONTENT-->
+<div class="row">
+	<div class="col-md-12">
+		<!-- BEGIN VALIDATION STATES-->
+		<div class="portlet box blue">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="fa fa-reorder"></i>信息
+				</div>
+				<div class="tools"></div>
+			</div>
+			<div class="portlet-body form">
+				<!-- BEGIN FORM-->
+				<form class="form-horizontal" id="form_config" method="post"
+					enctype="multipart/form-data" action="save.html"
+					novalidate="novalidate">
+					<div class="form-body">
+						<div class="alert alert-danger display-hide">
+							<button data-close="alert" class="close"></button>
+							页面填写信息出错了，请先检查再提交。
+						</div>
+						<div class="alert alert-success display-hide">
+							<button data-close="alert" class="close"></button>
+							验证通过，正在提交！
+						</div>
+						<div class="form-group">
+							<label class="control-label col-md-3">名称 ： <span class="required"> * </span> </label>
+							<div class="col-md-4">
+								<input type="text" class="form-control w_require w_2_4"
+									value="${obj.specificationName }" name="specificationName"> <input type="hidden"
+									value="${obj.id }" name="id">
+							</div>2-4个字，在商品详情中显示
+						</div>
+						<div class="form-group">
+							<label class="control-label col-md-3">规格值名称： <span
+								class="required"> * </span></label>
+							<div class="col-md-4">
+								<div style="width: 600px;" id="guiges">
+									<button type="button" class="btn green green1"
+										onclick="guigeadd()">添加规格值</button>
+									<c:forEach items="${obj.specDetailList }" var="psil">
+										<div>
+											<br> 规格值名称：<input type='hidden' name='skus'
+												value="${psil.id }"> <input type="text"
+												style='width: 200px;' name='detailNames'
+												value="${psil.detailName }"
+												class='form-control w_require'> <a
+												onclick='delguige(this)' href='javascript:void(0)'>&nbsp;
+												&nbsp; 删除</a>
+										</div>
+									</c:forEach>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="form-actions fluid">
+						<div class="col-md-offset-3 col-md-9">
+							<button class="btn green rollesubmit" type="submit" >提交</button>
+							<button class="btn grey-cascade sys_go_back" type="button" >返回</button>
+						</div>
+					</div>
+				</form>
+				<!-- END FORM-->
+			</div>
+		</div>
+		<!-- END VALIDATION STATES-->
+	</div>
+</div>
+<script type="text/javascript">
+$(function(){
+	$(".rollesubmit").live("click", function(e) {
+		var obj = $("[name='skus']").length;
+		if (0 == obj) {
+			showMessage("请至少添加一项规格值！");
+			return false;
+		}
+	});
+});
+//添加规格
+function guigeadd() {
+	var html = "<div><br><input type='hidden' name='skus'>"
+			+ "规格值名称：<input type='text' style='width:200px;' name='detailNames' class='form-control w_require'> "
+			+ " &nbsp; &nbsp;<a onclick='delguige(this)' href='javascript:void(0)'> 删除</a></div>";
+	$("#guiges").append(html);
+}
+//删除规格
+function delguige(k) {
+	$(k).parent().remove()
+}
+</script>
+<script>
+	jQuery(document).ready(function() {
+		FormValidation.init();
+	});
+</script>
+<!-- END PAGE CONTENT-->
+<jsp:include page="../../foot.jsp"></jsp:include>

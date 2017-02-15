@@ -1,0 +1,720 @@
+package com.wxsoft.xyd.prod.service.impl;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.wxsoft.framework.util.Tools;
+import com.wxsoft.xyd.common.mapper.CompanyStockMapper;
+import com.wxsoft.xyd.common.model.CompanyStock;
+import com.wxsoft.xyd.prod.mapper.ProductCatalogMapper;
+import com.wxsoft.xyd.prod.mapper.ProductImageMapper;
+import com.wxsoft.xyd.prod.mapper.ProductMapper;
+import com.wxsoft.xyd.prod.mapper.ProductPackageMapper;
+import com.wxsoft.xyd.prod.mapper.ProductSpecificationInfoMapper;
+import com.wxsoft.xyd.prod.model.Product;
+import com.wxsoft.xyd.prod.model.ProductCatalog;
+import com.wxsoft.xyd.prod.model.ProductImage;
+import com.wxsoft.xyd.prod.model.ProductPackage;
+import com.wxsoft.xyd.prod.model.ProductSpecificationInfo;
+import com.wxsoft.xyd.prod.service.ProductService;
+
+/**
+ * 商品 Service
+ * 
+ * @author kyz
+ * 
+ */
+@Service("productService")
+public class ProductServiceImpl implements ProductService {
+	@Autowired
+	private ProductMapper productMapper;
+	@Autowired
+	private ProductCatalogMapper productCatalogMapper;
+	@Autowired
+	private ProductImageMapper productImageMapper;
+	@Autowired
+	private ProductSpecificationInfoMapper productSpecificationInfoMapper;
+	@Autowired
+	private ProductPackageMapper productPackageMapper;
+	@Autowired
+	private CompanyStockMapper companyStockMapper;
+
+	@Override
+	public int deleteByPrimaryKey(Product record) {
+		return productMapper.deleteByPrimaryKey(record);
+	}
+
+	@Override
+	public int insert(Product record) {
+		return productMapper.insert(record);
+	}
+
+	@Override
+	public int insertSelective(Product record, String[] values,
+			Integer[] inventorynumbers, BigDecimal[] marketPrices,
+			BigDecimal[] prices, Integer[] skus, Integer specification,
+			String proBasicCount) {
+
+		String[] proImg = record.getPicuri().split(";");
+		// 设置第一张图片为产品首图
+		record.setPicuri(proImg[0]);
+
+		// 根据二级分类获取一级分类信息
+		ProductCatalog pc = productCatalogMapper.selectByPrimaryKey(record
+				.getCatalogId2());
+		record.setCatalogId1(pc.getPid());
+
+		// 插入产品表
+		int result = productMapper.insertSelective(record);
+		if (result > 0) {
+
+			// 遍历插入产品图片表
+			for (String string : proImg) {
+				ProductImage pi = new ProductImage();
+				pi.setUri(string);
+				pi.setProdid(record.getId());
+				productImageMapper.insertSelective(pi);
+			}
+
+			int i = 0;
+			if (null != prices) {
+				for (BigDecimal integer : prices) {
+					ProductSpecificationInfo psi = new ProductSpecificationInfo();
+					psi.setMarketPrice(marketPrices[i]);
+					psi.setPrice(integer);
+					psi.setProductId(record.getId());
+					psi.setInventorynumber(inventorynumbers[i]);
+					// psi.setValue(values[i]);
+					psi.setSpecId(specification);
+					productSpecificationInfoMapper.insertSelective(psi);
+					i++;
+				}
+			}
+
+			ProductSpecificationInfo psiTempLow = new ProductSpecificationInfo();// 最低商品规格信息
+
+			if (record.getType() == 1) {// 礼盒商品
+				ProductPackage pp = null;
+				String[] tempProBasic = proBasicCount.split(";");
+				for (String temp : tempProBasic) {
+					pp = new ProductPackage();
+					String temps[] = temp.split("-");
+					pp.setProdId(record.getId());
+					pp.setProdBaseicId(Integer.parseInt(temps[0]));
+					pp.setInventorynumber(Integer.parseInt(temps[1]));
+					productPackageMapper.insertSelective(pp);
+				}
+			} else {// 普通商品
+				psiTempLow.setProductId(record.getId());
+				psiTempLow = productSpecificationInfoMapper
+						.getLowInventorynumber(psiTempLow);
+			}
+
+			record.setPrice(psiTempLow.getPrice());
+			record.setMarketPrice(psiTempLow.getMarketPrice());
+			record.setInventorynumber(psiTempLow.getInventorynumber());
+			record.setRemark(psiTempLow.getInventorynumber() == null ? ""
+					: psiTempLow.getInventorynumber() + "");
+			record.setSpecid(psiTempLow.getId());
+			productMapper.updateByPrimaryKeySelective(record);
+		}
+		return result;
+	}
+
+	@Override
+	public int updateByPrimaryKeySelective(Product record, String[] values,
+			Integer[] inventorynumbers, BigDecimal[] marketPrices,
+			BigDecimal[] prices, Integer[] skus, Integer specification,
+			String proBasicCount) {
+		int i = 0;
+		// if (record.getIsSpecification() == 1) {// 如果开启规格，那么对历史规格做处理
+
+		// 如果修改图片那么进行处理
+		if (Tools.notEmpty(record.getPicuri())) {
+			String[] proImg = record.getPicuri().split(";");
+			// 设置第一张图片为产品首图
+			record.setPicuri(proImg[0]);
+			productImageMapper.deleteByProdId(record.getId());
+			// 遍历插入产品图片表
+			for (String string : proImg) {
+				ProductImage pi = new ProductImage();
+				pi.setUri(string);
+				pi.setProdid(record.getId());
+				productImageMapper.insertSelective(pi);
+			}
+
+		}
+		ProductSpecificationInfo psiTemp = new ProductSpecificationInfo();
+		psiTemp.setProductId(record.getId());
+		List<ProductSpecificationInfo> psList = productSpecificationInfoMapper
+				.getAllByProductSpecificationInfo(psiTemp);
+		Map<String, String> maps = new HashMap<String, String>();
+		for (ProductSpecificationInfo productSpecificationInfo : psList) {
+			maps.put("p" + productSpecificationInfo.getId(), "");
+		}
+
+		if (null != prices) {
+			for (Integer integer : skus) {
+				ProductSpecificationInfo psi = productSpecificationInfoMapper
+						.selectByPrimaryKey(integer);
+				if (null != psi) {
+					psi.setInventorynumber(inventorynumbers[i]);
+					psi.setMarketPrice(marketPrices[i]);
+					psi.setPrice(prices[i]);
+					// psi.setValue(values[i]);
+					psi.setSpecId(specification);
+					psi.setProductId(record.getId());
+					productSpecificationInfoMapper
+							.updateByPrimaryKeySelective(psi);
+				} else {
+					psi = new ProductSpecificationInfo();
+					psi.setInventorynumber(inventorynumbers[i]);
+					psi.setMarketPrice(marketPrices[i]);
+					psi.setPrice(prices[i]);
+					psi.setProductId(record.getId());
+					// psi.setValue(values[i]);
+					psi.setSpecId(specification);
+					productSpecificationInfoMapper.insertSelective(psi);
+				}
+				maps.remove("p" + integer);
+				i++;
+			}
+
+		}
+		for (Map.Entry<String, String> entry : maps.entrySet()) {
+			productSpecificationInfoMapper.deleteByPrimaryKey(Integer
+					.parseInt(entry.getKey().replace("p", "")));
+		}
+
+		ProductSpecificationInfo psiTempLow = new ProductSpecificationInfo();// 最低商品规格信息
+		if (record.getType() == 1) {// 礼盒商品
+			ProductPackage pp = null;
+			String[] tempProBasic = proBasicCount.split(";");
+			for (String temp : tempProBasic) {
+				pp = new ProductPackage();
+				String temps[] = temp.split("-");
+				pp.setProdId(record.getId());
+				pp.setProdBaseicId(Integer.parseInt(temps[0]));
+				pp.setInventorynumber(Integer.parseInt(temps[1]));
+				productPackageMapper.insertSelective(pp);
+			}
+		} else {// 普通商品
+			psiTempLow.setProductId(record.getId());
+			psiTempLow = productSpecificationInfoMapper
+					.getLowInventorynumber(psiTempLow);
+		}
+
+		record.setPrice(psiTempLow.getPrice());
+		record.setMarketPrice(psiTempLow.getMarketPrice());
+		record.setRemark(psiTempLow.getInventorynumber() == null ? ""
+				: psiTempLow.getInventorynumber() + "");
+		record.setSpecid(psiTempLow.getId());
+		record.setInventorynumber(psiTempLow.getInventorynumber());
+		return productMapper.updateByPrimaryKeySelective(record);
+	}
+
+	@Override
+	public Product selectByPrimaryKey(Integer id) {
+		return productMapper.selectByPrimaryKey(id);
+	}
+
+	@Override
+	public Product selectByProduct(Product record) {
+		return productMapper.selectByProduct(record);
+	}
+
+	@Override
+	public List<Map<String, Object>> listPageByProduct(Product clssname) {
+		return productMapper.listPageByProduct(clssname);
+	}
+
+	@Override
+	public List<Product> getAllByProduct(Product clssname) {
+		return productMapper.getAllByProduct(clssname);
+	}
+
+	@Override
+	public Map<String, Object> selectFrontByProduct(Product record) {
+		// TODO Auto-generated method stub
+		return productMapper.selectFrontByProduct(record);
+	}
+
+	@Override
+	public List<Product> selectProductByCartOrder(Map<String, Object> maps) {
+		// TODO Auto-generated method stub
+		return productMapper.selectProductByCartOrder(maps);
+	}
+
+	@Override
+	public int updateKuCunJian(Product classname) {
+		// TODO Auto-generated method stub
+		return productMapper.updateKuCunJian(classname);
+	}
+
+	@Override
+	public List<Map<String, String>> listPageByVProduct(Product clssname) {
+		// TODO Auto-generated method stub
+		return productMapper.listPageByVProduct(clssname);
+	}
+
+	@Override
+	public int updateByPrimaryKeySelective(Product record) {
+		// TODO Auto-generated method stub
+		return productMapper.updateByPrimaryKeySelective(record);
+	}
+
+	@Override
+	public List<Product> listPageByProductBooking(Product clssname) {
+		// TODO Auto-generated method stub
+		return productMapper.listPageByProductBooking(clssname);
+	}
+
+	@Override
+	public Product selectByProductBooking(Product record) {
+		return productMapper.selectByProductBooking(record);
+	}
+
+	@Override
+	public Product selectFrontByProductBooking(Product record) {
+		// TODO Auto-generated method stub
+		return productMapper.selectByProductBooking(record);
+	}
+
+	// 商城侧根据分类ID 或者排序 获取商品列表 不包含预售商品
+	@Override
+	public List<Product> getProListByProduct(Product clssname) {
+		// TODO Auto-generated method stub
+		return productMapper.getProListByProduct(clssname);
+	}
+
+	@Override
+	public List<Map<String, Object>> listAjaxPageProduct(Product pro) {
+		// TODO Auto-generated method stub
+		return productMapper.listAjaxPageProduct(pro);
+	}
+
+	@Override
+	public List<Map<String, Object>> selectProductFrontByShowList(
+			Map<String, Object> map) {
+		// TODO Auto-generated method stub
+		return productMapper.selectProductFrontByShowList(map);
+	}
+
+	@Override
+	public List<Integer> getCarProductVsUserId(String prodIds, Integer userId) {
+		String[] prodId = prodIds.split(",");
+		List<Product> pro = productMapper.getStockByProductId(prodId);
+		List<Integer> result = new ArrayList<Integer>();
+		Set<Integer> tempProdID = new HashSet<Integer>();
+		Map<String, Object> params = new HashMap<String, Object>(2);
+		for (Product p : pro) {
+			tempProdID.add(p.getId());
+		}
+		params.put("userId", userId);
+		params.put("prodId", tempProdID);
+		pro = productMapper.getCarProductVsUserId(params);
+		for (Product pr : pro) {
+			result.add(pr.getId());
+		}
+		return result;
+
+	}
+
+	@Override
+	public List<Integer> getCangProductVsUserId(String prodIds, Integer userId) {
+		String[] prodId = prodIds.split(",");
+		List<Product> pro = productMapper.getStockByProductId(prodId);
+		List<Integer> result = new ArrayList<Integer>();
+		Set<Integer> tempProdID = new HashSet<Integer>();
+		Map<String, Object> params = new HashMap<String, Object>(2);
+		for (Product p : pro) {
+			tempProdID.add(p.getId());
+		}
+		params.put("userId", userId);
+		params.put("prodId", tempProdID);
+		pro = productMapper.getCangProductVsUserId(params);
+		for (Product pr : pro) {
+			result.add(pr.getId());
+		}
+		return result;
+
+	}
+
+	@Override
+	public List<Integer> getKuCunByProductIdsVsCompanyId(String prodIds,
+			Integer companyId, String counts, String specIds) {
+		// 放置结果
+		List<Integer> result = new ArrayList<Integer>();
+
+		// 临时存放
+		CompanyStock temp = new CompanyStock();
+		String[] prodId = prodIds.split(",");
+		String[] count = null == counts ? null : counts.split(",");
+		String[] specId = null == specIds ? null : specIds.split(",");
+		List<Product> p = productMapper.getStockByProductId(prodId);// 临时获取所有商品
+
+		List<CompanyStock> tempCompanyStock = new ArrayList<CompanyStock>();// 临时存放基地库存
+		List<ProductSpecificationInfo> tempProductSpecificationInfo = new ArrayList<ProductSpecificationInfo>();// 临时存放商品规格信息
+		Map<Integer, ProductSpecificationInfo> tempProductSpecificationInfoMap = new HashMap<Integer, ProductSpecificationInfo>();
+		Map<Integer, CompanyStock> tempCompanyStockMap = new HashMap<Integer, CompanyStock>();
+		int i = 0;
+		Set<Integer> tempBasicIds = new HashSet<Integer>();// 临时存放商品字典id
+		Set<Integer> tempProdID = new HashSet<Integer>();// 临时存放商品id
+		List<Map<String, Object>> tempSpAll = new ArrayList<Map<String, Object>>();
+		int j = 0;
+		for (Product product : p) {
+			if (product.getType() == 0) {// 普通商品
+				tempProdID.add(product.getId());
+				tempBasicIds.add(product.getProdBasicsId());
+				if (null != specId) {
+					Map<String, Object> tempSpSub = new HashMap<String, Object>(
+							2);
+					tempSpSub.put("prodId", product.getId());
+					tempSpSub.put("specId", specId[j]);
+					tempSpAll.add(tempSpSub);
+				}
+			} else {
+				ProductPackage pPack = new ProductPackage();
+				pPack.setProdId(product.getId());
+				List<ProductPackage> pplist = productPackageMapper
+						.getAllByProductPackage(pPack);
+				product.setProductPackageList(pplist);
+				for (ProductPackage pp2 : pplist) {
+					tempBasicIds.add(pp2.getProdBaseicId());
+				}
+			}
+			j++;
+		}
+
+		Map<String, Object> params = new HashMap<String, Object>(3);
+		params.put("companyId", companyId);
+		if(null != tempBasicIds && tempBasicIds.size()>0){
+			params.put("prodBasicId", tempBasicIds);
+		}else{
+			params.put("prodBasicId", null);
+		}
+		params.put("tempProdID", tempProdID);
+		tempCompanyStock = companyStockMapper.selectByCompanyStockMaps(params);
+
+		for (CompanyStock cStock : tempCompanyStock) {
+			tempCompanyStockMap.put(cStock.getProdBasicId(), cStock);
+		}
+
+		// 如果規格爲空，那么取出该商品的最小规格还存起来
+		if (null == specId && tempProdID.size() > 0) {
+			tempProductSpecificationInfo = productSpecificationInfoMapper
+					.getLowInventorynumberMaps(params);
+			for (ProductSpecificationInfo psInfo : tempProductSpecificationInfo) {
+				tempProductSpecificationInfoMap.put(psInfo.getProductId(),
+						psInfo);
+			}
+		}
+		// 如果規格不爲空，那么取出该商品的传入规格还存起来
+		if (null != specId && tempProdID.size() > 0) {
+			tempProductSpecificationInfo = productSpecificationInfoMapper
+					.getInventorynumberMaps(tempSpAll);
+			for (ProductSpecificationInfo psInfo : tempProductSpecificationInfo) {
+				tempProductSpecificationInfoMap.put(psInfo.getId(), psInfo);
+			}
+		}
+
+		// 当前页商品字典库存已确定
+
+		for (Product product : p) {
+			int tempCount = 1;
+
+			if (null != count) {
+				tempCount = Integer.parseInt(count[i]);
+			}
+
+			if (product.getType() == 0) {// 普通商品
+				// 记录临时规格，如果不传规格id 那么查询最小
+				ProductSpecificationInfo pSpec = null;
+				temp = tempCompanyStockMap.get(product.getProdBasicsId());
+
+				if (null != specId) {// 存在规格id
+					// 获取规格表中字典数量規格
+					pSpec = tempProductSpecificationInfoMap.get(Integer
+							.parseInt(specId[i]));
+
+				} else {
+					// 获取规格表中字典数量最少的規格
+					pSpec = tempProductSpecificationInfoMap
+							.get(product.getId());
+				}
+				if (null != temp
+						&& null != pSpec
+						&& (temp.getInventorynumber() - pSpec
+								.getInventorynumber() * tempCount) >= 0) {// 基地商品库存不足
+				} else {
+					result.add(product.getId());
+				}
+
+			} else {// 礼盒包商品
+				List<ProductPackage> pp = product.getProductPackageList();
+				boolean canSale = true;
+				for (ProductPackage productPackage : pp) {
+					// 初始化
+					temp = tempCompanyStockMap.get(productPackage
+							.getProdBaseicId());
+					// 获取礼盒中每一个字典的id对应的系统库存表
+					if (canSale
+							&& null != temp
+							&& (temp.getInventorynumber() - productPackage
+									.getInventorynumber() * tempCount) >= 0) {// 基地商品库存不足
+					} else {
+						canSale = false;
+					}
+				}
+				if (canSale) {
+				} else {
+					result.add(product.getId());
+				}
+			}
+			i++;
+		}
+
+		return result;
+	}
+
+	@Override
+	public Map<String, Integer> getKuCunByProductIdsVsCompanyIdReturnSpecOrProductid(
+			String prodIds, Integer companyId, String counts, String specIds) {
+		// 放置结果
+		Map<String, Integer> result = new HashMap<String, Integer>();
+
+		// 临时存放
+		CompanyStock temp = new CompanyStock();
+		String[] prodId = prodIds.split(",");
+		String[] count = null == counts ? null : counts.split(",");
+		String[] specId = null == specIds ? null : specIds.split(",");
+
+		List<Product> p = productMapper.getStockNoCheckStateByProductId(prodId);// 临时获取所有商品
+
+		List<CompanyStock> tempCompanyStock = new ArrayList<CompanyStock>();// 临时存放基地库存
+		List<ProductSpecificationInfo> tempProductSpecificationInfo = new ArrayList<ProductSpecificationInfo>();// 临时存放商品规格信息
+		Map<Integer, ProductSpecificationInfo> tempProductSpecificationInfoMap = new HashMap<Integer, ProductSpecificationInfo>();
+		Map<Integer, CompanyStock> tempCompanyStockMap = new HashMap<Integer, CompanyStock>();
+		int i = 0;
+		Set<Integer> tempBasicIds = new HashSet<Integer>();// 临时存放商品字典id
+		Set<Integer> tempProdID = new HashSet<Integer>();// 临时存放商品id
+		List<Map<String, Object>> tempSpAll = new ArrayList<Map<String, Object>>();
+		int j = 0;
+		for (Product product : p) {
+			if (product.getSellStatus() != 1 || product.getDelFlag() == 1) {// 判断商品状态
+
+				if (product.getType() == 0) {// 普通商品
+					result.put("SPEC_" + specId[i], 0);
+				} else {// 礼盒包商品
+					result.put("P_" + product.getId(), 0);
+				}
+			} else {
+				if (product.getType() == 0) {// 普通商品
+					tempProdID.add(product.getId());
+					tempBasicIds.add(product.getProdBasicsId());
+					if (null != specId) {
+						Map<String, Object> tempSpSub = new HashMap<String, Object>(
+								2);
+						tempSpSub.put("prodId", product.getId());
+						tempSpSub.put("specId", specId[j]);
+						tempSpAll.add(tempSpSub);
+					}
+				} else {
+					ProductPackage pPack = new ProductPackage();
+					pPack.setProdId(product.getId());
+					List<ProductPackage> pplist = productPackageMapper
+							.getAllByProductPackage(pPack);
+					product.setProductPackageList(pplist);
+					for (ProductPackage pp2 : pplist) {
+						tempBasicIds.add(pp2.getProdBaseicId());
+					}
+				}
+			}
+			j++;
+
+		}
+		if (tempBasicIds.size() == 0) {
+			return result;
+		}
+
+		Map<String, Object> params = new HashMap<String, Object>(3);
+		params.put("companyId", companyId);
+		if(null != tempBasicIds && tempBasicIds.size()>0){
+			params.put("prodBasicId", tempBasicIds);
+		}else{
+			params.put("prodBasicId", null);
+		}
+		params.put("tempProdID", tempProdID);
+		tempCompanyStock = companyStockMapper.selectByCompanyStockMaps(params);// error
+
+		for (CompanyStock cStock : tempCompanyStock) {
+			tempCompanyStockMap.put(cStock.getProdBasicId(), cStock);
+		}
+
+		// 如果規格爲空，那么取出该商品的最小规格还存起来
+		if (null == specId && tempProdID.size() > 0) {
+			tempProductSpecificationInfo = productSpecificationInfoMapper
+					.getLowInventorynumberMaps(params);
+			for (ProductSpecificationInfo psInfo : tempProductSpecificationInfo) {
+				tempProductSpecificationInfoMap.put(psInfo.getProductId(),
+						psInfo);
+			}
+		}
+		// 如果規格不爲空，那么取出该商品的传入规格还存起来
+		if (null != specId && tempProdID.size() > 0) {
+			tempProductSpecificationInfo = productSpecificationInfoMapper
+					.getInventorynumberMaps(tempSpAll);
+			for (ProductSpecificationInfo psInfo : tempProductSpecificationInfo) {
+				tempProductSpecificationInfoMap.put(psInfo.getId(), psInfo);
+			}
+		}
+
+		for (Product product : p) {
+			if (product.getSellStatus() != 1 || product.getDelFlag() == 1) {// 判断商品状态
+
+				if (product.getType() == 0) {// 普通商品
+					result.put("SPEC_" + specId[i], 0);
+				} else {// 礼盒包商品
+					result.put("P_" + product.getId(), 0);
+				}
+			} else {
+				int tempCount = 1;
+
+				if (null != count) {
+					tempCount = Integer.parseInt(count[i]);
+				}
+				if (tempCount < 1) {
+					if (product.getType() == 0) {// 普通商品
+						result.put("SPEC_" + specId[i], 0);
+					} else {// 礼盒包商品
+						result.put("P_" + product.getId(), 0);
+					}
+				}
+				if (product.getType() == 0) {// 普通商品
+					// 记录临时规格，如果不传规格id 那么查询最小
+					ProductSpecificationInfo pSpec = null;
+					temp = tempCompanyStockMap.get(product.getProdBasicsId());
+					if (null != specId) {// 存在规格id
+						pSpec = tempProductSpecificationInfoMap.get(Integer
+								.parseInt(specId[i]));
+
+					} else {
+						pSpec = tempProductSpecificationInfoMap.get(product
+								.getId());
+					}
+
+					if (null != pSpec) {
+						if (null != temp
+								&& (temp.getInventorynumber() - pSpec
+										.getInventorynumber() * tempCount) >= 0) {// 基地商品库存不足
+
+						} else {
+							if (temp != null) {
+								int tCount = temp.getInventorynumber()
+										/ pSpec.getInventorynumber();// 最大库存
+								result.put("SPEC_" + pSpec.getId(), tCount);
+							} else {
+								result.put("SPEC_" + pSpec.getId(), 0);
+							}
+						}
+					} else {
+						result.put("SPEC_" + specId[i], 0);
+					}
+
+				} else {// 礼盒包商品
+
+					List<ProductPackage> pp = product.getProductPackageList();
+					boolean canSale = true;
+					List<Integer> tempC = new ArrayList<Integer>();// 礼盒中每一个商品的最大数量
+
+					for (ProductPackage productPackage : pp) {
+						temp = tempCompanyStockMap.get(productPackage
+								.getProdBaseicId());
+						// 获取礼盒中每一个字典的id对应的系统库存表
+						if (canSale
+								&& null != temp
+								&& (temp.getInventorynumber() - productPackage
+										.getInventorynumber() * tempCount) >= 0) {// 基地商品库存不足
+						} else {
+							if (null == temp) {
+								tempC.add(0);
+								canSale = false;
+							} else {
+								int tCount = temp.getInventorynumber()
+										/ productPackage.getInventorynumber();
+								tempC.add(tCount);
+								canSale = false;
+							}
+
+						}
+					}
+					if (canSale) {
+					} else {
+						result.put("P_" + product.getId(),
+								tempC.size() > 0 ? Collections.min(tempC) : 0);
+					}
+				}
+			}
+			i++;
+		}
+
+		return result;
+	}
+
+	public static void main(String[] args) {
+		List<Integer> tempC = new ArrayList<Integer>();// 礼盒中每一个商品的最大数量
+		System.out.println(Collections.min(tempC));
+	}
+
+	@Override
+	public List<Map<String, Object>> selectProductList(Product map) {
+		// TODO Auto-generated method stub
+		return productMapper.selectProductList(map);
+	}
+
+	@Override
+	public List<Map<String, Object>> listAjaxPageProductList(Product pro) {
+		// TODO Auto-generated method stub
+		return productMapper.listAjaxPageProductList(pro);
+	}
+
+	@Override
+	public Map<String, Object> selectFrontByProductInfo(Product record) {
+		// TODO Auto-generated method stub
+		return productMapper.selectFrontByProductInfo(record);
+	}
+
+	@Override
+	public Product selectProductByCart(Integer id) {
+		// TODO Auto-generated method stub
+		return productMapper.selectProductByCart(id);
+	}
+
+	@Override
+	public List<Map<String, Object>> listAjaxPageProductPromotion(Product pro) {
+		// TODO Auto-generated method stub
+		return productMapper.listAjaxPageProductPromotion(pro);
+	}
+
+	@Override
+	public List<Map<String, Object>> listAjaxPageAllProductPromotion(Product pro) {
+		// TODO Auto-generated method stub
+		return productMapper.listAjaxPageAllProductPromotion(pro);
+	}
+
+	@Override
+	public List<Product> selectTopRecommendProductByCart() {
+		// TODO Auto-generated method stub
+		return productMapper.selectTopRecommendProductByCart();
+	}
+
+}

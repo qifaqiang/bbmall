@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8" ?>  <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wxsoft.xyd.common.mapper.SysCouponsMapper">
+	<resultMap type="SysCoupons" id="SysCouponsMap">
+		<id property="id" column="id" />
+		<result property="id" column="id" />
+		<result property="name" column="name" />
+		<result property="remark" column="remark" />
+		<result property="startTime" column="start_time" />
+		<result property="endTime" column="end_time" />
+		<result property="addtime" column="addtime" />
+		<result property="needPrice" column="need_price" />
+		<result property="substractPrice" column="substract_price" />
+		<result property="adduserid" column="adduserid" />
+		<result property="allCount" column="all_count" />
+		<result property="leftCount" column="left_count" />
+		<result property="type" column="type" />
+		<result property="state" column="state" />
+		<result property="del_flag" column="delFlag" />
+		<result property="validTime" column="valid_time" />
+
+	</resultMap>
+	<select id="selectByPrimaryKey" parameterType="Integer"
+		resultMap="SysCouponsMap"><![CDATA[  SELECT id,valid_time,name,remark,start_time,end_time,addtime,need_price,substract_price,adduserid,all_count,left_count,type FROM sys_coupons tmp WHERE tmp.id = #{id} AND del_flag=1 ]]>
+	</select>
+	<select id="selectByPrimaryKeyCe" parameterType="Integer"
+		resultMap="SysCouponsMap"><![CDATA[  SELECT id FROM sys_coupons tmp WHERE tmp.id = #{id} AND del_flag=1 and  end_time>now()]]>
+	</select>
+	<select id="selectBySysCoupons" parameterType="SysCoupons"
+		resultMap="SysCouponsMap">
+		SELECT
+		id,name,remark,valid_time,start_time,end_time,addtime,need_price,substract_price,adduserid,all_count,left_count,type
+		FROM sys_coupons tmp
+		<where>
+			<if test="id != null"> AND id = #{id} </if>
+			<if test="name != null"> AND name = #{name} </if>
+			<if test="remark != null"> AND remark = #{remark} </if>
+			<if test="startTime != null"> AND start_time = #{startTime} </if>
+			<if test="endTime != null"> AND end_time = #{endTime} </if>
+			<if test="addtime != null"> AND addtime = #{addtime} </if>
+			<if test="needPrice != null"> AND need_price = #{needPrice} </if>
+			<if test="substractPrice != null"> AND substract_price = #{substractPrice} </if>
+			<if test="adduserid != null"> AND adduserid = #{adduserid} </if>
+			<if test="allCount != null"> AND all_count = #{allCount} </if>
+			<if test="leftCount != null"> AND left_count = #{leftCount} </if>
+			<if test="type != null"> AND type = #{type} </if>
+			AND del_flag=1
+		</where>
+	</select>
+	<select id="listPageBySysCoupons" parameterType="SysCoupons"
+		resultMap="SysCouponsMap">
+		SELECT
+		id,name,remark,valid_time,start_time,end_time,addtime,need_price,substract_price,adduserid,all_count,left_count,type
+		FROM sys_coupons tmp
+		<where>
+			<if test="id != null"> AND id = #{id} </if>
+			<if test="name != null"> AND name = #{name} </if>
+			<if test="remark != null"> AND remark = #{remark} </if>
+			<if test="startTime != null"> AND start_time = #{startTime} </if>
+			<if test="endTime != null"> AND end_time = #{endTime} </if>
+			<if test="addtime != null"> AND addtime = #{addtime} </if>
+			<if test="needPrice != null"> AND need_price = #{needPrice} </if>
+			<if test="substractPrice != null"> AND substract_price = #{substractPrice} </if>
+			<if test="adduserid != null"> AND adduserid = #{adduserid} </if>
+			<if test="allCount != null"> AND all_count = #{allCount} </if>
+			<if test="leftCount != null"> AND left_count = #{leftCount} </if>
+			<if test="type != null"> AND type = #{type} </if>
+			AND del_flag=1
+		</where>
+		ORDER BY id DESC
+	</select>
+	<select id="listAjaxPageSysCoupons" parameterType="SysCoupons"
+	resultMap="SysCouponsMap">
+	SELECT scr.user_id userId,
+sc.id,sc.name,sc.remark,DATE_FORMAT(sc.start_time,'%Y/%m/%d')
+	startTimeS,sc.start_time
+	startTime,DATE_FORMAT(sc.end_time,'%Y/%m/%d') endTimeS,sc.end_time endTime,sc.addtime,sc.need_price
+	needPrice,sc.substract_price substractPrice,sc.adduserid,sc.all_count allCount,sc.left_count
+	leftCount,type,
+CASE WHEN NOW() <![CDATA[>]]> sc.start_time AND NOW() <![CDATA[<]]>  sc.end_time THEN '1' WHEN NOW() <![CDATA[<]]> sc.start_time THEN '2' ELSE '3' END AS state
+
+FROM sys_coupons sc LEFT JOIN sys_coupons_record scr 
+ON     sc.id=scr.coupons_id  AND scr.user_id=#{userId}
+where  sc.left_count<![CDATA[>]]>0 and sc.end_time <![CDATA[>]]> now() and sc.del_flag=1
+	ORDER BY id DESC
+</select>
+
+<select id="listAjaxPageCoupons" parameterType="SysCoupons"
+	resultMap="SysCouponsMap">
+	SELECT 
+sc.id,sc.name,sc.remark,DATE_FORMAT(sc.start_time,'%Y/%m/%d')
+	startTimeS,sc.start_time
+	startTime,DATE_FORMAT(sc.end_time,'%Y/%m/%d') endTimeS,sc.end_time endTime,sc.addtime,sc.need_price
+	needPrice,sc.substract_price substractPrice,sc.adduserid,sc.all_count allCount,sc.left_count
+	leftCount,type,
+CASE WHEN NOW() <![CDATA[>]]> sc.start_time AND NOW() <![CDATA[<]]>  sc.end_time THEN '1' WHEN NOW() <![CDATA[<]]> sc.start_time THEN '2' ELSE '3' END AS state
+FROM sys_coupons sc 
+where  sc.left_count<![CDATA[>]]>0 and sc.end_time <![CDATA[>]]> now() and sc.del_flag=1
+	ORDER BY id DESC
+</select>
+	<select id="getAllBySysCoupons" parameterType="SysCoupons"
+		resultMap="SysCouponsMap">
+		SELECT
+		id,name,remark,valid_time,start_time,end_time,addtime,need_price,substract_price,adduserid,all_count,left_count,type
+		from sys_coupons tmp
+		<where>
+			<if test="id != null"> AND id = #{id} </if>
+			<if test="name != null"> AND name = #{name} </if>
+			<if test="remark != null"> AND remark = #{remark} </if>
+			<if test="startTime != null"> AND start_time = #{startTime} </if>
+			<if test="endTime != null"> AND end_time = #{endTime} </if>
+			<if test="addtime != null"> AND addtime = #{addtime} </if>
+			<if test="needPrice != null"> AND need_price = #{needPrice} </if>
+			<if test="substractPrice != null"> AND substract_price = #{substractPrice} </if>
+			<if test="adduserid != null"> AND adduserid = #{adduserid} </if>
+			<if test="allCount != null"> AND all_count = #{allCount} </if>
+			<if test="leftCount != null"> AND left_count = #{leftCount} </if>
+			<if test="type != null"> AND type = #{type} </if>
+			AND del_flag=1
+		</where>
+		ORDER BY id DESC
+	</select>
+	<insert id="insertSelective" parameterType="SysCoupons">
+		INSERT INTO sys_coupons
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">id,</if>
+			<if test="name != null">name,</if>
+			<if test="remark != null">remark,</if>
+			<if test="startTime != null">start_time,</if>
+			<if test="endTime != null">end_time,</if>
+			<if test="addtime != null">addtime,</if>
+			<if test="needPrice != null">need_price,</if>
+			<if test="substractPrice != null">substract_price,</if>
+			<if test="adduserid != null">adduserid,</if>
+			<if test="allCount != null">all_count,</if>
+			<if test="leftCount != null">left_count,</if>
+			<if test="type != null">type,</if>
+			<if test="validTime != null">valid_time,</if>
+		</trim>
+		values
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">#{id},</if>
+			<if test="name != null">#{name},</if>
+			<if test="remark != null">#{remark},</if>
+			<if test="startTime != null">#{startTime},</if>
+			<if test="endTime != null">#{endTime},</if>
+			<if test="addtime != null">#{addtime},</if>
+			<if test="needPrice != null">#{needPrice},</if>
+			<if test="substractPrice != null">#{substractPrice},</if>
+			<if test="adduserid != null">#{adduserid},</if>
+			<if test="allCount != null">#{allCount},</if>
+			<if test="leftCount != null">#{leftCount},</if>
+			<if test="type != null">#{type},</if>
+			<if test="validTime != null">#{validTime},</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="SysCoupons">
+		update sys_coupons
+		<set>
+			<if test="id != null">id=#{id},</if>
+			<if test="name != null">name=#{name},</if>
+			<if test="remark != null">remark=#{remark},</if>
+			<if test="startTime != null">start_time=#{startTime},</if>
+			<if test="endTime != null">end_time=#{endTime},</if>
+			<if test="addtime != null">addtime=#{addtime},</if>
+			<if test="needPrice != null">need_price=#{needPrice},</if>
+			<if test="substractPrice != null">substract_price=#{substractPrice},</if>
+			<if test="adduserid != null">adduserid=#{adduserid},</if>
+			<if test="allCount != null">all_count=#{allCount},</if>
+			<if test="leftCount != null">left_count=#{leftCount},</if>
+			<if test="type != null">type=#{type},</if>
+			<if test="delFlag != null">del_flag=#{delFlag},</if>
+			<if test="validTime != null">valid_time=#{validTime},</if>
+		</set>
+		where id = #{id}
+	</update>
+	<delete id="deleteByPrimaryKey" parameterType="SysCoupons"><![CDATA[delete from sys_coupons where id=#{id}
+]]></delete>
+	<update id="updateCount" parameterType="Integer">
+	 UPDATE sys_coupons SET left_count=left_count-1 WHERE id=#{id} and left_count<![CDATA[>]]> 0
+	</update>
+</mapper>

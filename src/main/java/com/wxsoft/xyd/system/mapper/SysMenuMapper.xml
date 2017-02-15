@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wxsoft.xyd.system.mapper.SysMenuMapper">
+	<resultMap id="BaseResultMap" type="com.wxsoft.xyd.system.model.SysMenu">
+
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="parent_id" property="parentId" jdbcType="INTEGER" />
+		<result column="visable" property="visable" jdbcType="INTEGER" />
+		<result column="img_url" property="imgUrl" jdbcType="VARCHAR" />
+		<result column="link_url" property="linkUrl" jdbcType="VARCHAR" />
+		<result column="img_class" property="imgClass" jdbcType="VARCHAR" />
+		<result column="role_intercept" property="roleIntercept"
+			jdbcType="VARCHAR" />
+		<result column="type_id" property="typeId" jdbcType="INTEGER" />
+		<result column="ord" property="ord" jdbcType="INTEGER" />
+		<result column="level" property="level" jdbcType="INTEGER" />
+	</resultMap>
+	<sql id="Base_Column_List">
+
+		id, name, parent_id, visable, img_url, link_url,ord,
+		img_class,role_intercept,level
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Integer">
+
+		select
+		<include refid="Base_Column_List" />
+		from sys_menu
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+	<select id="getAllFirstLevelSysMenu" resultMap="BaseResultMap"
+		parameterType="com.wxsoft.xyd.system.model.SysMenu">
+		select
+		<include refid="Base_Column_List" />
+		from sys_menu sm where sm.parent_id=0 and sm.visable=1
+		<if test="roleId !=null and roleId !=0">
+			left join user_roleresource ur on sm.id=ur.resid where
+			sm.parent_id=0 and sm.visable=1 and
+			ur.roleid=#{roleId,jdbcType=INTEGER}
+		</if>
+		order by sm.ord
+	</select>
+
+	<select id="getAllByParentId" resultMap="BaseResultMap"
+		parameterType="int">
+		select
+		<include refid="Base_Column_List" />
+		from sys_menu sm where sm.parent_id=#{pid}
+		order by sm.ord
+	</select>
+
+
+
+	<select id="getAllFirstLevelSysMenuWithRole" resultMap="BaseResultMap"
+		parameterType="com.wxsoft.xyd.system.model.SysMenu">
+		select
+		<include refid="Base_Column_List" />
+		from sys_menu sm
+		<if test="roleId !=null and roleId !=0">
+			left join user_roleresource ur on sm.id=ur.resid where
+			sm.parent_id=0 and sm.visable=1 and
+			ur.roleid=#{roleId,jdbcType=INTEGER}
+		</if>
+		order by sm.ord
+	</select>
+
+	<select id="getAllUserSysMenu" resultMap="BaseResultMap"
+		parameterType="com.wxsoft.xyd.system.model.SysMenu">
+		(select GROUP_CONCAT(s.link_url) as link_url from
+		sys_menu s LEFT JOIN user_roleresource ur on ur.resid=s.id where
+		ur.roleid=#{roleId,jdbcType=INTEGER})
+		union(
+		select
+		GROUP_CONCAT(sm.link_url) as link_url from (select s.id,s.name from
+		sys_menu s LEFT JOIN user_roleresource ur on ur.resid=s.id where
+		ur.roleid=#{roleId,jdbcType=INTEGER}) aa LEFT JOIN sys_menu sm on
+		sm.parent_id=aa.id where
+		sm.level=3)
+	</select>
+
+
+	<select id="getRoleInterceptByRoleId" resultType="java.lang.String"
+		parameterType="java.lang.Integer">
+		select
+		GROUP_CONCAT(role_intercept)
+		from sys_menu sm
+		left
+		join user_roleresource ur on sm.id=ur.resid where
+		sm.parent_id=0 and
+		sm.visable=1 and ur.roleid=#{roleId}
+	</select>
+
+	<select id="getAllSecondLevelSysMenu" resultMap="BaseResultMap"
+		parameterType="SysMenu">
+		select
+		<include refid="Base_Column_List" />
+		from sys_menu
+		where parent_id=#{id} and visable=1 order by ord
+	</select>
+
+	<select id="getAllSecondLevelSysMenuRole" resultMap="BaseResultMap"
+		parameterType="map">
+		select
+		sm.id, sm.name, sm.parent_id, sm.visable,
+		sm.img_url, sm.link_url,
+		sm.img_class,sm.role_intercept
+		from sys_menu
+		sm
+		left join user_roleresource ur on sm.id=ur.resid
+		where
+		sm.parent_id=#{id} and ur.roleid=#{roleId}
+		and sm.visable=1 order by
+		sm.ord
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+
+		delete from
+		sys_menu
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+	<insert id="insert" parameterType="com.wxsoft.xyd.system.model.SysMenu" useGeneratedKeys="true" keyProperty="id">
+		insert into sys_menu (id,
+		name, parent_id,
+		visable, img_url, link_url,
+		img_class,level)
+		values
+		(#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR},
+		#{parentId,jdbcType=INTEGER},
+		#{visable,jdbcType=INTEGER},
+		#{imgUrl,jdbcType=VARCHAR}, #{linkUrl,jdbcType=VARCHAR},
+		#{imgClass,jdbcType=VARCHAR},#{level,jdbcType=VARCHAR})
+	</insert>
+	<update id="updateByPrimaryKey" parameterType="com.wxsoft.xyd.system.model.SysMenu">
+		update sys_menu
+		set name = #{name,jdbcType=VARCHAR},
+		ord = #{ord,jdbcType=VARCHAR},
+		parent_id =
+		#{parentId,jdbcType=INTEGER},
+		visable =
+		#{visable,jdbcType=INTEGER},
+		img_url =
+		#{imgUrl,jdbcType=VARCHAR},
+		link_url =
+		#{linkUrl,jdbcType=VARCHAR},
+		img_class =
+		#{imgClass,jdbcType=VARCHAR}
+		where id =
+		#{id,jdbcType=INTEGER}
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.wxsoft.xyd.system.model.SysMenu">
+		update sys_menu
+		<set>
+			<if test="name != null">name = #{name},</if>
+			<if test="parentId != null">parent_id = #{parentId},</if>
+			<if test="imgUrl != null">img_url = #{imgUrl},</if>
+			<if test="linkUrl != null">link_url = #{linkUrl},</if>
+			<if test="imgClass != null">img_class = #{imgClass},</if>
+			<if test="ord != null">ord = #{ord},</if>
+			<if test="visable != null">visable = #{visable},</if>
+		</set>
+		where id = #{id}
+	</update>
+</mapper>

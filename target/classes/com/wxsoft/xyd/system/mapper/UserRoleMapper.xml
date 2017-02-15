@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wxsoft.xyd.system.mapper.UserRoleMapper">
+	<resultMap id="BaseResultMap" type="com.wxsoft.xyd.system.model.UserRole">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="status" property="status" jdbcType="BIT" />
+		<result column="descn" property="descn" jdbcType="VARCHAR" />
+		<result column="rolecode" property="rolecode" jdbcType="VARCHAR" />
+		<result column="company_id" property="companyId" jdbcType="INTEGER" />
+		<result column="time" property="time" jdbcType="INTEGER" />
+	</resultMap>
+	<resultMap type="com.wxsoft.xyd.system.model.UserRole"
+		id="roleResourceList">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+
+		id, name, status, descn, rolecode,company_id,time
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from user_role
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+	
+	<select id="selectByUserRoleAssociatedDeUserId" resultMap="roleResourceList"
+		parameterType="java.lang.Integer">
+		select
+		ur.*
+		from user_role ur left join user_role_associated ura on ura.roleid=ur.id
+		where ura.userid = #{id,jdbcType=INTEGER}
+	</select>
+	
+	<select id="selectRoleResourceByPrimaryKey" resultMap="roleResourceList"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from user_role
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+
+	<select id="listPageAllRole" resultMap="BaseResultMap"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from user_role
+		
+	</select>
+	
+	<select id="getAllRoleByCompanyId" resultMap="BaseResultMap"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from user_role
+		where company_id = #{companyId,jdbcType=INTEGER}
+	</select>
+
+
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+
+		delete from
+		user_role
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+	<insert id="insert" parameterType="com.wxsoft.xyd.system.model.UserRole"
+		useGeneratedKeys="true" keyProperty="id">
+
+		insert into user_role (id, name, status,
+		descn,
+		rolecode,time,company_id)
+		values
+		(#{id,jdbcType=INTEGER},
+		#{name,jdbcType=VARCHAR},
+		1,
+		#{descn,jdbcType=VARCHAR},
+		#{rolecode,jdbcType=VARCHAR},now(),#{companyId,jdbcType=INTEGER})
+		<!-- 添加活动信息 -->
+		<selectKey resultType="Integer" keyProperty="id">
+			select
+			last_insert_id() as id from user_role limit 1
+		</selectKey>
+	</insert>
+	<insert id="insertSelective" parameterType="com.wxsoft.xyd.system.model.UserRole">
+
+		insert into user_role
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="name != null">
+				name,
+			</if>
+			<if test="status != null">
+				status,
+			</if>
+			<if test="descn != null">
+				descn,
+			</if>
+			<if test="rolecode != null">
+				rolecode,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=INTEGER},
+			</if>
+			<if test="name != null">
+				#{name,jdbcType=VARCHAR},
+			</if>
+			<if test="status != null">
+				#{status,jdbcType=BIT},
+			</if>
+			<if test="descn != null">
+				#{descn,jdbcType=VARCHAR},
+			</if>
+			<if test="rolecode != null">
+				#{rolecode,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.wxsoft.xyd.system.model.UserRole">
+
+		update user_role
+		<set>
+			<if test="name != null">
+				name = #{name,jdbcType=VARCHAR},
+			</if>
+			<if test="status != null">
+				status = #{status,jdbcType=BIT},
+			</if>
+			<if test="descn != null">
+				descn = #{descn,jdbcType=VARCHAR},
+			</if>
+			<if test="rolecode != null">
+				rolecode = #{rolecode,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+</mapper>

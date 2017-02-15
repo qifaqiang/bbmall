@@ -1,0 +1,630 @@
+<?xml version="1.0" encoding="UTF-8" ?>  <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wxsoft.xyd.prod.mapper.ProductMapper">
+	<resultMap type="Product" id="productMap">
+		<id property="id" column="id" />
+		<result property="name" column="name" />
+		<result property="price" column="price" />
+		<result property="descn" column="descn" />
+		<result property="picuri" column="picuri" />
+		<result property="status" column="status" />
+		<result property="weight" column="weight" />
+		<result property="modified" column="modified" />
+		<result property="specid" column="specid" />
+		<result property="created" column="created" />
+		<result property="paycode" column="paycode" />
+		<result property="inventorynumber" column="inventorynumber" />
+		<result property="warningnumber" column="warningnumber" />
+		<result property="companyId" column="company_id" />
+		<result property="unit" column="unit" />
+		<result property="istop" column="istop" />
+		<result property="remark" column="remark" />
+		<result property="sn" column="sn" />
+		<result property="marketPrice" column="market_price" />
+		<result property="delFlag" column="del_flag" />
+		<result property="freight" column="freight" />
+		<result property="inventoryCalculation" column="inventory_calculation" />
+		<result property="sellTime" column="sell_time" />
+		<result property="sellEndTime" column="sell_end_time" />
+		<result property="sellStatus" column="sell_status" />
+		<result property="isSpecification" column="is_specification" />
+		<result property="addtime" column="addtime" />
+		<result property="vState" column="v_state" />
+		<result property="vContent" column="v_content" />
+		<result property="vTime" column="v_time" />
+		<result property="isSubscribe" column="is_subscribe" />
+		<result property="catalogId1" column="catalog_id_1" />
+		<result property="type" column="type" />
+		<result property="score" column="score" />
+		<result property="catalogId2" column="catalog_id_2" />
+		<result property="prodTagsId" column="prod_tags_id" />
+		<result property="prodBasicsId" column="prod_basic_id" />
+		<result property="origin" column="origin" />
+		<result property="note" column="note" />
+	</resultMap>
+
+	<resultMap type="Product" id="productMapPackage" extends="productMap">
+		<collection property="productPackageList" column="id"
+			select="com.wxsoft.xyd.prod.mapper.ProductPackageMapper.selectByProductId"></collection>
+	</resultMap>
+	<!-- 根据商品ID判断是否在购物车中 -->
+<select id="getCarProductVsUserId" parameterType="map"
+		resultMap="productMap">
+		SELECT prod_id id from user_cart cs  where user_id=#{userId} and
+		cs.prod_id in
+		<foreach item="item" index="index" collection="prodId" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+	</select>
+		<!-- 根据商品ID判断是否在收藏中 -->
+<select id="getCangProductVsUserId" parameterType="map"
+		resultMap="productMap">
+		SELECT prod_id id from user_collection cs  where user_id=#{userId} and
+		cs.prod_id in
+		<foreach item="item" index="index" collection="prodId" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+	</select>
+	<select id="selectByPrimaryKey" parameterType="Integer"
+		resultMap="productMap"><![CDATA[  SELECT id,name,picuri,is_subscribe,type,
+		tmp.inventorynumber,is_specification,origin,tmp.del_flag,price from product tmp WHERE tmp.id = #{id} ]]>
+	</select>
+	<select id="selectByProduct" parameterType="Product" resultMap="productMap">
+		SELECT
+		id,name,istop,addtime,catalog_id_1,catalog_id_2,prod_tags_id,score,prod_basic_id,note,origin,is_subscribe,v_state,v_content,v_time,is_specification,price,descn,picuri,status,weight,modified,specid,created,paycode,inventorynumber,warningnumber,company_id,unit,istop,remark,sn,market_price,del_flag,freight,inventory_calculation,sell_time,sell_end_time,sell_status
+		from product tmp WHERE
+		<if test="id != null">id = #{id} and </if>
+		<if test="name != null">name = #{name} and </if>
+		<if test="price != null">price = #{price} and </if>
+		<if test="descn != null">descn = #{descn} and </if>
+		<if test="picuri != null">picuri = #{picuri} and </if>
+		<if test="status != null">status = #{status} and </if>
+		<if test="weight != null">weight = #{weight} and </if>
+		<if test="modified != null">modified = #{modified} and </if>
+		<if test="specid != null">specid = #{specid} and </if>
+		<if test="created != null">created = #{created} and </if>
+		<if test="paycode != null">paycode = #{paycode} and </if>
+		<if test="inventorynumber != null">inventorynumber = #{inventorynumber} and </if>
+		<if test="warningnumber != null">warningnumber = #{warningnumber} and </if>
+		<if test="companyId != null">company_id = #{companyId} and </if>
+		<if test="unit != null">unit = #{unit} and </if>
+		<if test="istop != null">istop = #{istop} and </if>
+		<if test="remark != null">remark = #{remark} and </if>
+		<if test="sn != null">sn = #{sn} and </if>
+		<if test="marketPrice != null">market_price = #{marketPrice} and </if>
+		<if test="delFlag != null">del_flag = #{delFlag} and </if>
+		<if test="freight != null">freight = #{freight} and </if>
+		<if test="inventoryCalculation != null">inventory_calculation = #{inventoryCalculation} and </if>
+		<if test="sellTime != null">sell_time = #{sellTime} and </if>
+		<if test="sellEndTime != null">sell_end_time = #{sellEndTime} and </if>
+		<if test="sellStatus != null">sell_status = #{sellStatus} and </if>
+		<if test="vState != null">v_state = #{vState} and </if>
+		<if test="catalogId1 != null">catalog_id_1 = #{catalogId1} and </if>
+		1=1
+	</select>
+
+	<select id="selectProductByCart" parameterType="Integer"
+		resultMap="productMap">
+		SELECT id,
+		tmp.inventorynumber,prod_basic_id,origin,is_subscribe,note,type,addtime,v_state,v_content,v_time,is_specification,tmp.del_flag,tmp.sell_time,tmp.sell_end_time,tmp.sell_status,company_id,catalog_id_1
+		from product tmp WHERE id = #{id} and tmp.del_flag=0
+	</select>
+	<select id="selectProductByCartShow" parameterType="Integer"
+		resultMap="productMap">
+		SELECT id,name,picuri,is_subscribe,type,
+		tmp.inventorynumber,is_specification,origin,tmp.del_flag,note,tmp.sell_time,tmp.sell_end_time,tmp.sell_status,price,company_id,catalog_id_1
+		from product tmp WHERE id = #{id} and tmp.del_flag=0
+	</select>
+
+
+	<select id="selectProductByCartOrder" resultMap="productMap">
+		SELECT tmp.id,
+		tmp.NAME,tmp.is_subscribe,
+		tmp.picuri,
+		tmp.inventorynumber,is_specification,origin,tmp.del_flag,tmp.sell_time,tmp.sell_end_time,tmp.sell_status,tmp.price,tmp.company_id,catalog_id_1
+		from product tmp left join company c on tmp.company_id=c.company_id
+		right join user_cart ucs on ucs.prod_id=tmp.id WHERE
+		tmp.company_id =
+		#{companyId} and c.isdel=1 and ucs.user_id=#{user_id} and tmp.id in
+		<foreach item="item" index="index" collection="prods" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+		and v_state=1 and tmp.del_flag=0
+	</select>
+
+
+	<select id="selectFrontByProductInfo" parameterType="Product"
+		resultType="map">
+		SELECT
+		tmp.id,tmp.name,origin,tmp.price,note,tmp.descn,tmp.picuri,tmp.status,tmp.weight,tmp.catalog_id_1,tmp.catalog_id_2,
+		tmp.inventorynumber,tmp.unit,tmp.istop,type,tmp.market_price,tmp.sell_status,prod_basic_id,
+		(select max(psi.price) from product_specification_info psi where
+		psi.product_id=tmp.id) as max_price,
+		(select max(psi.market_price) from
+		product_specification_info psi where
+		psi.product_id=tmp.id) as
+		max_market_price
+		from product tmp WHERE
+		id=#{id} and tmp.del_flag=0 and
+		sell_status=1
+	</select>
+
+	<select id="selectFrontByProduct" parameterType="Product"
+		resultType="map">
+		SELECT
+		tmp.id,tmp.name,origin,tmp.price,note,tmp.descn,tmp.picuri,tmp.status,tmp.weight,tmp.catalog_id_1,
+		tmp.inventorynumber,tmp.unit,tmp.istop,type,tmp.market_price,tmp.sell_status,prod_basic_id
+		from product tmp WHERE
+		<if test="id != null">id = #{id} and </if>
+		<if test="name != null">name = #{name} and </if>
+		<if test="price != null">price = #{price} and </if>
+		<if test="descn != null">descn = #{descn} and </if>
+		<if test="picuri != null">picuri = #{picuri} and </if>
+		<if test="status != null">status = #{status} and </if>
+		<if test="weight != null">weight = #{weight} and </if>
+		<if test="modified != null">modified = #{modified} and </if>
+		<if test="specid != null">specid = #{specid} and </if>
+		<if test="created != null">created = #{created} and </if>
+		<if test="paycode != null">paycode = #{paycode} and </if>
+		<if test="inventorynumber != null">inventorynumber = #{inventorynumber} and </if>
+		<if test="warningnumber != null">warningnumber = #{warningnumber} and </if>
+		<if test="companyId != null">uc.id = #{companyId} and </if>
+		<if test="unit != null">unit = #{unit} and </if>
+		<if test="istop != null">istop = #{istop} and </if>
+		<if test="remark != null">remark = #{remark} and </if>
+		<if test="sn != null">sn = #{sn} and </if>
+		<if test="marketPrice != null">market_price = #{marketPrice} and </if>
+		<if test="freight != null">freight = #{freight} and </if>
+		<if test="inventoryCalculation != null">inventory_calculation = #{inventoryCalculation} and </if>
+		<if test="sellTime != null">sell_time = #{sellTime} and </if>
+		<if test="sellEndTime != null">sell_end_time = #{sellEndTime} and </if>
+		<if test="sellStatus != null">sell_status = #{sellStatus} and </if>
+		<if test="catalogId1 != null">catalog_id_1 = #{catalogId1} and </if>
+		<if test="catalogId2 != null">catalog_id_2 = #{catalogId2} and </if>
+		<if test="origin != null">origin = #{origin} and </if>
+		1=1 and tmp.del_flag=0 and sell_status=1
+	</select>
+
+	<select id="listAjaxPageProduct" parameterType="Product"
+		resultType="map">
+		SELECT pc.name as catalogname,pm.sales_count,origin,
+		tmp.addtime
+		,tmp.id,tmp.name,pt.name as ptname,
+		tmp.istop,tmp.price,tmp.status,tmp.unit,tmp.sn,tmp.del_flag,tmp.type,tmp.sell_status,tmp.picuri
+		from product tmp left join product_catalog pc on
+		pc.id=tmp.catalog_id_2 left join product_statistics pm on
+		pm.prod_id=tmp.id left join product_tags pt on pt.id=tmp.prod_tags_id
+		WHERE
+		<if test="name != null">tmp.name like '%${name}%' and </if>
+		<if test="sn != null">tmp.sn = #{sn} and </if>
+		<if test="istop != null">tmp.istop = #{istop} and </if>
+		<if test="prodTagsId != null">tmp.prod_tags_id = #{prodTagsId} and </if>
+		<if test="sellStatus != null">tmp.sell_status = #{sellStatus} and </if>
+		<if test="catalogId1 != null">tmp.catalog_id_1 = #{catalogId1} and </if>
+		<if test="catalogId2 != null">tmp.catalog_id_2 = #{catalogId2} and </if>
+		<if test="type != null">tmp.type = #{type} and </if>
+		1=1 and tmp.del_flag=0 order by
+		<if test="orderBy != null"> ${orderBy} </if>
+	</select>
+	<!-- 获得促销商品 -->
+	<select id="listAjaxPageProductPromotion" parameterType="Product"
+		resultType="map">
+		SELECT pp.id promotionIdbiao,pp.promotion_id
+		promotionId,pp.prod_id id,p.picuri picuri,p.price price,p.unit
+		unit,p.specid,p.name FROM promotion_product pp , product p
+		WHERE
+		pp.prod_id=p.id
+		AND pp.promotion_id=#{id} and p.del_flag=0 and p.sell_status =1
+	</select>
+	<!-- 获得所有的促销商品 -->
+	<select id="listAjaxPageAllProductPromotion" parameterType="Product"
+		resultType="map">
+		SELECT * from product where del_flag=0 and sell_status=1
+	</select>
+	<select id="listPageByVProduct" parameterType="Product"
+		resultType="map">
+		SELECT c.company_name,
+		tmp.addtime,tmp.v_state,tmp.v_content,tmp.v_time,tmp.is_subscribe,tmp.sell_status,catalog_id_1,
+		tmp.id,tmp.name,tmp.status,tmp.company_id,tmp.istop,tmp.del_flag,tmp.type
+		from
+		product tmp left join company c on c.company_id=tmp.company_id
+		WHERE
+		<if test="vState != null">tmp.v_state = #{vState} and </if>
+		1=1 and c.company_id!=1 and tmp.del_flag=0
+	</select>
+	<select id="selectTopRecommendProductByCart" resultMap="productMap">
+		SELECT
+		p.id,p.name,p.price,ps.sales_count,p.remark,p.unit,p.picuri,p.note
+		FROM product p
+		LEFT
+		JOIN
+		product_statistics ps ON p.id=ps.prod_id where
+		p.del_flag=0 and
+		p.sell_status=1 and
+		p.prod_tags_id=3 order by p.addtime desc limit 8
+	</select>
+
+	<select id="getAllByProduct" parameterType="Product" resultMap="productMap">
+		SELECT addtime,v_state,v_content,v_time,is_subscribe,catalog_id_1,
+		id,name,price,is_specification,descn,picuri,status,weight,modified,specid,created,paycode,inventorynumber,warningnumber,company_id,unit,istop,remark,sn,market_price,del_flag,freight,inventory_calculation,sell_time,sell_end_time,sell_status
+		from product tmp WHERE
+		<if test="id != null">id = #{id} and </if>
+		<if test="name != null">name = #{name} and </if>
+		<if test="price != null">price = #{price} and </if>
+		<if test="descn != null">descn = #{descn} and </if>
+		<if test="picuri != null">picuri = #{picuri} and </if>
+		<if test="status != null">status = #{status} and </if>
+		<if test="weight != null">weight = #{weight} and </if>
+		<if test="modified != null">modified = #{modified} and </if>
+		<if test="specid != null">specid = #{specid} and </if>
+		<if test="created != null">created = #{created} and </if>
+		<if test="paycode != null">paycode = #{paycode} and </if>
+		<if test="inventorynumber != null">inventorynumber = #{inventorynumber} and </if>
+		<if test="warningnumber != null">warningnumber = #{warningnumber} and </if>
+		<if test="companyId != null">company_id = #{companyId} and </if>
+		<if test="unit != null">unit = #{unit} and </if>
+		<if test="istop != null">istop = #{istop} and </if>
+		<if test="remark != null">remark = #{remark} and </if>
+		<if test="sn != null">sn = #{sn} and </if>
+		<if test="marketPrice != null">market_price = #{marketPrice} and </if>
+		<if test="delFlag != null">del_flag = #{delFlag} and </if>
+		<if test="freight != null">freight = #{freight} and </if>
+		<if test="inventoryCalculation != null">inventory_calculation = #{inventoryCalculation} and </if>
+		<if test="sellTime != null">sell_time = #{sellTime} and </if>
+		<if test="sellEndTime != null">sell_end_time = #{sellEndTime} and </if>
+		<if test="sellStatus != null">sell_status = #{sellStatus} and </if>
+		<if test="vState != null">v_state = #{vState} and </if>
+		<if test="catalogId1 != null">catalog_id_1 = #{catalogId1} and </if>
+		<if test="catalogId2 != null">catalog_id_2 = #{catalogId2} and </if>
+		1=1 and tmp.del_flag=0
+	</select>
+	<insert id="insertSelective" parameterType="Product"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into product
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">id,</if>
+			<if test="name != null">name,</if>
+			<if test="price != null">price,</if>
+			<if test="descn != null">descn,</if>
+			<if test="picuri != null">picuri,</if>
+			<if test="status != null">status,</if>
+			<if test="weight != null">weight,</if>
+			<if test="modified != null">modified,</if>
+			<if test="specid != null">specid,</if>
+			<if test="created != null">created,</if>
+			<if test="paycode != null">paycode,</if>
+			<if test="inventorynumber != null">inventorynumber,</if>
+			<if test="warningnumber != null">warningnumber,</if>
+			<if test="companyId != null">company_id,</if>
+			<if test="unit != null">unit,</if>
+			<if test="istop != null">istop,</if>
+			<if test="remark != null">remark,</if>
+			<if test="sn != null">sn,</if>
+			<if test="marketPrice != null">market_price,</if>
+			<if test="delFlag != null">del_flag,</if>
+			<if test="freight != null">freight,</if>
+			<if test="inventoryCalculation != null">inventory_calculation,</if>
+			<if test="sellTime != null">sell_time,</if>
+			<if test="sellEndTime != null">sell_end_time,</if>
+			<if test="sellStatus != null">sell_status,</if>
+			<if test="isSpecification != null">is_specification,</if>
+			<if test="addtime != null">addtime,</if>
+			<if test="vState != null">v_state,</if>
+			<if test="vContent != null">v_content,</if>
+			<if test="vTime != null">v_time,</if>
+			<if test="isSubscribe != null">is_subscribe,</if>
+			<if test="catalogId1 != null">catalog_id_1,</if>
+			<if test="catalogId2 != null">catalog_id_2, </if>
+			<if test="type != null">type,</if>
+			<if test="prodTagsId != null">prod_tags_id,</if>
+			<if test="prodBasicsId != null">prod_basic_id,</if>
+			<if test="origin != null">origin,</if>
+			<if test="note != null">note,</if>
+		</trim>
+		value
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">#{id},</if>
+			<if test="name != null">#{name},</if>
+			<if test="price != null">#{price},</if>
+			<if test="descn != null">#{descn},</if>
+			<if test="picuri != null">#{picuri},</if>
+			<if test="status != null">#{status},</if>
+			<if test="weight != null">#{weight},</if>
+			<if test="modified != null">#{modified},</if>
+			<if test="specid != null">#{specid},</if>
+			<if test="created != null">#{created},</if>
+			<if test="paycode != null">#{paycode},</if>
+			<if test="inventorynumber != null">#{inventorynumber},</if>
+			<if test="warningnumber != null">#{warningnumber},</if>
+			<if test="companyId != null">#{companyId},</if>
+			<if test="unit != null">#{unit},</if>
+			<if test="istop != null">#{istop},</if>
+			<if test="remark != null">#{remark},</if>
+			<if test="sn != null">#{sn},</if>
+			<if test="marketPrice != null">#{marketPrice},</if>
+			<if test="delFlag != null">#{delFlag},</if>
+			<if test="freight != null">#{freight},</if>
+			<if test="inventoryCalculation != null">#{inventoryCalculation},</if>
+			<if test="sellTime != null">#{sellTime},</if>
+			<if test="sellEndTime != null">#{sellEndTime},</if>
+			<if test="sellStatus != null">#{sellStatus},</if>
+			<if test="isSpecification != null">#{isSpecification},</if>
+			<if test="addtime != null">#{addtime},</if>
+			<if test="vState != null">#{vState},</if>
+			<if test="vContent != null">#{vContent},</if>
+			<if test="vTime != null">#{vTime},</if>
+			<if test="isSubscribe != null">#{isSubscribe},</if>
+			<if test="catalogId1 != null">#{catalogId1},</if>
+			<if test="catalogId2 != null">#{catalogId2},</if>
+			<if test="type != null">#{type},</if>
+			<if test="prodTagsId != null">#{prodTagsId},</if>
+			<if test="prodBasicsId != null">#{prodBasicsId},</if>
+			<if test="origin != null">#{origin},</if>
+			<if test="note != null">#{note},</if>
+		</trim>
+	</insert>
+	<insert id="insert" parameterType="Product"><![CDATA[insert into product( 
+id,name,price,descn,picuri,status,weight,modified,specid,created,paycode,inventorynumber,warningnumber,company_id,unit,istop,remark,sn,market_price,del_flag,freight,inventory_calculation,sell_time,sell_end_time,sell_status,is_specification,catalog_id_1,type) values (#{id},#{name},#{price},#{descn},#{picuri},#{status},#{weight},#{modified},#{specid},#{created},#{paycode},#{inventorynumber},#{warningnumber},#{companyId},#{unit},#{istop},#{remark},#{sn},#{marketPrice},#{delFlag},#{freight},#{inventoryCalculation},#{sellTime},#{sellEndTime},#{sellStatus},#{isSpecification},#{catalogId1},#{type})
+]]></insert>
+	<update id="updateByPrimaryKeySelective" parameterType="Product">
+		update product
+		<set>
+			<if test="id != null">id = #{id},</if>
+			<if test="name != null">name = #{name},</if>
+			<if test="price != null">price = #{price},</if>
+			<if test="descn != null">descn = #{descn},</if>
+			<if test="picuri != null">picuri = #{picuri},</if>
+			<if test="status != null">status = #{status},</if>
+			<if test="weight != null">weight = #{weight},</if>
+			<if test="modified != null">modified = #{modified},</if>
+			<if test="specid != null">specid = #{specid},</if>
+			<if test="created != null">created = #{created},</if>
+			<if test="paycode != null">paycode = #{paycode},</if>
+			<if test="inventorynumber != null">inventorynumber = #{inventorynumber},</if>
+			<if test="warningnumber != null">warningnumber = #{warningnumber},</if>
+			<if test="companyId != null">company_id = #{companyId},</if>
+			<if test="unit != null">unit = #{unit},</if>
+			<if test="istop != null">istop = #{istop},</if>
+			<if test="remark != null">remark = #{remark},</if>
+			<if test="sn != null">sn = #{sn},</if>
+			<if test="marketPrice != null">market_price = #{marketPrice},</if>
+			<if test="delFlag != null">del_flag = #{delFlag},</if>
+			<if test="freight != null">freight = #{freight},</if>
+			<if test="inventoryCalculation != null">inventory_calculation = #{inventoryCalculation},</if>
+			<if test="sellTime != null">sell_time = #{sellTime},</if>
+			<if test="sellEndTime != null">sell_end_time = #{sellEndTime},</if>
+			<if test="isSpecification != null">is_specification = #{isSpecification},</if>
+			<if test="sellStatus != null">sell_status = #{sellStatus},</if>
+			<if test="vState != null">v_state = #{vState},</if>
+			<if test="vContent != null">v_content = #{vContent},</if>
+			<if test="vTime != null">v_time = #{vTime},</if>
+			<if test="isSubscribe != null">is_subscribe = #{isSubscribe},</if>
+			<if test="catalogId1 != null">catalog_id_1 = #{catalogId1},</if>
+			<if test="catalogId2 != null">catalog_id_2 = #{catalogId2},</if>
+			<if test="type != null">type = #{type},</if>
+			<if test="score != null">score = #{score}+score,</if>
+			<if test="prodTagsId != null">prod_tags_id = #{prodTagsId},</if>
+			<if test="prodBasicsId != null">prod_basic_id = #{prodBasicsId},</if>
+			<if test="origin != null">origin = #{origin},</if>
+			<if test="note != null">note = #{note},</if>
+		</set>
+		where id = #{id}
+	</update>
+
+	<update id="updateKuCunJian" parameterType="Product">
+		update product set
+		inventorynumber = inventorynumber-#{inventorynumber} where id = #{id}
+		and (inventorynumber-#{inventorynumber})>0 and sell_status =1
+	</update>
+	<update id="updateByPrimaryKey" parameterType="Product"><![CDATA[update product set 
+id=#{id},name=#{name},price=#{price},catalog_id_1 = #{catalogId1},is_subscribe=#{isSubscribe},descn=#{descn},picuri=#{picuri},status=#{status},is_specification=#{isSpecification},weight=#{weight},modified=#{modified},specid=#{specid},created=#{created},paycode=#{paycode},inventorynumber=#{inventorynumber},warningnumber=#{warningnumber},company_id=#{companyId},unit=#{unit},istop=#{istop},remark=#{remark},sn=#{sn},market_price=#{marketPrice},del_flag=#{delFlag},freight=#{freight},inventory_calculation=#{inventoryCalculation},sell_time=#{sellTime},sell_end_time=#{sellEndTime},sell_status=#{sellStatus} where id = #{id}
+]]></update>
+	<update id="deleteByPrimaryKey" parameterType="Product">
+		update product set del_flag = '1' where
+		<if test="id != null"> id=#{id} </if>
+	</update>
+	<select id="getAllBuyByMap" parameterType="Map" resultMap="productMap">
+		SELECT
+		tmp.id,name,price,status,sn,market_price,sell_status,type,
+		pb.deposit_price,pb.min_price,pb.minus_price,pb.booking_endDate,pb.catalog_id_2
+		from product tmp
+		left join product_booking pb
+		on tmp.id = pb.proid
+		where
+		tmp.id in(select prod_id from orders_detail
+		WHERE order_id=#{orderId})
+		and tmp.del_flag=0 and tmp.v_state = 1
+	</select>
+	<select id="getAllBuyByCataid" parameterType="Map" resultMap="productMap">
+		SELECT
+		tmp.id,tmp.name,is_specification,tmp.price,tmp.descn,tmp.picuri,tmp.status,tmp.weight,tmp.is_subscribe,tmp.catalog_id_1,
+		tmp.inventorynumber,tmp.warningnumber,tmp.company_id,tmp.unit,tmp.istop,tmp.market_price,tmp.del_flag,tmp.sell_time,tmp.sell_end_time,tmp.sell_status
+		from product tmp WHERE del_flag = 0 and v_state = 1
+		<if test="type != null">
+			<if test="type == -1">
+				AND tmp.type !=1
+			</if>
+		</if>
+		<if test="sellStatus != null">
+			<if test="sellStatus == -1">
+				AND tmp.sell_status =1
+			</if>
+		</if>
+		<if test="list != null">
+			<if test="list.size() > 0">
+				AND tmp.catalog_id_1 IN
+				<foreach collection="list" item="cataId" open="(" separator=","
+					close=")">
+					#{cataId}
+				</foreach>
+			</if>
+		</if>
+		<if test="list == null">
+			AND 1 = 2
+		</if>
+		ORDER BY tmp.ADDTIME DESC
+
+		<if test="maxRow !=null">
+			LIMIT 0,#{maxRow}
+		</if>
+	</select>
+	<select id="getProListByProduct" parameterType="Product"
+		resultMap="productMap">
+		SELECT addtime,v_state,v_content,v_time,is_subscribe,catalog_id_1,
+		id,name,price,is_specification,descn,picuri,status,weight,modified,specid,created,paycode,inventorynumber,warningnumber,company_id,unit,istop,remark,sn,market_price,del_flag,freight,inventory_calculation,sell_time,sell_end_time,sell_status
+		from product tmp WHERE
+		<if test="id != null">id = #{id} and </if>
+		<if test="name != null">name like "%"#{name}"%" and </if>
+		<if test="status != null">status = #{status} and </if>
+		<if test="modified != null">modified = #{modified} and </if>
+		<if test="specid != null">specid = #{specid} and </if>
+		<if test="created != null">created = #{created} and </if>
+		<if test="paycode != null">paycode = #{paycode} and </if>
+		<if test="inventorynumber != null">inventorynumber = #{inventorynumber} and </if>
+		<if test="warningnumber != null">warningnumber = #{warningnumber} and </if>
+		<if test="companyId != null">company_id = #{companyId} and </if>
+		<if test="sn != null">sn = #{sn} and </if>
+		<if test="inventoryCalculation != null">inventory_calculation = #{inventoryCalculation} and </if>
+		<if test="sellTime != null">sell_time = #{sellTime} and </if>
+		<if test="sellEndTime != null">sell_end_time = #{sellEndTime} and </if>
+		<if test="sellStatus != null">
+			<if test="sellStatus == -1">
+				sell_status =1 and
+			</if>
+			<if test="sellStatus != -1">
+				sell_status = #{sellStatus} and
+			</if>
+		</if>
+		<if test="vState != null">v_state = #{vState} and </if>
+		<if test="catalogId1 != null">catalog_id_1 = #{catalogId1} and </if>
+		<if test="catalogId2 != null">catalog_id_2 = #{catalogId2} and </if>
+		tmp.del_flag= 0 and tmp.type != 1
+		<if test="orderBy == null"> ORDER BY modified desc,addtime desc  </if>
+		<if test="orderBy !=null">
+			<if test="orderBy==1">ORDER BY price desc</if>
+			<if test="orderBy==2">ORDER BY price</if>
+			<if test="orderBy==3">ORDER BY score</if>
+		</if>
+	</select>
+
+	<select id="selectProductFrontByShowList" parameterType="map"
+		resultType="map">
+		SELECT
+		p.id,p.name,p.price,ps.sales_count,p.remark,p.unit,p.picuri,p.note,p.specid,pt.name ptname
+		FROM product p
+		LEFT
+		JOIN
+		product_statistics ps ON p.id=ps.prod_id left join product_tags pt on p.prod_tags_id=pt.id where
+		p.del_flag=0 and
+		p.sell_status=1 and
+		<if test="catalogId1 != null">catalog_id_1 = #{catalogId1} and </if>
+		<if test="catalogId2 != null">catalog_id_2 = #{catalogId2} and </if>
+		<if test="isTop != null">istop = #{isTop} and </if>
+		<if test="prodTagsId != null">p.prod_tags_id=3 and </if>
+		1=1
+		<if test="limit != null"> order by p.addtime desc limit ${limit}</if>
+		
+	</select>
+
+
+	<select id="getPackageByProductId" resultMap="productMapPackage">
+		SELECT p.id,p.name,p.prod_basic_id,psi.inventorynumber,p.type FROM
+		product p
+		LEFT JOIN
+		product_specification_info psi on
+		p.id=psi.product_id where
+		p.del_flag=0 and
+		p.sell_status=1 and
+		p.id in
+		<foreach item="item" index="index" collection="array" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+		 order by p.id
+	</select>
+
+	<select id="getStockByProductId" resultMap="productMap">
+		SELECT p.id,p.name,p.prod_basic_id,p.type FROM
+		product p
+		where
+		p.del_flag=0 and
+		p.sell_status=1 and
+		p.id in
+		<foreach item="item" index="index" collection="array" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+		order by p.id
+	</select>
+	
+	<select id="getStockNoCheckStateByProductId" resultMap="productMap">
+		SELECT p.id,p.name,p.prod_basic_id,p.type,p.sell_status,p.del_flag FROM
+		product p
+		where
+		p.id in
+		<foreach item="item" index="index" collection="array" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+		order by p.id
+	</select>
+	
+
+	<select id="listAjaxPageProductList" parameterType="Product"
+		resultType="map">
+		SELECT ps.sales_count salesCount,pt.name ptname,p.id,p.name,p.price,p.picuri,p.inventorynumber,p.unit,p.specid ,p.remark
+		FROM product p LEFT JOIN
+		product_statistics ps ON p.id=ps.prod_id LEFT
+		JOIN product_tags pt ON
+		pt.id=p.prod_tags_id
+		WHERE
+		<if test="name != null and name != '' ">p.name like '%${name}%' and </if>
+		<if test="sn != null">p.sn = #{sn} and </if>
+		<if test="sellStatus != null">p.sell_status = #{sellStatus} and </if>
+		<if test="catalogId1 != null">p.catalog_id_1 = #{catalogId1} and </if>
+		<if test="catalogId2 != null">p.catalog_id_2 = #{catalogId2} and </if>
+		<if test="type != null and type != 11">p.type = #{type} and </if>
+		<if test="price ==1">p.price <![CDATA[<=]]> 100 and </if>
+		<if test="price ==2">p.price <![CDATA[<=]]> 300 and  p.price <![CDATA[>]]> 100 and</if>
+		<if test="price ==3">p.price <![CDATA[>]]> 300 and </if>
+		<if test="origin != null and origin != 11">p.origin = #{origin} and </if>
+		p.del_flag=0 and p.sell_status=1
+		<!-- 按销量排序 从高到低 -->
+		<if test="salesCount == 1">order by sales_count desc</if>
+		<!-- 按销量排序 从di到gao -->
+		<if test="salesCount == 7">order by sales_count</if>
+		<!-- 按评价排序 从高到低 -->
+		<if test="salesCount == 3">order by ps.comment_score desc </if>
+		<!-- 按评价排序 从di到gao -->
+		<if test="salesCount == 8">order by ps.comment_score</if>
+		<!-- 按价格排序 从低到高 -->
+		<if test="salesCount == 2">order by price </if>
+		<!-- 按价格排序 从高到低 -->
+		<if test="salesCount == 5">order by price desc</if>
+		<!-- 按上架时间排序 从高到低 -->
+		<if test="salesCount == 6">order by modified desc</if>
+		<!-- 按上架时间排序 从低到高 -->
+		<if test="salesCount == 4">order by modified </if>
+
+	</select>
+	<select id="listPageByProduct" parameterType="Product"
+		resultType="map">
+		SELECT pc.name as catalogname,pm.sales_count,origin,
+		tmp.addtime,tmp.id,tmp.name,tmp.price,tmp.status,tmp.unit,tmp.sn,tmp.del_flag,tmp.type,tmp.sell_status
+		from product tmp left join product_catalog pc on
+		pc.id=tmp.catalog_id_2 left join product_statistics pm on
+		pm.prod_id=tmp.id
+		WHERE
+		<if test="name != null">tmp.name = #{name} and </if>
+		<if test="sn != null">tmp.sn = #{sn} and </if>
+		<if test="sellStatus != null">tmp.sell_status = #{sellStatus} and </if>
+		<if test="catalogId1 != null">tmp.catalog_id_1 = #{catalogId1} and </if>
+		<if test="catalogId2 != null">tmp.catalog_id_2 = #{catalogId2} and </if>
+		<if test="type != null">tmp.type = #{type} and </if>
+		1=1 and tmp.del_flag=0 order by
+		<if test="orderBy != null"> ${orderBy} </if>
+	</select>
+
+</mapper>

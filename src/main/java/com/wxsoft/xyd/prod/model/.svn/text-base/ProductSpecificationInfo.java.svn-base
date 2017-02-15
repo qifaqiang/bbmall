@@ -1,0 +1,90 @@
+package com.wxsoft.xyd.prod.model;
+
+import java.math.BigDecimal;
+
+import com.wxsoft.framework.bean.BaseBean;
+import com.wxsoft.xyd.system.model.CommonPage;
+
+/**
+ * @文件名称: ProductSpecificationInfo.java
+ * @类路径: com/wxltsoft/schoolmgr/extra/model/
+ * @描述: TODO
+ * @作者：kyz
+ * @公司：wxltsoft
+ * @时间：2015-07-16 20:07:27
+ */
+public class ProductSpecificationInfo extends BaseBean {
+	private static final long serialVersionUID = 1L;
+	private CommonPage page;
+	private Integer id;//
+	private Integer specId;//
+	private String value;//
+	private BigDecimal price;// 价格
+	private Integer inventorynumber;//存量 用这个和每个基地的库存量挂钩
+	private BigDecimal marketPrice;// 市场价格
+	private Integer productId;//
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public Integer getSpecId() {
+		return specId;
+	}
+
+	public void setSpecId(Integer specId) {
+		this.specId = specId;
+	}
+
+	public String getValue() {
+		return value;
+	}
+
+	public void setValue(String value) {
+		this.value = value;
+	}
+
+	public BigDecimal getPrice() {
+		return price;
+	}
+
+	public void setPrice(BigDecimal price) {
+		this.price = price;
+	}
+
+	public Integer getInventorynumber() {
+		return inventorynumber;
+	}
+
+	public void setInventorynumber(Integer inventorynumber) {
+		this.inventorynumber = inventorynumber;
+	}
+
+	public BigDecimal getMarketPrice() {
+		return marketPrice;
+	}
+
+	public void setMarketPrice(BigDecimal marketPrice) {
+		this.marketPrice = marketPrice;
+	}
+
+	public Integer getProductId() {
+		return productId;
+	}
+
+	public void setProductId(Integer productId) {
+		this.productId = productId;
+	}
+
+	public CommonPage getPage() {
+		return page;
+	}
+
+	public void setPage(CommonPage page) {
+		this.page = page;
+	}
+}

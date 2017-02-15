@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8" ?>  <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wxsoft.xyd.prod.mapper.ProductCatalogMapper">
+	<resultMap type="ProductCatalog" id="ProductCatalogMap">
+		<id property="id" column="id" />
+		<result property="id" column="id" />
+		<result property="name" column="name" />
+		<result property="pid" column="pid" />
+		<result property="addtime" column="addtime" />
+		<result property="level" column="level" />
+		<result property="pic" column="pic" />
+		<result property="sortn" column="sortn" />
+		<result property="isTop" column="is_top" />
+		<result property="wapPic" column="wap_pic" />
+		<result property="wapDescn" column="wap_descn" />
+		<result property="isRecommended" column="is_recommended" />
+		<result property="pcPic" column="pc_pic" />
+	</resultMap>
+	<select id="selectByPrimaryKey" parameterType="Integer"
+		resultMap="ProductCatalogMap"><![CDATA[  SELECT id,pc_pic,is_recommended,name,pid,addtime,level,pic,sortn,is_top,wap_pic,wap_descn FROM product_catalog tmp WHERE tmp.id = #{id} ]]>
+	</select>
+	<select id="selectByProductCatalog" parameterType="ProductCatalog"
+		resultMap="ProductCatalogMap">
+		SELECT
+		id,name,pid,addtime,is_recommended,level,pic,sortn,is_top,wap_pic,pc_pic,wap_descn
+		FROM product_catalog tmp
+		<where>
+			<if test="id != null"> id = #{id} </if>
+			<if test="name != null">AND name = #{name} </if>
+			<if test="pid != null">AND pid = #{pid} </if>
+			<if test="addtime != null">AND addtime = #{addtime} </if>
+			<if test="level != null">AND level = #{level} </if>
+			<if test="pic != null">AND pic = #{pic} </if>
+			<if test="sortn != null">AND sortn = #{sortn} </if>
+			<if test="isTop != null">AND is_top = #{isTop} </if>
+			<if test="wapPic != null">AND wap_pic = #{wapPic} </if>
+			<if test="wapDescn != null">AND wap_descn = #{wapDescn} </if>
+		</where>
+	</select>
+	<select id="listPageByProductCatalog" parameterType="ProductCatalog"
+		resultMap="ProductCatalogMap">
+		SELECT
+		id,name,pid,addtime,is_recommended,level,pic,sortn,is_top,wap_pic,pc_pic,wap_descn
+		from product_catalog tmp
+		<where>
+			<if test="id != null"> id = #{id} </if>
+			<if test="name != null">AND name = #{name} </if>
+			<if test="pid != null">AND pid = #{pid} </if>
+			<if test="addtime != null">AND addtime = #{addtime} </if>
+			<if test="level != null">AND level = #{level} </if>
+			<if test="pic != null">AND pic = #{pic} </if>
+			<if test="sortn != null">AND sortn = #{sortn} </if>
+			<if test="isTop != null">AND is_top = #{isTop} </if>
+			<if test="wapPic != null">AND wap_pic = #{wapPic} </if>
+			<if test="wapDescn != null">AND wap_descn = #{wapDescn} </if>
+		</where>
+		ORDER BY sortn DESC
+	</select>
+	<select id="getAllByProductCatalog" parameterType="ProductCatalog"
+		resultMap="ProductCatalogMap">
+		SELECT id,name,pid,addtime,level,pic,sortn,is_top,wap_pic,pc_pic,wap_descn
+		from product_catalog tmp
+		<where>
+			<if test="id != null"> AND id = #{id} </if>
+			<if test="name != null">AND name = #{name} </if>
+			<if test="pid != null">AND pid = #{pid} </if>
+			<if test="addtime != null">AND addtime = #{addtime} </if>
+			<if test="level != null">AND level = #{level} </if>
+			<if test="pic != null">AND pic = #{pic} </if>
+			<if test="sortn != null">AND sortn = #{sortn} </if>
+			<if test="isTop != null">AND is_top = #{isTop} </if>
+			<if test="wapPic != null">AND wap_pic = #{wapPic} </if>
+			<if test="wapDescn != null">AND wap_descn = #{wapDescn} </if>
+		</where>
+		ORDER BY sortn DESC
+	</select>
+
+	<select id="getAllByProductCatalogIndexNavigation"
+		parameterType="ProductCatalog" resultType="map">
+		SELECT id,name,wap_pic,pc_pic
+		from product_catalog tmp
+		<where>
+			<if test="pid != null">AND pid = #{pid} </if>
+			<if test="level != null">AND level = #{level} </if>
+			<if test="isTop != null">AND is_top = #{isTop} </if>
+			<if test="isRecommended != null">AND is_recommended = #{isRecommended} </if>
+		</where>
+		ORDER BY sortn DESC
+	</select>
+
+	<select id="getAllByProductCatalogIndexRecommend" parameterType="ProductCatalog"
+		resultType="map">
+		SELECT id,name,wap_pic,pic,wap_descn,pc_pic,pid
+		from product_catalog tmp
+		<where>
+		1=1 
+			<if test="pid != null"> AND pid = #{pid} </if>
+			<if test="name != null and name!=''"> AND (name like '%${name}%' or pid=0)</if>
+			<if test="level != null"> AND level = #{level} </if>
+			<if test="isTop != null"> AND is_top = #{isTop} </if>
+			<if test="isRecommended != null">AND is_recommended = #{isRecommended} </if>
+		</where>
+		ORDER BY sortn DESC
+	</select>
+
+	<select id="getAllByProductCatalogFront" parameterType="ProductCatalog"
+		resultType="map">
+		SELECT id,name
+		from product_catalog tmp
+		<where>
+			<if test="pid != null">AND pid = #{pid} </if>
+		</where>
+		ORDER BY sortn DESC
+	</select>
+
+	<insert id="insertSelective" parameterType="ProductCatalog">
+		INSERT INTO product_catalog
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">id,</if>
+			<if test="name != null">name,</if>
+			<if test="pid != null">pid,</if>
+			<if test="addtime != null">addtime,</if>
+			<if test="level != null">level,</if>
+			<if test="pic != null">pic,</if>
+			<if test="sortn != null">sortn,</if>
+			<if test="isTop != null">is_top,</if>
+			<if test="wapPic != null">wap_pic,</if>
+			<if test="wapDescn != null">wap_descn,</if>
+			<if test="isRecommended != null">is_recommended,</if>
+			<if test="pcPic != null">pc_pic,</if>
+		</trim>
+		values
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">#{id},</if>
+			<if test="name != null">#{name},</if>
+			<if test="pid != null">#{pid},</if>
+			<if test="addtime != null">#{addtime},</if>
+			<if test="level != null">#{level},</if>
+			<if test="pic != null">#{pic},</if>
+			<if test="sortn != null">#{sortn},</if>
+			<if test="isTop != null">#{isTop},</if>
+			<if test="wapPic != null">#{wapPic},</if>
+			<if test="wapDescn != null">#{wapDescn},</if>
+			<if test="isRecommended != null">#{isRecommended},</if>
+			<if test="pcPic != null">#{pcPic},</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="ProductCatalog">
+		update product_catalog
+		<set>
+			<if test="id != null">id=#{id},</if>
+			<if test="name != null">name=#{name},</if>
+			<if test="pid != null">pid=#{pid},</if>
+			<if test="addtime != null">addtime=#{addtime},</if>
+			<if test="level != null">level=#{level},</if>
+			<if test="pic != null">pic=#{pic},</if>
+			<if test="sortn != null">sortn=#{sortn},</if>
+			<if test="isTop != null">is_top=#{isTop},</if>
+			<if test="wapPic != null">wap_pic=#{wapPic},</if>
+			<if test="wapDescn != null">wap_descn=#{wapDescn},</if>
+			<if test="isRecommended != null">is_recommended=#{isRecommended},</if>
+			<if test="pcPic != null">pc_pic=#{pcPic},</if>
+		</set>
+		where id = #{id}
+	</update>
+	<delete id="deleteByPrimaryKey" parameterType="ProductCatalog"><![CDATA[delete from product_catalog where id=#{id}
+]]></delete>
+</mapper>

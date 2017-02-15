@@ -1,0 +1,47 @@
+@charset "utf-8";
+.annRight{
+    width: 940px;
+}
+.width878Padding {
+    width: 878px;
+    padding:30px 30px;
+
+
+}
+.borderBe5{
+    border-bottom: 1px solid #e5e5e5;
+    overflow: hidden;
+    padding: 10px 0 5px 0;
+
+}
+.borderB{
+    border-bottom: 1px solid #e5e5e5;
+}
+.title_width{
+    width: 600px;
+
+}
+.per_main{
+    margin: 0 auto;
+    padding: 20px 0;
+}
+.width850{
+
+}
+.annTitle{
+
+    text-align: center;
+    padding-bottom: 20px;
+}
+.annTime{
+    font-size: 14px;
+    text-align: center;
+    padding-bottom: 30px;
+
+}
+.annDetails{
+    padding: 20px;
+}
+.annDetailsContent{
+    font-size: 14px;
+}

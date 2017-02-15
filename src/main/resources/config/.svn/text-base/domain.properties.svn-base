@@ -1,0 +1,5 @@
+domain=http\://127.0.0.1/xyd
+imgdomain8000=http\://42.121.129.188/xyd
+imgdomain8888=http\://42.121.129.188/xyd
+cdn=http\://127.0.0.1/xyd/system/theme
+pic_path=F\:\\apache-tomcat-8.0.24\\webapps\\xyd

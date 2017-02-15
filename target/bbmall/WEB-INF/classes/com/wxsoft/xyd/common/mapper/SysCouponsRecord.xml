@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="UTF-8" ?>  <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wxsoft.xyd.common.mapper.SysCouponsRecordMapper">
+	<resultMap type="SysCouponsRecord" id="SysCouponsRecordMap">
+		<id property="id" column="id" />
+		<result property="id" column="id" />
+		<result property="couponsId" column="coupons_id" />
+		<result property="addtime" column="addtime" />
+		<result property="userId" column="user_id" />
+		<result property="state" column="state" />
+		<result property="wFrom" column="w_from" />
+		<result property="orderSn" column="order_sn" />
+		<result property="startTime" column="start_time" />
+		<result property="endTime" column="end_time" />
+		<result property="needPrice" column="need_price" />
+		<result property="substractPrice" column="substract_price" />
+		<result property="mobile" column="mobile" />
+
+	</resultMap>
+	<select id="selectByPrimaryKey" parameterType="Integer"
+		resultMap="SysCouponsRecordMap"><![CDATA[  SELECT start_time,mobile,end_time,need_price,substract_price,id,order_sn,coupons_id,addtime,user_id,state,w_from FROM sys_coupons_record tmp WHERE tmp.id = #{id} ]]>
+	</select>
+	<select id="selectBySysCouponsRecord" parameterType="SysCouponsRecord"
+		resultMap="SysCouponsRecordMap">
+		SELECT
+		start_time,end_time,need_price,substract_price,id,coupons_id,addtime,user_id,state,order_sn,w_from
+		FROM
+		sys_coupons_record tmp
+		<where>
+			<if test="id != null"> AND id = #{id} </if>
+			<if test="couponsId != null"> AND coupons_id = #{couponsId} </if>
+			<if test="addtime != null"> AND addtime = #{addtime} </if>
+			<if test="userId != null"> AND user_id = #{userId} </if>
+			<if test="state != null"> AND state = #{state} </if>
+			<if test="wFrom != null"> AND w_from = #{wFrom} </if>
+			<if test="orderSn != null"> AND order_sn = #{orderSn} </if>
+				<if test="mobile != null"> AND mobile = #{mobile} </if>
+		</where>
+	</select>
+	<select id="listPageBySysCouponsRecord" parameterType="SysCouponsRecord"
+		resultMap="SysCouponsRecordMap">
+		SELECT
+		start_time,end_time,need_price,substract_price,id,coupons_id,addtime,user_id,state,w_from,order_sn
+		from
+		sys_coupons_record tmp
+		<where>
+			<if test="id != null"> AND id = #{id} </if>
+			<if test="couponsId != null"> AND coupons_id = #{couponsId} </if>
+			<if test="addtime != null"> AND addtime = #{addtime} </if>
+			<if test="userId != null"> AND user_id = #{userId} </if>
+			<if test="state != null"> AND state = #{state} </if>
+			<if test="wFrom != null"> AND w_from = #{wFrom} </if>
+			<if test="orderSn != null"> AND order_sn = #{orderSn} </if>
+		</where>
+		ORDER BY id DESC
+	</select>
+	<select id="listPageBySysCouponsRecordWithUser" parameterType="SysCouponsRecord"
+		resultType="map">
+		SELECT
+		tmp.id,tmp.coupons_id,tmp.addtime,tmp.user_id,tmp.state,tmp.w_from,u.name
+		as username,orders.ordersn as order_sn,orders.addtime as userdtime
+		from sys_coupons_record tmp left join user u
+		on
+		tmp.user_id=u.id left
+		join orders on orders.coupons_record_id=tmp.id
+		<where>
+			<if test="id != null"> AND tmp.id = #{id} </if>
+			<if test="couponsId != null"> AND tmp.coupons_id = #{couponsId} </if>
+			<if test="addtime != null"> AND tmp.addtime = #{addtime} </if>
+			<if test="userId != null"> AND tmp.user_id = #{userId} </if>
+			<if test="state != null"> AND tmp.state = #{state} </if>
+			<if test="wFrom != null"> AND tmp.w_from = #{wFrom} </if>
+			<if test="orderSn != null"> AND order_sn = #{orderSn} </if>
+		</where>
+		ORDER BY tmp.id DESC
+	</select>
+	<select id="getUserCouponsRecord" parameterType="SysCouponsRecord"
+		resultMap="SysCouponsRecordMap">
+		SELECT
+		start_time,end_time,need_price,substract_price,id,coupons_id,ADDTIME,user_id,state,w_from,order_sn
+		FROM
+		sys_coupons_record tmp  
+      <where>
+          user_id=#{userId} and state=1 AND
+		  NOW() BETWEEN tmp.start_time AND tmp.end_time
+          <if test="needPrice !=null"> AND need_price &lt;=#{needPrice}</if>   
+      </where>
+      
+      
+	</select>
+
+	<select id="getAllBySysCouponsRecord" parameterType="SysCouponsRecord"
+		resultMap="SysCouponsRecordMap">
+		SELECT
+		start_time,end_time,need_price,substract_price,mobile,id,coupons_id,addtime,user_id,state,w_from,order_sn
+		from
+		sys_coupons_record tmp
+		<where>
+			<if test="id != null"> AND id = #{id} </if>
+			<if test="couponsId != null"> AND coupons_id = #{couponsId} </if>
+			<if test="addtime != null"> AND addtime = #{addtime} </if>
+			<if test="userId != null"> AND user_id = #{userId} </if>
+			<if test="state != null"> AND state = #{state} </if>
+			<if test="wFrom != null"> AND w_from = #{wFrom} </if>
+			<if test="orderSn != null"> AND order_sn = #{orderSn} </if>
+			<if test="mobile != null"> AND mobile = #{mobile} </if>
+		</where>
+		ORDER BY id DESC
+	</select>
+	<!-- 得到未使用优惠券 -->
+	<select id="listAjaxPageBySysCouponsRecordCan" parameterType="SysCouponsRecord"
+		resultType="map">
+		SELECT DATE_FORMAT(start_time,'%Y/%m/%d')
+		startTimeS,DATE_FORMAT(end_time,'%Y/%m/%d') endTimeS,need_price
+		needPrice,substract_price substractPrice,id FROM sys_coupons_record tmp
+		WHERE UNIX_TIMESTAMP(end_time) <![CDATA[>]]>
+		UNIX_TIMESTAMP(NOW()) AND state=1 AND user_id = #{userId}
+		<!-- <if test="needPrice != null and needPrice !=''">
+			AND tmp.need_price <![CDATA[<=]]>
+			#{needPrice}
+		</if> -->
+		ORDER BY id DESC
+	</select>
+	<select id="listBySysCouponsRecordCan" parameterType="SysCouponsRecord"
+		resultMap="SysCouponsRecordMap">
+		SELECT id FROM sys_coupons_record tmp WHERE UNIX_TIMESTAMP(end_time) <![CDATA[>]]>
+		UNIX_TIMESTAMP(NOW()) AND state=1 AND user_id = #{userId}
+		ORDER BY id
+		DESC
+	</select>
+	<!-- 得到过期优惠券 -->
+	<select id="listAjaxPageBySysCouponsRecordExpire" parameterType="SysCouponsRecord"
+		resultType="map">
+		SELECT DATE_FORMAT(start_time,'%Y/%m/%d')
+		startTimeS,DATE_FORMAT(end_time,'%Y/%m/%d') endTimeS,need_price
+		needPrice,substract_price substractPrice FROM sys_coupons_record tmp
+		WHERE (UNIX_TIMESTAMP(end_time) <![CDATA[<]]>
+		UNIX_TIMESTAMP(NOW()) AND state=1 OR state=3 ) AND user_id =#{userId}
+		ORDER BY id DESC
+	</select>
+	<select id="listBySysCouponsRecordExpire" parameterType="SysCouponsRecord"
+		resultMap="SysCouponsRecordMap">
+		SELECT id FROM sys_coupons_record tmp WHERE (UNIX_TIMESTAMP(end_time) <![CDATA[<]]>
+		UNIX_TIMESTAMP(NOW()) AND state=1 OR state=3 ) AND user_id =#{userId}
+		ORDER BY id DESC
+	</select>
+	<!-- 得到已使用优惠券 -->
+	<select id="listAjaxPageBySysCouponsRecordOver" parameterType="SysCouponsRecord"
+		resultType="map">
+		SELECT DATE_FORMAT(start_time,'%Y/%m/%d')
+		startTimeS,DATE_FORMAT(end_time,'%Y/%m/%d') endTimeS,need_price
+		needPrice,substract_price substractPrice FROM sys_coupons_record tmp
+		WHERE state=2 AND user_id =#{userId}
+		ORDER BY id DESC
+	</select>
+	<select id="listBySysCouponsRecordOver" parameterType="SysCouponsRecord"
+		resultMap="SysCouponsRecordMap">
+		SELECT id FROM sys_coupons_record tmp WHERE state=2 AND
+		user_id =#{userId}
+		ORDER BY id DESC
+	</select>
+	<select id="listByOrderSnRedBag"  parameterType="SysCouponsRecord" resultType="java.util.HashMap">
+	SELECT scr.`addtime`,scr.`substract_price`,uwx.`nick_name`,uwx.`pic_url` FROM sys_coupons_record scr 
+	LEFT JOIN user_wx  uwx ON scr.`mobile`=uwx.`mobile` WHERE scr.`order_sn`=#{orderSn}
+	
+	</select>
+	<!-- 查询个数 -->
+	<select id="selectCountByOrdersn" parameterType="SysCouponsRecord"
+		resultType="integer">
+	 	SELECT  COUNT(*) AS COUNT FROM sys_coupons_record tmp WHERE  order_sn =${orderSn}
+	</select>
+	
+	
+	<insert id="insertSelective" parameterType="SysCouponsRecord">
+		INSERT INTO sys_coupons_record
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">id,</if>
+			<if test="couponsId != null">coupons_id,</if>
+			<if test="addtime != null">addtime,</if>
+			<if test="userId != null">user_id,</if>
+			<if test="state != null">state,</if>
+			<if test="wFrom != null">w_from,</if>
+			<if test="startTime != null">start_time,</if>
+			<if test="endTime != null">end_time,</if>
+			<if test="needPrice != null">need_price,</if>
+			<if test="substractPrice != null">substract_price,</if>
+			<if test="mobile != null">mobile,</if>
+			<if test="orderSn != null">order_sn,</if>
+		</trim>
+		values
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">#{id},</if>
+			<if test="couponsId != null">#{couponsId},</if>
+			<if test="addtime != null">#{addtime},</if>
+			<if test="userId != null">#{userId},</if>
+			<if test="state != null">#{state},</if>
+			<if test="wFrom != null">#{wFrom},</if>
+			<if test="startTime != null">#{startTime},</if>
+			<if test="endTime != null">#{endTime},</if>
+			<if test="needPrice != null">#{needPrice},</if>
+			<if test="substractPrice != null">#{substractPrice},</if>
+			<if test="mobile != null">#{mobile},</if>
+			<if test="orderSn != null">#{orderSn},</if>
+		</trim>
+	</insert>
+
+<insert id="insertSelectiveT" parameterType="SysCouponsRecord">
+		INSERT INTO sys_coupons_record
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">id,</if>
+			<if test="couponsId != null">coupons_id,</if>
+			<if test="addtime != null">addtime,</if>
+			<if test="userId != null">user_id,</if>
+			<if test="state != null">state,</if>
+			<if test="wFrom != null">w_from,</if>
+			<if test="startTime != null">start_time,</if>
+			<if test="endTime != null">end_time,</if>
+			<if test="needPrice != null">need_price,</if>
+			<if test="substractPrice != null">substract_price,</if>
+			<if test="mobile != null">mobile,</if>
+			<if test="orderSn != null">order_sn,</if>
+		</trim>
+		values
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">#{id},</if>
+			<if test="couponsId != null">#{couponsId},</if>
+			<if test="addtime != null">#{addtime},</if>
+			<if test="userId != null">#{userId},</if>
+			<if test="state != null">#{state},</if>
+			<if test="wFrom != null">#{wFrom},</if>
+			<if test="startTime != null">#{startTime},</if>
+			<if test="endTime != null">#{endTime},</if>
+			<if test="needPrice != null">#{needPrice},</if>
+			<if test="substractPrice != null">#{substractPrice},</if>
+			<if test="mobile != null">#{mobile},</if>
+				<if test="orderSn != null">#{orderSn},</if>
+		</trim>
+	</insert>
+
+
+
+	<update id="updateByPrimaryKeySelective" parameterType="SysCouponsRecord">
+		update sys_coupons_record
+		<set>
+			<if test="couponsId != null">coupons_id=#{couponsId},</if>
+			<if test="addtime != null">addtime=#{addtime},</if>
+			<if test="userId != null">user_id=#{userId},</if>
+			<if test="state != null">state=#{state},</if>
+			<if test="wFrom != null">w_from=#{wFrom},</if>
+			<if test="orderSn != null">order_sn=#{orderSn},</if>
+			<if test="startTime != null">start_time=#{startTime},</if>
+			<if test="endTime != null">end_time=#{endTime},</if>
+			<if test="needPrice != null">need_price=#{needPrice},</if>
+			<if test="substractPrice != null">substract_price=#{substractPrice},</if>
+		</set>
+		where id = #{id}
+	</update>
+
+	<update id="updateByTimeIsOver" parameterType="integer">
+		update
+		sys_coupons_record
+		set state=1
+		where id = #{id} and now() between
+		start_time and end_time
+	</update>
+	<update id="updateByRegMobile" parameterType="SysCouponsRecord">
+		update
+		sys_coupons_record
+		set user_id=#{userId}
+		where mobile = #{mobile}
+	</update>
+	<delete id="deleteByPrimaryKey" parameterType="SysCouponsRecord"><![CDATA[delete from sys_coupons_record where id=#{id}
+]]></delete>
+</mapper>

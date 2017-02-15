@@ -1,0 +1,48 @@
+<%@ page language="java" import="java.util.*" pageEncoding="utf-8"%>
+<jsp:include page="top.jsp"></jsp:include>
+<link href="${SHOPDOMAIN}/front/css/web/commonW.css" rel="stylesheet"
+	type="text/css">
+<link href="${SHOPDOMAIN}/front/css/web/share.css" rel="stylesheet"
+	type="text/css">
+<link href="${SHOPDOMAIN}/front/css/web/globalW.css" rel="stylesheet"
+	type="text/css">
+<link href="${SHOPDOMAIN}/front/css/web/Personal.css" rel="stylesheet"
+	type="text/css">
+<script src="js/ntab.js"></script>
+<div class="per_toppart">
+	<div class="per_top">
+		<div class="per_topleft flW ">
+			<div class="per_toplogo flW">
+				<a href="${SHOPDOMAIN}/index.html"> <img
+					src="${SHOPDOMAIN}/front/images/web/pcLogo.png" />
+				</a>
+			</div>
+			<div class="per_toplogotxt flW">
+				<span>收银台</span>
+			</div>
+		</div>
+	</div>
+	<div class="fox"></div>
+</div>
+<div class="per_return_main">
+	<div class="per_paywey">
+		<div class="per_paywey_title">
+			微信支付<span class="frW"><a href="#" onclick="history.go(-1);">＜选择其他付款方式</a></span>
+		</div>
+		<div class="per_paywey_con">
+			<div style="font-size: 15pt;">
+				订单编号：<span style="color:red">${param.ordersn }</span>
+			</div>
+			<img src="${SHOPDOMAIN}/wap/wxpay/wxPayQrCode.html" width="256"
+				height="258" alt="" />
+			<h3>扫描二维码支付</h3>
+		</div>
+	</div>
+</div>
+<!--底部-->
+<jsp:include page="footShop.jsp"></jsp:include>
+<script>
+document.title="电商平台-微信扫码支付";
+</script>
+</body>
+</html>

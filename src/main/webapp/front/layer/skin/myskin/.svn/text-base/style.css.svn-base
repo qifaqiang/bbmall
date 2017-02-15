@@ -1,0 +1,85 @@
+@charset "utf-8";
+html #layui_layer_skinmyskinstylecss{display:none; position: absolute; width:1989px;}
+
+body .layer-ext-myskincoll{
+    border-radius: 10px;
+
+
+}
+body .layer-ext-myskincoll .layui-layer-content{
+    padding:40px 40px 40px 40px;
+    height: auto !important;
+    color: #e94925;
+    text-align: center;
+    font-size: 18px;
+    font-family: "Microsoft YaHei", "微软雅黑";
+
+}
+body .layer-ext-myskincoll .layui-layer-btn{
+    text-align: center;
+    padding: 0 10px 20px;
+}
+body .layer-ext-myskincoll  .layui-layer-btn0{
+    background: #f4f4f4;
+    border: 1px solid #e5e5e5;
+    border-radius: 5px;
+    font-size: 16px;
+    color: #333333;
+    height: 40px;
+    line-height: 40px;
+    padding: 0;
+    padding: 0 25px;
+}
+
+
+body .layer-ext-myskinIndex{
+    background-color: transparent;
+}
+
+/*公共样式*/
+body .layer-ext-myskinGlobal{
+    min-width: 400px;
+    border-radius: 10px;
+}
+
+body .layer-ext-myskinGlobal .layui-layer-content{
+    padding:40px 40px 40px 40px;
+    height: auto !important;
+    color: #333;
+    text-align: center;
+    font-size: 18px;
+    font-family: "Microsoft YaHei", "微软雅黑";
+
+}
+body .layer-ext-myskinGlobal .layui-layer-btn{
+    text-align: center;
+    padding: 0 10px 20px;
+    font-family: "Microsoft YaHei", "微软雅黑";
+
+}
+body .layer-ext-myskinGlobal  .layui-layer-btn0{
+    background: #8ab800;
+    border: 1px solid #e5e5e5;
+    border-radius: 5px;
+    font-size: 16px;
+    color: #333333;
+    height: 40px;
+    line-height: 40px;
+    padding: 0;
+    padding: 0 25px;
+    color: white;
+}
+body .layer-ext-myskinGlobal  .layui-layer-btn1{
+    background: #EEEEEE;
+    border: 1px solid #e5e5e5;
+    border-radius: 5px;
+    font-size: 16px;
+    color: #333333;
+    height: 40px;
+    line-height: 40px;
+    padding: 0;
+    padding: 0 25px;
+}
+
+
+

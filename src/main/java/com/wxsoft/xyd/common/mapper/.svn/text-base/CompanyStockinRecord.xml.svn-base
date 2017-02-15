@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>  <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wxsoft.xyd.common.mapper.CompanyStockinRecordMapper">
+	<resultMap type="CompanyStockinRecord" id="CompanyStockinRecordMap">
+		<id property="id" column="id" />
+		<result property="id" column="id" />
+		<result property="basicId" column="basic_id" />
+		<result property="count" column="count" />
+		<result property="companyId" column="company_id" />
+		<result property="adduserid" column="adduserid" />
+		<result property="addtime" column="addtime" />
+	</resultMap>
+	<select id="selectByPrimaryKey" parameterType="Integer"
+		resultMap="CompanyStockinRecordMap"><![CDATA[  SELECT id,basic_id,count,company_id,adduserid,addtime FROM company_stockin_record tmp WHERE tmp.id = #{id} ]]>
+	</select>
+	<select id="selectByCompanyStockinRecord" parameterType="CompanyStockinRecord" resultMap="CompanyStockinRecordMap">
+		SELECT id,basic_id,count,company_id,adduserid,addtime FROM company_stockin_record tmp
+		<where>
+			<if test="id != null"> AND id = #{id} </if>
+			<if test="basicId != null"> AND basic_id = #{basicId} </if>
+			<if test="count != null"> AND count = #{count} </if>
+			<if test="companyId != null"> AND company_id = #{companyId} </if>
+			<if test="adduserid != null"> AND adduserid = #{adduserid} </if>
+			<if test="addtime != null"> AND addtime = #{addtime} </if>
+ 		</where>
+	</select>
+	<select id="listPageByCompanyStockinRecord" parameterType="CompanyStockinRecord"
+		resultMap="CompanyStockinRecordMap">
+		SELECT 
+a.id,
+a.adduseridName,
+a.basic_id,
+a.count,
+a.company_id,
+a.adduserid,
+a.addtime,
+a.companyIdName,
+pb.name basicIdName,
+pb.unit unit
+FROM 
+product_basic pb,
+        (SELECT a.id,
+        a.adduseridName adduserIdName,
+        a.basic_id,
+        a.count,
+        a.company_id,
+        a.adduserid,
+        a.addtime,
+        comname.company_name companyIdName
+        FROM 
+        (SELECT tmp.id,
+        addname.login  adduseridName,
+
+        tmp.basic_id,
+        tmp.count,
+        tmp.company_id,
+        tmp.adduserid,
+        tmp.addtime 
+        FROM 
+        company_stockin_record tmp 
+        JOIN
+        company addname
+        ON 
+        tmp.adduserid=addname.company_id) a
+        JOIN 
+        company comname
+        ON
+        a.company_id=comname.company_id) a
+		<where>
+		pb.id=a.basic_id
+			<if test="companyIdName !=null and companyIdName != ''"> AND a.companyIdName like '%${companyIdName}%' </if>
+			<if test="companyId !=null and companyId != ''"> AND a.company_id =#{companyId} </if>
+ 		</where>
+ 		 ORDER BY id DESC
+	</select>
+	<select id="getAllByCompanyStockinRecord" parameterType="CompanyStockinRecord" resultMap="CompanyStockinRecordMap">
+		SELECT id,basic_id,count,company_id,adduserid,addtime from company_stockin_record tmp
+		<where>
+			<if test="id != null"> AND id = #{id} </if>
+			<if test="basicId != null"> AND basic_id = #{basicId} </if>
+			<if test="count != null"> AND count = #{count} </if>
+			<if test="companyId != null"> AND company_id = #{companyId} </if>
+			<if test="adduserid != null"> AND adduserid = #{adduserid} </if>
+			<if test="addtime != null"> AND addtime = #{addtime} </if>
+ 		</where>
+ 	    ORDER BY id DESC
+	</select>
+	<insert id="insertSelective" parameterType="CompanyStockinRecord">
+		INSERT INTO company_stockin_record
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">id,</if>
+			<if test="basicId != null">basic_id,</if>
+			<if test="count != null">count,</if>
+			<if test="companyId != null">company_id,</if>
+			<if test="adduserid != null">adduserid,</if>
+			<if test="addtime != null">addtime,</if>
+		</trim>
+		values
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">#{id},</if>
+			<if test="basicId != null">#{basicId},</if>
+			<if test="count != null">#{count},</if>
+			<if test="companyId != null">#{companyId},</if>
+			<if test="adduserid != null">#{adduserid},</if>
+			<if test="addtime != null">#{addtime},</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="CompanyStockinRecord">
+		update company_stockin_record
+		<set>
+			<if test="id != null">id=#{id},</if>
+			<if test="basicId != null">basic_id=#{basicId},</if>
+			<if test="count != null">count=#{count},</if>
+			<if test="companyId != null">company_id=#{companyId},</if>
+			<if test="adduserid != null">adduserid=#{adduserid},</if>
+			<if test="addtime != null">addtime=#{addtime},</if>
+		</set>
+		where id = #{id}
+	</update>
+	<delete id="deleteByPrimaryKey" parameterType="CompanyStockinRecord"><![CDATA[delete from company_stockin_record where id=#{id}
+]]></delete>
+</mapper>

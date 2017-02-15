@@ -1,0 +1,24 @@
+.w-addPhoto {
+	min-height: 300px;
+	text-align: center;
+}
+
+.w-addPhoto button {
+	background: #abd13e none repeat scroll 0 0;
+	border: 2px solid #abd13e;
+	border-radius: 8px;
+	color: #ffffff;
+	font-family: "Î¢ÈíÑÅºÚ";
+	font-size: 24px;
+	margin: 10px 0;
+	padding: 13px 10px;
+	width: 120px;
+}
+element.style {
+    background: #ffffff none repeat scroll 0 0;
+    cursor: pointer;
+    display: block;
+    height: 100%;
+    opacity: 0;
+    width: 100%;
+}

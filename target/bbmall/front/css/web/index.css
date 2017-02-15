@@ -1,0 +1,353 @@
+@charset "utf-8";
+
+/*轮播修改*/
+
+.flexslider .slides li{
+        height: 350px;
+        background-repeat:  no-repeat;
+
+}
+.flexslider .slides li a{
+        display: block;
+        height: 350px;
+}
+
+
+
+.secNavW{
+        margin: 17px 0;
+        overflow: hidden;
+}
+.secNavW ul li{
+        width: 298px;
+        height: 133px;
+        border: 1px solid #e5e5e5;
+        margin-right: 18px;
+
+        float: left;
+}
+.secNavLi1{
+        height: 69px;
+        padding:32px 0;
+
+        margin-left: 40px;
+        padding-left: 74px;
+        background: url('../../images/web/secNavdiv1.png') no-repeat left center;
+        
+}
+.secNavW ul li p{
+        height: 34px;
+        line-height: 34px;
+        font-size: 18px;
+}
+.secNavLi2{
+        height: 69px;
+        padding:32px 0;
+
+        margin-left: 40px;
+        padding-left: 74px;
+        background: url('../../images/web/secNavdiv2.png') no-repeat left center;
+
+}
+.secNavLi3{
+        height: 69px;
+        padding:32px 0;
+        margin-left: 40px;
+        padding-left: 74px;
+        background: url('../../images/web/secNavdiv3.png') no-repeat left center;
+}
+.secNavW ul .announcement{
+        width: 214px;
+        margin-right: 0;
+}
+.secNavW a:hover{
+        color: #333;
+}
+.announceTitle {
+        height: 30px;
+        line-height: 30px;
+        text-align: center;
+        border-bottom: 1px solid #e5e5e5;
+        position: relative;
+}
+.announceTitle .annMore{
+        position: absolute;
+        top:13px;
+        right: 10px;
+        font-size: 10px;
+        line-height: 10px;
+        color: #999999;
+}
+#scrollDiv li{
+        height: 29px;
+        line-height: 29px;
+        padding-left: 35px;
+        position: relative;
+        border: none;
+        width:160px ;
+        float: none;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+}
+#scrollDiv {
+        width: 195px;
+        overflow: hidden;
+        padding: 10px;
+}
+.circleW{
+        position: absolute;
+        left:20px;
+        top:16px;
+        width: 4px;
+        height: 4px;
+        background: #e70012;
+        border-radius: 4px;
+        font-size: 16px;
+}
+.marginB25{
+        margin-bottom: 25px;
+}
+
+/*新品推荐商品列表*/
+.productList{
+        border: 1px solid #e5e5e5;
+        overflow: hidden;
+        padding:0 0 20px 20px;
+}
+.firstLine3 li{
+        width: 360px;
+        height: 190px;
+        border: 1px solid #e5e5e5;
+        margin-top: 20px;
+        margin-right: 20px;
+        float: left;
+}
+.firstLine3 li img{
+       float: left;
+}
+.firstLineName{
+        margin-left: 190px;
+        overflow:hidden;
+
+}
+.productName{
+        height: 30px;
+        line-height: 30px;
+        margin-top: 90px;
+        font-size: 16px;
+}
+.FirproductPrice{
+        height: 30px;
+        line-height: 30px;
+        font-size: 16px;
+        color: #e94925;
+}
+.firstLineName p{
+        padding: 0 5px;
+}
+.firstLineName .salesNum{
+        padding-right: 30px;
+        height: 30px;
+        line-height: 30px;
+        font-size: 16px;
+        color: #999;
+        text-align: right;
+
+}
+.salesNum i{
+        color:#e94925 ;
+}
+
+.secLine5 li{
+        border: 1px solid #e5e5e5;
+        margin-top: 20px;
+        margin-right: 20px;
+        float: left;
+        width:207px;
+        height:300px;
+}
+
+.secProName{
+        height: 30px;
+        line-height: 30px;
+
+        font-size: 16px;
+}
+.secProPrice{
+        height: 30px;
+        line-height: 30px;
+        font-size: 16px;
+        color: #e94925;
+}
+.secSalesNum{
+        height: 30px;
+        line-height: 30px;
+        font-size: 16px;
+        color: #999;
+
+}
+
+.secSalesNum i{
+        color:#e94925 ;
+}
+.secLineName{
+        padding:16px 5px;
+}
+.borderTopB{
+        border-top: 2px solid #e70012;
+}
+.moduleTitle{
+        padding-left: 20px;
+
+        font-size: 20px;
+}
+/*.productList a :hover{*/
+        /*background: #e70012;*/
+        /*color: white;*/
+
+/*}*/
+
+.firstLineName{
+        height: 190px;
+
+}
+/*.firstLineName:hover{*/
+        /*background: #e70012;*/
+        /*color: white;*/
+/*}*/
+.firstLineName.active,.secLineName.active{
+        background: #e70012;
+        color: white;
+}
+
+/*.productList a :hover .secProPrice,.productList a :hover .secSalesNum ,.productList a :hover .secSalesNum i,.productList a :hover .FirproductPrice,*/
+/*.productList a :hover .salesNum, .productList a :hover .salesNum i*/
+/*{*/
+        /*color: white;*/
+        /*background: #e70012;*/
+/*}*/
+.firstLineName.active .FirproductPrice,.firstLineName.active .salesNum,.firstLineName.active .salesNum i,
+.secLineName.active .secSalesNum,.secLineName.active .secSalesNum i,.secLineName.active .secProPrice{
+        color: white;
+}
+
+
+/*左侧楼梯导航*/
+.leftside{
+        position: fixed;
+
+        bottom:200px;
+        z-index:1000;
+        display: none;
+        
+}
+.leftside ul li {
+        width: 60px;
+        height: 60px;
+        margin-bottom: 8px;
+        cursor:pointer;
+}
+	.gray { 
+-webkit-filter: grayscale(100%); 
+-moz-filter: grayscale(100%); 
+-ms-filter: grayscale(100%); 
+-o-filter: grayscale(100%); 
+filter: grayscale(100%); 
+filter: gray; 
+} 
+
+.moreWIndex{
+	font-size:16px;
+	color:#999999;
+	line-height:30px;
+	height:30px;
+	
+}
+.leftside ul li div.imgLeftW{
+
+	width:60px;
+	height:60px;
+}
+.leftside ul li .divLeftH{
+	font-size:16px;
+	text-align:center;
+	background:url('../../images/web/leftBgFix.png') no-repeat center;
+	color:white;
+	height:40px;
+	width:40px;
+	padding:10px;
+	line-height:20px;
+	
+}
+
+
+.leftside ul li div.imgLeftW{
+        display: block;
+}
+.leftside ul li .divLeftH{
+        display: none;
+}
+
+.leftside ul li.active div.imgLeftW{
+        display: none;
+}
+.leftside ul li.active .divLeftH{
+        display: block;
+}
+.leftside ul li:hover div.imgLeftW{
+        display: none;
+}
+.leftside ul li:hover .divLeftH{
+        display: block;
+}
+
+#indexlayer{
+        position: relative;
+}
+#close{
+        position: absolute;
+        top:13px;
+        right: 15px;
+        width: 49px;
+        height: 49px;
+        background: black;
+        opacity: 0;
+        filter:alpha(opacity=0);
+}
+#choose{
+        position: absolute;
+        top: 152px;
+        right:128px;
+        width: 185px;
+        height: 65px;
+        background: black;
+        opacity: 0;
+        filter:alpha(opacity=0);
+}
+#default{
+        position: absolute;
+        bottom: 30px;
+        left: 135px;
+        width: 185px;
+        height: 60px;
+        background: black;
+        opacity: 0;
+        filter:alpha(opacity=0);
+}
+.imgFdiv {
+        position: relative;
+        width: 60px;
+        height: 60px;
+        text-align: center;
+        padding-top: 10px;
+    }
+
+    .imgNextI {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 60px;
+        height: 60px;
+        background: url(../../images/web/leftBgFixgray.png) no-repeat center
+    }

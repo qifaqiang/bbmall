@@ -1,0 +1,10 @@
+@charset "utf-8";
+.activeBan{position: relative; padding-bottom: 6px;}
+.activeBack{height: 34px; width: 34px; position: absolute; top:28px; left: 18px;}
+.productList{float: left;}
+.productList ul li{margin-top: 9px; width: 208px; height: 350px; margin-right: 8px; border: 1px solid #f4f4f4; border-radius: 10px; float: left; background: #fff;}
+.productList ul li:nth-of-type(3n){margin-right: 0;}
+.activeWord{padding:10px 10px; font-size: 24px; text-align: center;}
+.activeWord span{display: block; line-height: 40px;}
+.activeWord span i{color: #fe0000;}
+.activeWord button{width: 150px; height: 40px; line-height: 40px; color: white; background: #fca815; border: none; border-radius: 5px; font-family: "Microsoft YaHei", "微软雅黑";}

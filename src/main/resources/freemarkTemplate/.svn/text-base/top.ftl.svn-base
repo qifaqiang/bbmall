@@ -1,0 +1,110 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<jsp:include page="top.jsp"></jsp:include>
+<!--logo 搜索 个人中心-->
+<div class="wrapW ofW">
+    <div class="headerLogoW flW" style="width:295px;">
+    	<a href="${SHOPDOMAIN}/index.html">
+        	<img src="${SHOPDOMAIN}/front/images/web/pcLogo.png" width="210" height="45" alt=""/>
+        </a>
+    </div>
+    <div class="headerSearchW flW">
+        <div class="searchBoxW">
+            <input id="searc" type="text" value=""/>
+            <a onclick="searc()" class="frW">搜索</a>
+        </div>
+    </div>
+    <div class="headerPersonalBtnW frW">
+        <button  id='usercenter'>个人中心</button>
+    </div>
+    <div class="headerShopBtnW frW">
+        <i id="shopcart-count-top" class="shopping-countW"></i>
+        <button id='usercart' >购物车</button>
+    </div>
+    <div class="headerHotSearchW flW clearfixW">
+        <span>热点搜索：
+        <#list hotSearchs as prop>  
+       		<a class="hotsearch" id="${prop.name}">${prop.name}</a>&nbsp;&nbsp;&nbsp;&nbsp;
+ 		</#list>  
+        </span>
+    </div>
+</div>
+<!--导航-->
+<div class="mianNavW wrapW" style="position:relative">
+    <ul class="mainNavulW clearfixW">
+
+        <li class="firstAllW ">
+            <a href="productList.html">
+                <div>所有商品类目</div>
+            </a>
+
+            <div id="allsort" style="z-index: 1000">
+             <#list productCatalogLIst as prop>  
+       			<div class="item">
+                    <div class="itemW" onclick="window.location.href='productList.html?catalogId1=${prop.id?c}&catalogId1name=${prop.name}'" style="cursor:pointer">
+                        <i class="itemIconW">
+                            <img src="${USERIMGSRC}<#if prop.pcPic?exists>${prop.pcPic?replace('.','_100.')}</#if>" alt="" width="24"/>
+                        </i>
+                        <span>${prop.name}</span>
+                    </div>
+                    <div class="i-mlW">
+                        <ul>
+                         	<#list prop.sublist as propSub>  
+                            <a onclick="window.location.href='productList.html?catalogId1=${prop.id?c}&catalogId1name=${prop.name}&catalogId2=${propSub.id?c}&catalogId2name=${propSub.name}'">
+                                <li><span>${propSub.name}</span><em><#if propSub_has_next>|</#if></em></li> 
+                                
+                            </a>
+                            </#list>  
+                        </ul>
+                    </div>
+                </div>
+ 			 </#list>  
+            </div>
+        </li>
+        <a href="index.html">
+            <li class="shou shouye active">首页</li>
+        </a>
+        <a href="couponCenter.html">
+            <li class="shou qiangquan">抢券中心</li>
+        </a>
+        <a href="productList.html?ty=1">
+            <li class="shou lipin">礼品特惠</li>
+        </a>
+        <a href="helpCenter.html">
+            <li class="shou bangzhu">帮助中心</li>
+        </a>
+    </ul>
+   <div class="scanGif">
+   <a href="scanning.html"  target="_blank">
+   		<img src="${SHOPDOMAIN}/front/images/web/scaning.gif" />
+   		</a>
+   </div>
+</div>
+<div class="s-line"></div>
+<script>
+function goCatalog(id){
+	window.location.href='${SHOPDOMAIN}='+id;
+}
+function searc(){
+var se=$('#searc').val();
+	window.location.href="productList.html?search="+se;
+}
+$(document).on("click",".hotsearch",function(event){
+var hse=$(this).attr("id");
+	window.location.href="productList.html?search="+hse;
+});
+$(document).on("click","#usercart",function(event){
+	if(userId==""){
+		window.location.href="login.html";
+	}else{
+		window.location.href="shoppingcart.html";
+	}
+});
+$(document).on("click","#usercenter",function(event){
+	if(userId==""){
+		window.location.href="login.html";
+	}else{
+		window.location.href="personalCenter.html";
+	}
+});
+</script>

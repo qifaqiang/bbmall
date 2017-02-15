@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8" ?>  <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wxsoft.xyd.common.mapper.UserCommentMapper">
+	<resultMap type="UserComment" id="UserCommentMap">
+		<id property="id" column="id" />
+		<result property="id" column="id" />
+		<result property="content" column="content" />
+		<result property="prodId" column="prod_id" />
+		<result property="starCount" column="star_count" />
+		<result property="picurl" column="picurl" />
+		<result property="vState" column="v_state" />
+		<result property="vComment" column="v_comment" />
+		<result property="vTime" column="v_time" />
+		<result property="userId" column="user_id" />
+		<result property="addtime" column="addtime" />
+		<result property="commentLevel" column="comment_level" />
+		<result property="orderDetailId" column="order_detail_id" />
+	</resultMap>
+	<select id="selectByPrimaryKey" parameterType="Integer"
+		resultMap="UserCommentMap"><![CDATA[  SELECT id,content,order_detail_id,comment_level,prod_id,star_count,picurl,v_state,v_comment,v_time,user_id,addtime FROM user_comment tmp WHERE tmp.id = #{id} ]]>
+	</select>
+	<select id="selectByUserComment" parameterType="UserComment"
+		resultMap="UserCommentMap">
+		SELECT
+		id,content,prod_id,star_count,picurl,v_state,v_comment,order_detail_id,comment_level,v_time,user_id,addtime
+		FROM user_comment tmp
+		<where>
+			<if test="id != null"> AND id = #{id} </if>
+			<if test="content != null"> AND content = #{content} </if>
+			<if test="prodId != null"> AND prod_id = #{prodId} </if>
+			<if test="starCount != null"> AND star_count = #{starCount} </if>
+			<if test="picurl != null"> AND picurl = #{picurl} </if>
+			<if test="vState != null"> AND v_state = #{vState} </if>
+			<if test="vComment != null"> AND v_comment = #{vComment} </if>
+			<if test="orderDetailId != null"> AND order_detail_id = #{orderDetailId} </if>
+			<if test="vTime != null"> AND v_time = #{vTime} </if>
+			<if test="userId != null"> AND user_id = #{userId} </if>
+			<if test="addtime != null"> AND addtime = #{addtime} </if>
+		</where>
+	</select>
+	<select id="listPageByUserComment" parameterType="UserComment"
+		resultMap="UserCommentMap">
+		SELECT tmp.id,u.name NAME,p.name
+		productName,tmp.content,tmp.prod_id,order_detail_id,comment_level,tmp.star_count,tmp.picurl,
+		tmp.v_state,tmp.v_comment,tmp.v_time,tmp.user_id,tmp.addtime
+		FROM
+		user_comment tmp LEFT JOIN user u ON tmp.user_id=u.id LEFT JOIN product p
+		ON tmp.prod_id=p.id
+		<where>
+			<if test="content !=null and content != ''"> AND tmp.content like '%${content}%' </if>
+			<if test="prodId != null"> AND tmp.prod_id = #{prodId} </if>
+			<if test="starCount != null"> AND tmp.star_count = #{starCount} </if>
+			<if test="vState == 3"> AND tmp.v_state = 3 </if>
+			<if test="vState == 1"> AND tmp.v_state in (1,2) </if>
+			<if test="userId != null"> AND tmp.user_id = #{userId} </if>
+		</where>
+		ORDER BY id DESC
+	</select>
+	<select id="listAjaxPageByUserCommentFrontShow" parameterType="UserComment"
+		resultType="map">
+		SELECT uc.id,uc.content as Content,uc.star_count as Star,u.pic_url as
+		HeadUrl, DATE_FORMAT(uc.addtime,'%Y-%m-%d') as addtime,uc.picurl,
+		u.name as NickName from user_comment uc left join
+		user u
+		on
+		u.id=uc.user_id where
+		<if test="prodId != null"> uc.prod_id = #{prodId} AND </if>
+		<if test="userId != null"> uc.user_id = #{userId} AND </if>
+		<if test="commentLevel != null"> uc.comment_level = #{commentLevel} AND </if>
+		uc.v_state =1
+		ORDER BY uc.id DESC
+	</select>
+	<select id="selectCountLevelFromUserComment" parameterType="UserComment"
+		resultType="Integer">
+		SELECT count(*) from user_comment uc
+		<where>
+			<if test="prodId != null"> AND uc.prod_id = #{prodId} </if>
+			<if test="vState != null"> AND uc.v_state = #{vState} </if>
+			<if test="userId != null"> AND uc.user_id = #{userId} </if>
+			<if test="commentLevel != null"> AND uc.comment_level = #{commentLevel} </if>
+		</where>
+		ORDER BY uc.id DESC
+	</select>
+	<select id="getAllByUserComment" parameterType="UserComment"
+		resultMap="UserCommentMap">
+		SELECT
+		id,content,prod_id,star_count,picurl,v_state,v_comment,v_time,user_id,addtime
+		from user_comment tmp
+		<where>
+			<if test="id != null"> AND id = #{id} </if>
+			<if test="content != null"> AND content = #{content} </if>
+			<if test="prodId != null"> AND prod_id = #{prodId} </if>
+			<if test="starCount != null"> AND star_count = #{starCount} </if>
+			<if test="picurl != null"> AND picurl = #{picurl} </if>
+			<if test="vState != null"> AND v_state = #{vState} </if>
+			<if test="vComment != null"> AND v_comment = #{vComment} </if>
+			<if test="vTime != null"> AND v_time = #{vTime} </if>
+			<if test="userId != null"> AND user_id = #{userId} </if>
+			<if test="addtime != null"> AND addtime = #{addtime} </if>
+		</where>
+		ORDER BY id DESC
+	</select>
+	<insert id="insertSelective" parameterType="UserComment">
+		INSERT INTO user_comment
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">id,</if>
+			<if test="content != null">content,</if>
+			<if test="prodId != null">prod_id,</if>
+			<if test="starCount != null">star_count,</if>
+			<if test="picurl != null">picurl,</if>
+			<if test="vState != null">v_state,</if>
+			<if test="vComment != null">v_comment,</if>
+			<if test="vTime != null">v_time,</if>
+			<if test="userId != null">user_id,</if>
+			addtime,
+			<if test="commentLevel != null">comment_level,</if>
+			<if test="orderDetailId != null">order_detail_id,</if>
+		</trim>
+		values
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">#{id},</if>
+			<if test="content != null">#{content},</if>
+			<if test="prodId != null">#{prodId},</if>
+			<if test="starCount != null">#{starCount},</if>
+			<if test="picurl != null">#{picurl},</if>
+			<if test="vState != null">#{vState},</if>
+			<if test="vComment != null">#{vComment},</if>
+			<if test="vTime != null">#{vTime},</if>
+			<if test="userId != null">#{userId},</if>
+			 now(), 
+			<if test="commentLevel != null">#{commentLevel},</if>
+			<if test="orderDetailId != null">#{orderDetailId},</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="UserComment">
+		update user_comment
+		<set>
+			<if test="id != null">id=#{id},</if>
+			<if test="content != null">content=#{content},</if>
+			<if test="prodId != null">prod_id=#{prodId},</if>
+			<if test="starCount != null">star_count=#{starCount},</if>
+			<if test="picurl != null">picurl=#{picurl},</if>
+			<if test="vState != null">v_state=#{vState},</if>
+			<if test="vComment != null">v_comment=#{vComment},</if>
+			<if test="vTime != null">v_time=#{vTime},</if>
+			<if test="userId != null">user_id=#{userId},</if>
+			<if test="addtime != null">addtime=#{addtime},</if>
+			<if test="commentLevel != null">comment_level=#{commentLevel},</if>
+			<if test="orderDetailId != null">order_detail_id=#{orderDetailId},</if>
+		</set>
+		where id = #{id}
+	</update>
+	<delete id="deleteByPrimaryKey" parameterType="UserComment"><![CDATA[delete from user_comment where id=#{id}
+]]></delete>
+</mapper>

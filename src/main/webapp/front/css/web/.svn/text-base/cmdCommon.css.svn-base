@@ -1,0 +1,149 @@
+@charset "utf-8";
+
+.headerTitleL{
+    font-size: 20px;
+    padding-left: 20px;
+}
+.forPrompt{
+    margin-top: 40px;
+    height: 30px;
+    line-height: 30px;
+    padding-left:90px;
+    font-size: 16px;
+}
+.forgotPForm{
+    padding-bottom: 150px;
+}
+.forgotPForm table{
+
+    margin: 45px auto 0;
+}
+.loginFirstL{
+    height: 100px;
+    line-height: 100px;
+    font-size: 18px;
+    margin: 0 auto;
+    text-align: center;
+}
+.footLogin{
+    border-top: 1px solid #e5e5e5;
+}
+.loginsecL{
+    height: 14px;
+    line-height: 14px;
+    font-size: 14px;
+    margin: 0 auto;
+    text-align: center;
+    margin-bottom:40px;
+    color: #999999;
+}
+.inputTitle{
+    text-align:right;
+    width: 100px;
+    font-size: 16px;
+}
+.lastTd{
+    padding-left: 25px;
+}
+.inputTd{
+
+    text-align: left;
+    padding-left: 15px;
+}
+.inputStyle{
+    border: 1px solid #e5e5e5;
+    height: 40px;
+    width: 300px;
+    font-size: 16px;
+    padding: 0 10px;
+    font-family: "Microsoft YaHei", "微软雅黑";
+
+}
+.forgotPForm tr td{
+    height: 65px;
+}
+.borderE5{
+    border: 1px solid #e5e5e5;
+}
+.getVCode{
+    border: 1px solid #8ab800;
+    font-size: 16px;
+    color: #8ab800;
+    line-height: 16px;
+    padding: 12px 10px;
+    cursor: pointer;
+    background: #ffffff;
+}
+.forPSubBtn{
+    height: 40px;
+    font-size: 20px;
+    line-height: 40px;
+    padding: 0 30px;
+    background: #8ab800;
+    border: none;
+    color: white;
+}
+
+.couponsBan{
+    margin-bottom: 15px;
+}
+.couponsList{
+    padding: 0 21px;
+}
+.couponsListUl{
+    padding-left: 22px;
+    overflow: hidden;
+}
+.couponsListUlDiv{
+     width: 198px;
+    border: 1px solid #f39800;
+    text-align: center;
+    color:#f39800 ;
+}
+.couponsListPrice{
+    font-size: 48px;
+    line-height: 48px;
+    padding: 40px 0 25px;
+
+}
+.couponsListUlLi{
+    width: 200px;
+    float: left;
+    margin-right: 21px;
+}
+.couponsListDetails{
+    font-size: 18px;
+    line-height: 30px;
+
+}
+.couponsListTime{
+
+    line-height: 30px;
+    padding-bottom: 36px;
+}
+.couponsListUlBtn{
+    margin-top: 10px;
+    margin-bottom: 20px;
+    width: 150px;
+    height: 40px;
+    line-height: 40px;
+    background: #f39800;
+    color: #ffffff;
+    font-size: 18px;
+    border-radius: 5px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    cursor:pointer;
+
+}
+.forgotPassSpan{
+    padding: 0 15px;
+    margin-top: 50px;
+    display: inline-block;
+    line-height: 14px;
+}
+.borderR{
+    border-right: 2px solid #747474;
+
+}

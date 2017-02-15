@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8" ?>  <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wxsoft.xyd.prod.mapper.ProductSpecificationInfoMapper">
+	<resultMap type="ProductSpecificationInfo" id="productSpecificationInfoMap">
+		<id property="id" column="id" />
+		<result property="id" column="id" />
+		<result property="specId" column="spec_id" />
+		<result property="value" column="value" />
+		<result property="price" column="price" />
+		<result property="inventorynumber" column="inventorynumber" />
+		<result property="marketPrice" column="market_price" />
+		<result property="productId" column="product_id" />
+	</resultMap>
+	<select id="selectByPrimaryKey" parameterType="Integer"
+		resultMap="productSpecificationInfoMap"><![CDATA[  SELECT id,spec_id,value,price,inventorynumber,market_price,product_id from product_specification_info tmp WHERE tmp.id = #{id} ]]>
+	</select>
+
+	<update id="updateKuCunJian" parameterType="ProductSpecificationInfo">
+		update
+		product_specification_info set
+		inventorynumber =
+		inventorynumber-#{inventorynumber} where id = #{id}
+		and
+		(inventorynumber-#{inventorynumber})>0
+	</update>
+
+	<select id="selectByProductSpecificationInfo" parameterType="ProductSpecificationInfo"
+		resultMap="productSpecificationInfoMap">
+		SELECT id,spec_id,value,price,inventorynumber,market_price,product_id
+		from product_specification_info tmp WHERE
+		<if test="id != null">id = #{id} and </if>
+		<if test="specId != null">spec_id = #{specId} and </if>
+		<if test="value != null">value = #{value} and </if>
+		<if test="price != null">price = #{price} and </if>
+		<if test="inventorynumber != null">inventorynumber = #{inventorynumber} and </if>
+		<if test="marketPrice != null">market_price = #{marketPrice} and </if>
+		<if test="productId != null">product_id = #{productId} and </if>
+		1=1
+	</select>
+
+	<select id="getLowInventorynumber" parameterType="ProductSpecificationInfo"
+		resultMap="productSpecificationInfoMap">
+		SELECT id,spec_id,value,price,inventorynumber,market_price,product_id
+		from product_specification_info tmp WHERE
+		<if test="productId != null">product_id = #{productId} and </if>
+		1=1 order by inventorynumber asc limit 1
+	</select>
+
+	<select id="getLowInventorynumberMaps" parameterType="map"
+		resultMap="productSpecificationInfoMap">
+		select id,spec_id,value,price,inventorynumber,market_price,product_id
+		from product_specification_info a where a.product_id in
+		<foreach item="item" index="index" collection="tempProdID"
+			open="(" separator="," close=")">
+			#{item}
+		</foreach>
+		and inventorynumber=(select min(inventorynumber) from
+		product_specification_info where product_id=a.product_id)
+	</select>
+
+	<select id="getInventorynumberMaps" parameterType="java.util.List"
+		resultMap="productSpecificationInfoMap">
+		<foreach item="item" index="index" collection="list" open="("
+			separator=")union all(" close=")">
+			select
+			id,spec_id,value,price,inventorynumber,market_price,product_id from
+			product_specification_info a where a.id =#{item.specId} and
+			product_id=#{item.prodId}
+		</foreach>
+	</select>
+
+	<select id="listPageByProductSpecificationInfo" parameterType="ProductSpecificationInfo"
+		resultMap="productSpecificationInfoMap">
+		SELECT id,spec_id,value,price,inventorynumber,market_price,product_id
+		from product_specification_info tmp WHERE
+		<if test="id != null">id = #{id} and </if>
+		<if test="specId != null">spec_id = #{specId} and </if>
+		<if test="value != null">value = #{value} and </if>
+		<if test="price != null">price = #{price} and </if>
+		<if test="inventorynumber != null">inventorynumber = #{inventorynumber} and </if>
+		<if test="marketPrice != null">market_price = #{marketPrice} and </if>
+		<if test="productId != null">product_id = #{productId} and </if>
+		1=1
+	</select>
+	<select id="getAllByProductSpecificationInfo" parameterType="ProductSpecificationInfo"
+		resultMap="productSpecificationInfoMap">
+		SELECT id,spec_id,value,price,inventorynumber,market_price,product_id
+		from product_specification_info tmp WHERE
+		<if test="id != null">id = #{id} and </if>
+		<if test="specId != null">spec_id = #{specId} and </if>
+		<if test="value != null">value = #{value} and </if>
+		<if test="price != null">price = #{price} and </if>
+		<if test="inventorynumber != null">inventorynumber = #{inventorynumber} and </if>
+		<if test="marketPrice != null">market_price = #{marketPrice} and </if>
+		<if test="productId != null">product_id = #{productId} and </if>
+		1=1
+	</select>
+	<insert id="insertSelective" parameterType="ProductSpecificationInfo">
+		insert into product_specification_info
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">id,</if>
+			<if test="specId != null">spec_id,</if>
+			<if test="value != null">value,</if>
+			<if test="price != null">price,</if>
+			<if test="inventorynumber != null">inventorynumber,</if>
+			<if test="marketPrice != null">market_price,</if>
+			<if test="productId != null">product_id,</if>
+		</trim>
+		value
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">#{id},</if>
+			<if test="specId != null">#{specId},</if>
+			<if test="value != null">#{value},</if>
+			<if test="price != null">#{price},</if>
+			<if test="inventorynumber != null">#{inventorynumber},</if>
+			<if test="marketPrice != null">#{marketPrice},</if>
+			<if test="productId != null">#{productId},</if>
+		</trim>
+	</insert>
+	<insert id="insert" parameterType="ProductSpecificationInfo"><![CDATA[insert into product_specification_info( 
+id,spec_id,value,price,inventorynumber,market_price,product_id) values (#{id},#{specId},#{value},#{price},#{inventorynumber},#{marketPrice},#{productId})
+]]></insert>
+	<update id="updateByPrimaryKeySelective" parameterType="ProductSpecificationInfo">
+		update product_specification_info
+		<set>
+			<if test="id != null">id = #{id},</if>
+			<if test="specId != null">spec_id = #{specId},</if>
+			<if test="value != null">value = #{value},</if>
+			<if test="price != null">price = #{price},</if>
+			<if test="inventorynumber != null">inventorynumber = #{inventorynumber},</if>
+			<if test="marketPrice != null">market_price = #{marketPrice},</if>
+			<if test="productId != null">product_id = #{productId},</if>
+		</set>
+		where id = #{id}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="ProductSpecificationInfo"><![CDATA[update product_specification_info set 
+id=#{id},spec_id=#{specId},value=#{value},price=#{price},inventorynumber=#{inventorynumber},market_price=#{marketPrice},product_id=#{productId} where id = #{id}
+]]></update>
+	<delete id="deleteByPrimaryKey" parameterType="ProductSpecificationInfo"><![CDATA[delete from product_specification_info where id=#{id} 
+]]></delete>
+
+	<delete id="deleteByProductId" parameterType="integer"><![CDATA[delete from product_specification_info where product_id=#{id} 
+]]></delete>
+
+</mapper>

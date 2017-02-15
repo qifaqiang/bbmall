@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" ?>  <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wxsoft.xyd.prod.mapper.ProductImageMapper">
+	<resultMap type="ProductImage" id="productImageMap">
+		<id property="id" column="id" />
+		<result property="id" column="id" />
+		<result property="name" column="name" />
+		<result property="prodid" column="prodid" />
+		<result property="type" column="type" />
+		<result property="uri" column="uri" />
+		<result property="position" column="position" />
+		<result property="ismain" column="ismain" />
+		<result property="width" column="width" />
+		<result property="higth" column="higth" />
+		<result property="sn" column="sn" />
+		<result property="created" column="created" />
+		<result property="borsmall" column="borsmall" />
+	</resultMap>
+	<select id="selectByPrimaryKey" parameterType="Integer"
+		resultMap="productImageMap"><![CDATA[  SELECT id,name,prodid,type,uri,position,ismain,width,higth,sn,created,borsmall from product_image tmp WHERE tmp.id = #{id} ]]>
+	</select>
+	<select id="selectByProductImage" parameterType="ProductImage"
+		resultMap="productImageMap">
+		SELECT
+		id,name,prodid,type,uri,position,ismain,width,higth,sn,created,borsmall
+		from product_image tmp WHERE
+		<if test="id != null">id = #{id} and </if>
+		<if test="name != null">name = #{name} and </if>
+		<if test="prodid != null">prodid = #{prodid} and </if>
+		<if test="type != null">type = #{type} and </if>
+		<if test="uri != null">uri = #{uri} and </if>
+		<if test="position != null">position = #{position} and </if>
+		<if test="ismain != null">ismain = #{ismain} and </if>
+		<if test="width != null">width = #{width} and </if>
+		<if test="higth != null">higth = #{higth} and </if>
+		<if test="sn != null">sn = #{sn} and </if>
+		<if test="created != null">created = #{created} and </if>
+		<if test="borsmall != null">borsmall = #{borsmall} and </if>
+		1=1
+	</select>
+	<select id="listPageByProductImage" parameterType="ProductImage"
+		resultMap="productImageMap">
+		SELECT
+		id,name,prodid,type,uri,position,ismain,width,higth,sn,created,borsmall
+		from product_image tmp WHERE
+		<if test="id != null">id = #{id} and </if>
+		<if test="name != null">name = #{name} and </if>
+		<if test="prodid != null">prodid = #{prodid} and </if>
+		<if test="type != null">type = #{type} and </if>
+		<if test="uri != null">uri = #{uri} and </if>
+		<if test="position != null">position = #{position} and </if>
+		<if test="ismain != null">ismain = #{ismain} and </if>
+		<if test="width != null">width = #{width} and </if>
+		<if test="higth != null">higth = #{higth} and </if>
+		<if test="sn != null">sn = #{sn} and </if>
+		<if test="created != null">created = #{created} and </if>
+		<if test="borsmall != null">borsmall = #{borsmall} and </if>
+		1=1
+	</select>
+	<select id="getAllByProductImage" parameterType="integer"
+		resultMap="productImageMap">
+		SELECT id,uri from product_image tmp WHERE prodid =
+		#{prodid}
+	</select>
+
+	<select id="getAllByProductImageRMap" parameterType="integer"
+		resultType="map">
+		SELECT uri from product_image tmp WHERE prodid =
+		#{prodid}
+	</select>
+
+	<insert id="insertSelective" parameterType="ProductImage">
+		insert into product_image
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">id,</if>
+			<if test="name != null">name,</if>
+			<if test="prodid != null">prodid,</if>
+			<if test="type != null">type,</if>
+			<if test="uri != null">uri,</if>
+			<if test="position != null">position,</if>
+			<if test="ismain != null">ismain,</if>
+			<if test="width != null">width,</if>
+			<if test="higth != null">higth,</if>
+			<if test="sn != null">sn,</if>
+			<if test="created != null">created,</if>
+			<if test="borsmall != null">borsmall,</if>
+		</trim>
+		value
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">#{id},</if>
+			<if test="name != null">#{name},</if>
+			<if test="prodid != null">#{prodid},</if>
+			<if test="type != null">#{type},</if>
+			<if test="uri != null">#{uri},</if>
+			<if test="position != null">#{position},</if>
+			<if test="ismain != null">#{ismain},</if>
+			<if test="width != null">#{width},</if>
+			<if test="higth != null">#{higth},</if>
+			<if test="sn != null">#{sn},</if>
+			<if test="created != null">#{created},</if>
+			<if test="borsmall != null">#{borsmall},</if>
+		</trim>
+	</insert>
+	<insert id="insert" parameterType="ProductImage"><![CDATA[insert into product_image( 
+id,name,prodid,type,uri,position,ismain,width,higth,sn,created,borsmall) values (#{id},#{name},#{prodid},#{type},#{uri},#{position},#{ismain},#{width},#{higth},#{sn},#{created},#{borsmall})
+]]></insert>
+	<update id="updateByPrimaryKeySelective" parameterType="ProductImage">
+		update product_image
+		<set>
+			<if test="id != null">id = #{id},</if>
+			<if test="name != null">name = #{name},</if>
+			<if test="prodid != null">prodid = #{prodid},</if>
+			<if test="type != null">type = #{type},</if>
+			<if test="uri != null">uri = #{uri},</if>
+			<if test="position != null">position = #{position},</if>
+			<if test="ismain != null">ismain = #{ismain},</if>
+			<if test="width != null">width = #{width},</if>
+			<if test="higth != null">higth = #{higth},</if>
+			<if test="sn != null">sn = #{sn},</if>
+			<if test="created != null">created = #{created},</if>
+			<if test="borsmall != null">borsmall = #{borsmall},</if>
+		</set>
+		where id = #{id}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="ProductImage"><![CDATA[update product_image set 
+id=#{id},name=#{name},prodid=#{prodid},type=#{type},uri=#{uri},position=#{position},ismain=#{ismain},width=#{width},higth=#{higth},sn=#{sn},created=#{created},borsmall=#{borsmall} where id = #{id}
+]]></update>
+	<delete id="deleteByPrimaryKey" parameterType="ProductImage"><![CDATA[delete from product_image where id=#{id} 
+]]></delete>
+	<delete id="deleteByProdId" parameterType="Integer"><![CDATA[delete from product_image where prodid=#{id} 
+]]></delete>
+
+
+</mapper>

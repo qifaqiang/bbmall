@@ -1,0 +1,38 @@
+.tips_cover{
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background: #000;
+  opacity: 0.2; /* Standards Compliant Browsers */
+  filter: alpha(opacity=30); /* IE 7 and Earlier */
+  /* Next 2 lines IE8 */
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=30)";
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=30);
+  z-index: 999;
+}
+.cover_content{
+  position: fixed;
+  top: 42%;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+}
+.coverIng, .cover_after{
+  width: 300px;
+  padding: 15px;
+  margin: 0 auto;
+  font-size: 14px;
+  line-height: 20px;
+  text-align: center;
+  color: #444;
+  background: #fff;
+  box-shadow: 0 0 5px #4D4D4D;
+  border-radius: 5px;
+}
+.coverIng>span{
+  display: inline-block;
+  padding-left: 20px;
+  background: url(../../image/system/loading.gif) 0 center no-repeat;
+}

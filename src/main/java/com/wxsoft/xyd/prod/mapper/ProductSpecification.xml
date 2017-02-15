@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>  <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wxsoft.xyd.prod.mapper.ProductSpecificationMapper">
+	<resultMap type="ProductSpecification" id="productSpecificationMap">
+		<id property="id" column="id" />
+		<result property="id" column="id" />
+		<result property="companyId" column="company_id" />
+		<result property="specificationName" column="specification_name" />
+		<result property="addtime" column="addtime" />
+	</resultMap>
+	
+	<resultMap type="ProductSpecification" id="productSpecDetailMap" extends="productSpecificationMap">
+		<collection property="specDetailList" column="id"
+			select="com.wxsoft.xyd.prod.mapper.ProductSpecificationDetailMapper.selectBySpecId"></collection>
+	</resultMap>
+	
+	<select id="selectByPrimaryKey" parameterType="Integer"
+		resultMap="productSpecDetailMap">
+		<![CDATA[  
+			SELECT id,company_id,specification_name,addtime from product_specification tmp WHERE tmp.id = #{id} 
+		]]>
+	</select>
+	<select id="selectByProductSpecification" parameterType="ProductSpecification"
+		resultMap="productSpecificationMap">
+		SELECT id,company_id,specification_name,addtime from
+		product_specification tmp WHERE
+		<if test="id != null">id = #{id} and </if>
+		<if test="companyId != null">company_id = #{companyId} and </if>
+		<if test="specificationName != null">specification_name = #{specificationName} and </if>
+		<if test="addtime != null">addtime = #{addtime} and </if>
+		1=1
+	</select>
+	<select id="listPageByProductSpecification" parameterType="ProductSpecification"
+		resultMap="productSpecDetailMap">
+		SELECT id,company_id,specification_name,addtime from
+		product_specification tmp WHERE
+		<if test="id != null">id = #{id} and </if>
+		<if test="companyId != null">company_id = #{companyId} and </if>
+		<if test="specificationName != null">specification_name like '%${specificationName}%' and </if>
+		<if test="addtime != null">addtime = #{addtime} and </if>
+		1=1
+	</select>
+	<select id="getAllByProductSpecification" parameterType="ProductSpecification"
+		resultMap="productSpecDetailMap">
+		SELECT id,company_id,specification_name,addtime from
+		product_specification tmp WHERE
+		<if test="id != null">id = #{id} and </if>
+		<if test="companyId != null">company_id = #{companyId} and </if>
+		<if test="specificationName != null">specification_name = #{specificationName} and </if>
+		<if test="addtime != null">addtime = #{addtime} and </if>
+		1=1
+	</select>
+	<insert id="insertSelective" parameterType="ProductSpecification" useGeneratedKeys="true" keyProperty="id">
+		insert into product_specification
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">id,</if>
+			<if test="companyId != null">company_id,</if>
+			<if test="specificationName != null">specification_name,</if>
+			<if test="addtime != null">addtime,</if>
+		</trim>
+		values
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">#{id},</if>
+			<if test="companyId != null">#{companyId},</if>
+			<if test="specificationName != null">#{specificationName},</if>
+			<if test="addtime != null">now(),</if>
+		</trim>
+	</insert>
+	<insert id="insert" parameterType="ProductSpecification"><![CDATA[insert into product_specification( 
+id,company_id,specification_name,addtime) values (#{id},#{companyId},#{specificationName},#{addtime})
+]]></insert>
+	<update id="updateByPrimaryKeySelective" parameterType="ProductSpecification">
+		update product_specification
+		<set>
+			<if test="id != null">id = #{id},</if>
+			<if test="companyId != null">company_id = #{companyId},</if>
+			<if test="specificationName != null">specification_name = #{specificationName},</if>
+			<if test="addtime != null">addtime = #{addtime},</if>
+		</set>
+		where id = #{id}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="ProductSpecification"><![CDATA[update product_specification set 
+id=#{id},company_id=#{companyId},specification_name=#{specificationName},addtime=#{addtime} where id = #{id}
+]]></update>
+	<delete id="deleteByPrimaryKey" parameterType="ProductSpecification"><![CDATA[delete from product_specification where id=#{id} 
+]]></delete>
+</mapper>

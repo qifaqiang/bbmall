@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>  <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wxsoft.xyd.order.mapper.OrdersLocationMapper">
+	<resultMap type="OrdersLocation" id="ordersLocationMap">
+		<id property="id" column="id" />
+		<result property="id" column="id" />
+		<result property="orderId" column="order_id" />
+		<result property="consignee" column="consignee" />
+		<result property="mobile" column="mobile" />
+		<result property="addressName" column="address_name" />
+		<result property="created" column="created" />
+		<result property="zipcode" column="zipcode" />
+	</resultMap>
+	<select id="selectByPrimaryKey" parameterType="Integer"
+		resultMap="ordersLocationMap"><![CDATA[  SELECT id,order_id,consignee,mobile,address_name,created,zipcode from orders_location tmp WHERE tmp.order_id = #{id} ]]>
+	</select>
+	<select id="selectByOrdersLocation" parameterType="OrdersLocation"
+		resultMap="ordersLocationMap">
+		SELECT id,order_id,consignee,mobile,address_name,created,zipcode from
+		orders_location tmp WHERE
+		<if test="id != null">id = #{id} and </if>
+		<if test="orderId != null">order_id = #{orderId} and </if>
+		<if test="consignee != null">consignee = #{consignee} and </if>
+		<if test="mobile != null">mobile = #{mobile} and </if>
+		<if test="addressName != null">address_name = #{addressName} and </if>
+		<if test="created != null">created = #{created} and </if>
+		1=1
+	</select>
+	<select id="listPageByOrdersLocation" parameterType="OrdersLocation"
+		resultMap="ordersLocationMap">
+		SELECT id,order_id,consignee,mobile,address_name,created,zipcode from
+		orders_location tmp WHERE
+		<if test="id != null">id = #{id} and </if>
+		<if test="orderId != null">order_id = #{orderId} and </if>
+		<if test="consignee != null">consignee = #{consignee} and </if>
+		<if test="mobile != null">mobile = #{mobile} and </if>
+		<if test="addressName != null">address_name = #{addressName} and </if>
+		<if test="created != null">created = #{created} and </if>
+		1=1
+	</select>
+	<select id="getAllByOrdersLocation" parameterType="OrdersLocation"
+		resultMap="ordersLocationMap">
+		SELECT id,order_id,consignee,mobile,address_name,created,zipcode from
+		orders_location tmp WHERE
+		<if test="id != null">id = #{id} and </if>
+		<if test="orderId != null">order_id = #{orderId} and </if>
+		<if test="consignee != null">consignee = #{consignee} and </if>
+		<if test="mobile != null">mobile = #{mobile} and </if>
+		<if test="addressName != null">address_name = #{addressName} and </if>
+		<if test="created != null">created = #{created} and </if>
+		1=1
+	</select>
+	<insert id="insertSelective" parameterType="OrdersLocation">
+		insert into orders_location
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">id,</if>
+			<if test="orderId != null">order_id,</if>
+			<if test="consignee != null">consignee,</if>
+			<if test="mobile != null">mobile,</if>
+			<if test="addressName != null">address_name,</if>
+			<if test="created != null">created,</if>
+			<if test="zipcode != null">zipcode,</if>
+		</trim>
+		value
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">#{id},</if>
+			<if test="orderId != null">#{orderId},</if>
+			<if test="consignee != null">#{consignee},</if>
+			<if test="mobile != null">#{mobile},</if>
+			<if test="addressName != null">#{addressName},</if>
+			<if test="created != null">#{created},</if>
+			<if test="zipcode != null">#{zipcode},</if>
+		</trim>
+	</insert>
+	<insert id="insert" parameterType="OrdersLocation"><![CDATA[insert into orders_location( 
+id,order_id,consignee,mobile,address_name,created) values (#{id},#{orderId},#{consignee},#{mobile},#{addressName},#{created})
+]]></insert>
+	<update id="updateByPrimaryKeySelective" parameterType="OrdersLocation">
+		update orders_location
+		<set>
+			<if test="id != null">id = #{id},</if>
+			<if test="orderId != null">order_id = #{orderId},</if>
+			<if test="consignee != null">consignee = #{consignee},</if>
+			<if test="mobile != null">mobile = #{mobile},</if>
+			<if test="addressName != null">address_name = #{addressName},</if>
+			<if test="created != null">created = #{created},</if>
+			<if test="zipcode != null">zipcode = #{zipcode},</if>
+		</set>
+		where id = #{id}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="OrdersLocation"><![CDATA[update orders_location set 
+id=#{id},order_id=#{orderId},consignee=#{consignee},mobile=#{mobile},address_name=#{addressName},created=#{created} where id = #{id}
+]]></update>
+	<delete id="deleteByPrimaryKey" parameterType="OrdersLocation"><![CDATA[delete from orders_location where id=#{id} 
+]]></delete>
+</mapper>

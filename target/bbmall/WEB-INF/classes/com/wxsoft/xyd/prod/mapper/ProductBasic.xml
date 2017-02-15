@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>  <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wxsoft.xyd.prod.mapper.ProductBasicMapper">
+	<resultMap type="ProductBasic" id="ProductBasicMap">
+		<id property="id" column="id" />
+		<result property="id" column="id" />
+		<result property="name" column="name" />
+		<result property="type" column="type" />
+		<result property="unit" column="unit" />
+	</resultMap>
+	<select id="selectByPrimaryKey" parameterType="Integer"
+		resultMap="ProductBasicMap"><![CDATA[  SELECT id,name,type,unit FROM product_basic tmp WHERE tmp.id = #{id} ]]>
+	</select>
+	<select id="selectByProductBasic" parameterType="ProductBasic" resultMap="ProductBasicMap">
+		SELECT id,name,type,unit FROM product_basic tmp
+		<where>
+			<if test="id != null"> AND id = #{id} </if>
+			<if test="name != null"> AND name = #{name} </if>
+			<if test="type != null"> AND type = #{type} </if>
+			<if test="unit != null"> AND unit = #{unit} </if>
+ 		</where>
+	</select>
+	<select id="listPageByProductBasic" parameterType="ProductBasic"
+		resultMap="ProductBasicMap">
+		SELECT id,name,type,unit from product_basic tmp
+		<where>
+			<if test="id != null"> AND id = #{id} </if>
+			<if test="name != null"> AND name like concat(concat('%',#{name}),'%')  </if>
+			<if test="type != null"> AND type = #{type} </if>
+			<if test="unit != null"> AND unit = #{unit} </if>
+ 		</where>
+ 		 ORDER BY id DESC
+	</select>
+	<select id="getAllByProductBasic" parameterType="ProductBasic" resultMap="ProductBasicMap">
+		SELECT id,name,type,unit from product_basic tmp
+		<where>
+			<if test="id != null"> AND id = #{id} </if>
+			<if test="name != null"> AND name = #{name} </if>
+			<if test="type != null"> AND type = #{type} </if>
+			<if test="unit != null"> AND unit = #{unit} </if>
+ 		</where>
+ 	    ORDER BY id 
+	</select>
+	<insert id="insertSelective" parameterType="ProductBasic">
+		INSERT INTO product_basic
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">id,</if>
+			<if test="name != null">name,</if>
+			<if test="type != null">type,</if>
+			<if test="unit != null">unit,</if>
+		</trim>
+		values
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">#{id},</if>
+			<if test="name != null">#{name},</if>
+			<if test="type != null">#{type},</if>
+			<if test="unit != null">#{unit},</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="ProductBasic">
+		update product_basic
+		<set>
+			<if test="id != null">id=#{id},</if>
+			<if test="name != null">name=#{name},</if>
+			<if test="type != null">type=#{type},</if>
+			<if test="unit != null">unit=#{unit},</if>
+		</set>
+		where id = #{id}
+	</update>
+	<delete id="deleteByPrimaryKey" parameterType="ProductBasic"><![CDATA[delete from product_basic where id=#{id}
+]]></delete>
+</mapper>

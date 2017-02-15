@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>  <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wxsoft.xyd.common.mapper.RollPicMapper">
+	<resultMap type="RollPic" id="RollPicMap">
+		<id property="id" column="id" />
+		<result property="id" column="id" />
+		<result property="title" column="title" />
+		<result property="picUrl" column="pic_url" />
+		<result property="linkUrl" column="link_url" />
+		<result property="sorts" column="sorts" />
+		<result property="isVisable" column="is_visable" />
+		<result property="addtime" column="addtime" />
+		<result property="type" column="type" />
+	</resultMap>
+	<select id="selectByPrimaryKey" parameterType="Integer"
+		resultMap="RollPicMap"><![CDATA[  SELECT id,title,pic_url,type,link_url,sorts,is_visable,addtime FROM roll_pic tmp WHERE tmp.id = #{id} ]]>
+	</select>
+	<select id="selectByRollPic" parameterType="RollPic" resultMap="RollPicMap">
+		SELECT id,title,pic_url,link_url,sorts,is_visable,addtime,type FROM
+		roll_pic tmp
+		<where>
+			<if test="id != null"> AND id = #{id} </if>
+			<if test="title !=null and title != ''"> AND title like '%${title}%' </if>
+			<if test="picUrl != null"> AND pic_url = #{picUrl} </if>
+			<if test="linkUrl != null"> AND link_url = #{linkUrl} </if>
+			<if test="sorts != null"> AND sorts = #{sorts} </if>
+			<if test="isVisable != null"> AND is_visable = #{isVisable} </if>
+			<if test="addtime != null"> AND addtime = #{addtime} </if>
+		</where>
+	</select>
+	<select id="listPageByRollPic" parameterType="RollPic"
+		resultMap="RollPicMap">
+		SELECT id,title,pic_url,link_url,sorts,is_visable,addtime,type from
+		roll_pic tmp
+		<where>
+			<if test="id != null"> AND id = #{id} </if>
+			<if test="title !=null and title != ''"> AND title like '%${title}%' </if>
+			<if test="picUrl != null"> AND pic_url = #{picUrl} </if>
+			<if test="linkUrl != null"> AND link_url = #{linkUrl} </if>
+			<if test="sorts != null"> AND sorts = #{sorts} </if>
+			<if test="isVisable != null"> AND is_visable = #{isVisable} </if>
+			<if test="addtime != null"> AND addtime = #{addtime} </if>
+		</where>
+		ORDER BY id DESC
+	</select>
+	<select id="getAllByRollPic" parameterType="RollPic" resultType="map">
+		SELECT title,pic_url,link_url from
+		roll_pic tmp
+		<where>
+			<if test="type != null"> AND type = #{type} </if>
+		</where>
+		ORDER BY sorts DESC
+	</select>
+	<insert id="insertSelective" parameterType="RollPic">
+		INSERT INTO roll_pic
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">id,</if>
+			<if test="title != null">title,</if>
+			<if test="picUrl != null">pic_url,</if>
+			<if test="linkUrl != null">link_url,</if>
+			<if test="sorts != null">sorts,</if>
+			<if test="isVisable != null">is_visable,</if>
+			<if test="addtime != null">addtime,</if>
+			<if test="type != null">type,</if>
+		</trim>
+		values
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">#{id},</if>
+			<if test="title != null">#{title},</if>
+			<if test="picUrl != null">#{picUrl},</if>
+			<if test="linkUrl != null">#{linkUrl},</if>
+			<if test="sorts != null">#{sorts},</if>
+			<if test="isVisable != null">#{isVisable},</if>
+			<if test="addtime != null">#{addtime},</if>
+			<if test="type != null">#{type},</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="RollPic">
+		update roll_pic
+		<set>
+			<if test="id != null">id=#{id},</if>
+			<if test="title != null">title=#{title},</if>
+			<if test="picUrl != null">pic_url=#{picUrl},</if>
+			<if test="linkUrl != null">link_url=#{linkUrl},</if>
+			<if test="sorts != null">sorts=#{sorts},</if>
+			<if test="isVisable != null">is_visable=#{isVisable},</if>
+			<if test="addtime != null">addtime=#{addtime},</if>
+			<if test="type != null">type=#{type},</if>
+		</set>
+		where id = #{id}
+	</update>
+	<delete id="deleteByPrimaryKey" parameterType="RollPic"><![CDATA[delete from roll_pic where id=#{id}
+]]></delete>
+</mapper>

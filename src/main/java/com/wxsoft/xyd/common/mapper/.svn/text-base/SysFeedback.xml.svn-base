@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>  <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wxsoft.xyd.common.mapper.SysFeedbackMapper">
+	<resultMap type="SysFeedback" id="SysFeedbackMap">
+		<id property="id" column="id" />
+		<result property="id" column="id" />
+		<result property="userId" column="user_id" />
+		<result property="content" column="content" />
+		<result property="addtime" column="addtime" />
+		<result property="sysTime" column="sys_time" />
+		<result property="sysContent" column="sys_content" />
+		<result property="vState" column="v_state" />
+		<result property="vComment" column="v_comment" />
+		<result property="vTime" column="v_time" />
+		<result property="mobile" column="mobile" />
+	</resultMap>
+	<select id="selectByPrimaryKey" parameterType="Integer"
+		resultMap="SysFeedbackMap"><![CDATA[  SELECT id,user_id,content,addtime,sys_time,sys_content,v_state,v_comment,v_time,mobile FROM sys_feedback tmp WHERE tmp.id = #{id} ]]>
+	</select>
+	<select id="selectBySysFeedback" parameterType="SysFeedback" resultMap="SysFeedbackMap">
+		SELECT id,user_id,content,addtime,sys_time,sys_content,v_state,v_comment,v_time,mobile FROM sys_feedback tmp
+		<where>
+			<if test="id != null"> AND id = #{id} </if>
+			<if test="userId != null"> AND user_id = #{userId} </if>
+			<if test="content !=null and content != ''"> AND content like '%${content}%' </if>
+			<if test="addtime != null"> AND addtime = #{addtime} </if>
+			<if test="sysTime != null"> AND sys_time = #{sysTime} </if>
+			<if test="sysContent != null"> AND sys_content = #{sysContent} </if>
+			<if test="vState != null"> AND v_state = #{vState} </if>
+			<if test="vComment != null"> AND v_comment = #{vComment} </if>
+			<if test="vTime != null"> AND v_time = #{vTime} </if>
+			<if test="mobile != null"> AND mobile = #{mobile} </if>
+ 		</where>
+	</select>
+	<select id="listPageBySysFeedback" parameterType="SysFeedback"
+		resultMap="SysFeedbackMap">
+		SELECT u.name,tmp.*  from sys_feedback tmp left join user u on u.id=tmp.user_id
+		<where>
+		1=1
+			<if test="id != null"> AND id = #{id} </if>
+			<if test="userId != null"> AND user_id = #{userId} </if>
+			<if test="content !=null and content != ''"> AND content like '%${content}%' </if>
+			<if test="addtime != null"> AND addtime = #{addtime} </if>
+			<if test="sysTime != null"> AND sys_time = #{sysTime} </if>
+			<if test="sysContent != null"> AND sys_content = #{sysContent} </if>
+			<if test="vState != null"> AND v_state = #{vState} </if>
+			<if test="vComment != null"> AND v_comment = #{vComment} </if>
+			<if test="vTime != null"> AND v_time = #{vTime} </if>
+			<if test="mobile != null"> AND mobile = #{mobile} </if>
+ 		</where>
+ 		 ORDER BY id DESC
+	</select>
+	<select id="getAllBySysFeedback" parameterType="SysFeedback" resultMap="SysFeedbackMap">
+		SELECT id,user_id,content,addtime,sys_time,sys_content,v_state,v_comment,v_time,mobile from sys_feedback tmp
+		<where>
+			<if test="id != null"> AND id = #{id} </if>
+			<if test="userId != null"> AND user_id = #{userId} </if>
+			<if test="content !=null and content != ''"> AND content like '%${content}%' </if>
+			<if test="addtime != null"> AND addtime = #{addtime} </if>
+			<if test="sysTime != null"> AND sys_time = #{sysTime} </if>
+			<if test="sysContent != null"> AND sys_content = #{sysContent} </if>
+			<if test="vState != null"> AND v_state = #{vState} </if>
+			<if test="vComment != null"> AND v_comment = #{vComment} </if>
+			<if test="vTime != null"> AND v_time = #{vTime} </if>
+			<if test="mobile != null"> AND mobile = #{mobile} </if>
+ 		</where>
+ 	    ORDER BY id DESC
+	</select>
+	<insert id="insertSelective" parameterType="SysFeedback">
+		INSERT INTO sys_feedback
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">id,</if>
+			<if test="userId != null">user_id,</if>
+			<if test="content != null">content,</if>
+			 addtime,
+			<if test="sysTime != null">sys_time,</if>
+			<if test="sysContent != null">sys_content,</if>
+			<if test="vState != null">v_state,</if>
+			<if test="vComment != null">v_comment,</if>
+			<if test="vTime != null">v_time,</if>
+			<if test="mobile != null">mobile,</if>
+		</trim>
+		values
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">#{id},</if>
+			<if test="userId != null">#{userId},</if>
+			<if test="content != null">#{content},</if>
+			   now(), 
+			<if test="sysTime != null">#{sysTime},</if>
+			<if test="sysContent != null">#{sysContent},</if>
+			<if test="vState != null">#{vState},</if>
+			<if test="vComment != null">#{vComment},</if>
+			<if test="vTime != null">#{vTime},</if>
+			<if test="mobile != null">#{mobile},</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="SysFeedback">
+		update sys_feedback
+		<set>
+			<if test="id != null">id=#{id},</if>
+			<if test="userId != null">user_id=#{userId},</if>
+			<if test="content != null">content=#{content},</if>
+			<if test="addtime != null">addtime=#{addtime},</if>
+			<if test="sysTime != null">sys_time=#{sysTime},</if>
+			<if test="sysContent != null">sys_content=#{sysContent},</if>
+			<if test="vState != null">v_state=#{vState},</if>
+			<if test="vComment != null">v_comment=#{vComment},</if>
+			<if test="vTime != null">v_time=#{vTime},</if>
+			<if test="mobile != null">mobile=#{mobile},</if>
+		</set>
+		where id = #{id}
+	</update>
+	<delete id="deleteByPrimaryKey" parameterType="SysFeedback"><![CDATA[delete from sys_feedback where id=#{id}
+]]></delete>
+</mapper>

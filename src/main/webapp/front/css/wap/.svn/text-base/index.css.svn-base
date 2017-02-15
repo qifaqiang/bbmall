@@ -1,0 +1,26 @@
+@charset "utf-8";
+#w-nav{padding: 0 10px 10px; /*background: seagreen;*/ overflow: hidden; width: 640px;}
+#w-nav li{width: 155px; text-align: center; float: left; margin-top: 10px;}
+#w-nav li img{width: 75px;}
+#w-nav li p{font-size: 24px; color: #555555;}
+#w-content1{width: 640px;;}
+#w-content1 a img{width: 640px; margin-bottom: 11px;}
+#w-content2{background: #eeeeee; overflow: hidden; padding-top: 6px; padding-bottom: 16px; width: 640px;}
+#w-content2>ul>li{width: 317px; float: left; border: 1px solid #e5e5e5; margin-bottom: 8px; height: 492px; overflow: hidden;}
+#w-content2>ul>li:nth-child(2n){margin-left: 6px;}
+#w-content2>ul>li>.w-pro-title{text-align: center; padding: 25px 13px; color: #999999;}
+#w-content2>ul>.w-first{padding-bottom: 0px; border: none;}
+.w-pro-title h4{font-size: 28px; font-weight: 500; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; padding:0 0 10px 0;}
+.w-pro-title h5{font-size: 24px; font-weight: normal; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;}
+.kind>a>li{float: left; margin-left: 12px; margin-top: 16px; text-align: center; font-size: 28px; padding: 28px 0; border:1px solid transparent; border-radius: 3px; background: white; width: 140px; color: #333333;}
+.w-product{background: #FFFFFF; /*padding-bottom: 0.28rem;*/ overflow: hidden; position: relative;}
+.w-word{padding-top: 30px; padding-bottom: 34px;}
+.w-product img{width: 317px; border-bottom: 1px solid #e5e5e5;}
+.w-product p{font-size: 24px; /*padding-top:0.03rem;*/ padding-left: 10px; padding-right:10px;}
+.w-ellipsis{overflow: hidden; white-space: nowrap; text-overflow: ellipsis;}
+.w-product .w-name{color: #333333;}
+.w-product .w-introduce{color: #999999;}
+.w-product .w-num .w-name i{color: #fe0000;}
+.sales{width: 140px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; text-align: right;}
+.w-label{position: absolute; top:0; left: 3px; background:#abd13e; width: 40px; text-align: center; color: #FFFFFF; border: 1px solid #abd13e;}
+.w-label p{border:3px solid white; padding:3px 3px; font-size: 18px;}

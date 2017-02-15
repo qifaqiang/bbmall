@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>  <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wxsoft.xyd.common.mapper.SysNewsCatalogMapper">
+	<resultMap type="SysNewsCatalog" id="SysNewsCatalogMap">
+		<id property="id" column="id" />
+		<result property="id" column="id" />
+		<result property="name" column="name" />
+		<result property="pid" column="pid" />
+		<result property="addtime" column="addtime" />
+		<result property="level" column="level" />
+		<result property="sortn" column="sortn" />
+		<result property="isWep" column="is_wep" />
+	</resultMap>
+	<select id="selectByPrimaryKey" parameterType="Integer"
+		resultMap="SysNewsCatalogMap"><![CDATA[  SELECT id,name,pid,addtime,level,sortn,is_wep isWep,pic FROM sys_news_catalog tmp WHERE tmp.id = #{id} ]]>
+	</select>
+	<select id="selectBySysNewsCatalog" parameterType="SysNewsCatalog" resultMap="SysNewsCatalogMap">
+		SELECT id,name,pid,addtime,level,sortn FROM sys_news_catalog tmp
+		<where>
+			<if test="id != null"> AND id = #{id} </if>
+			<if test="name != null"> AND name = #{name} </if>
+			<if test="pid != null"> AND pid = #{pid} </if>
+			<if test="addtime != null"> AND addtime = #{addtime} </if>
+			<if test="level != null"> AND level = #{level} </if>
+			<if test="sortn != null"> AND sortn = #{sortn} </if>
+ 		</where>
+	</select>
+	<select id="listPageBySysNewsCatalog" parameterType="SysNewsCatalog"
+		resultMap="SysNewsCatalogMap">
+		SELECT id,name,pid,addtime,level,sortn from sys_news_catalog tmp
+		<where>
+			<if test="id != null"> AND id = #{id} </if>
+			<if test="name != null"> AND name = #{name} </if>
+			<if test="pid != null"> AND pid = #{pid} </if>
+			<if test="addtime != null"> AND addtime = #{addtime} </if>
+			<if test="level != null"> AND level = #{level} </if>
+			<if test="sortn != null"> AND sortn = #{sortn} </if>
+ 		</where>
+ 		 ORDER BY id DESC
+	</select>
+	<select id="getAllBySysNewsCatalog" parameterType="SysNewsCatalog" resultMap="SysNewsCatalogMap">
+		SELECT 
+		id,
+		name,
+		pid,
+		addtime,
+		level,
+		sortn,
+		is_wep isWep,
+		pic
+		from sys_news_catalog tmp1
+		 <where>
+			 <if test="id != null"> AND id = #{id} </if>
+			<if test="name != null"> AND name = #{name} </if>
+			<if test="pid != null"> AND pid = #{pid} </if>
+			<if test="addtime != null"> AND addtime = #{addtime} </if>
+			<if test="level != null"> AND level = #{level} </if>
+			<if test="isWep != null">AND is_wep=#{isWep} </if>
+			<if test="sortn != null"> AND sortn = #{sortn} </if> 
+ 		</where>
+ 	    ORDER BY sortn 
+	</select>
+	<insert id="insertSelective" parameterType="SysNewsCatalog">
+		INSERT INTO sys_news_catalog
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">id,</if>
+			<if test="name != null">name,</if>
+			<if test="pid != null">pid,</if>
+			<if test="addtime != null">addtime,</if>
+			<if test="level != null">level,</if>
+			<if test="sortn != null">sortn,</if>
+			<if test="isWep != null">is_wep,</if>
+			<if test="pic != null">pic,</if>
+		</trim>
+		values
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">#{id},</if>
+			<if test="name != null">#{name},</if>
+			<if test="pid != null">#{pid},</if>
+			<if test="addtime != null">#{addtime},</if>
+			<if test="level != null">#{level},</if>
+			<if test="sortn != null">#{sortn},</if>
+			<if test="isWep != null">#{isWep},</if>
+			<if test="pic != null">#{pic},</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="SysNewsCatalog">
+		update sys_news_catalog
+		<set>
+			<if test="id != null">id=#{id},</if>
+			<if test="name != null">name=#{name},</if>
+			<if test="pid != null">pid=#{pid},</if>
+			<if test="addtime != null">addtime=#{addtime},</if>
+			<if test="level != null">level=#{level},</if>
+			<if test="sortn != null">sortn=#{sortn},</if>
+			<if test="isWep != null">is_wep=#{isWep},</if>
+			<if test="pic != null">pic=#{pic},</if>
+		</set>
+		where id = #{id}
+	</update>
+	<delete id="deleteByPrimaryKey" parameterType="SysNewsCatalog"><![CDATA[delete from sys_news_catalog where id=#{id}
+]]></delete>
+<delete id="deleteByPid" parameterType="SysNewsCatalog"><![CDATA[delete from sys_news_catalog where id=#{id}
+]]></delete>
+</mapper>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>  <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wxsoft.xyd.prod.mapper.ProductTagsMapper">
+	<resultMap type="ProductTags" id="ProductTagsMap">
+		<id property="id" column="id" />
+		<result property="id" column="id" />
+		<result property="name" column="name" />
+		<result property="sortn" column="sortn" />
+	</resultMap>
+	<select id="selectByPrimaryKey" parameterType="Integer"
+		resultMap="ProductTagsMap"><![CDATA[  SELECT id,name,sortn FROM product_tags tmp WHERE tmp.id = #{id} ]]>
+	</select>
+	<select id="selectByProductTags" parameterType="ProductTags" resultMap="ProductTagsMap">
+		SELECT id,name,sortn FROM product_tags tmp
+		<where>
+			<if test="id != null"> AND id = #{id} </if>
+			<if test="name != null"> AND name = #{name} </if>
+			<if test="sortn != null"> AND sortn = #{sortn} </if>
+ 		</where>
+	</select>
+	<select id="listPageByProductTags" parameterType="ProductTags"
+		resultMap="ProductTagsMap">
+		SELECT id,name,sortn from product_tags tmp
+		<where>
+			<if test="id != null"> AND id = #{id} </if>
+			<if test="name != null"> AND name like concat(concat('%',#{name}),'%')  </if>
+			<if test="sortn != null"> AND sortn = #{sortn} </if>
+ 		</where>
+ 		 ORDER BY id DESC
+	</select>
+	<select id="getAllByProductTags" parameterType="ProductTags" resultMap="ProductTagsMap">
+		SELECT id,name,sortn from product_tags tmp
+		<where>
+			<if test="id != null"> AND id = #{id} </if>
+			<if test="name != null"> AND name = #{name} </if>
+			<if test="sortn != null"> AND sortn = #{sortn} </if>
+ 		</where>
+ 	    ORDER BY id DESC
+	</select>
+	<insert id="insertSelective" parameterType="ProductTags">
+		INSERT INTO product_tags
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">id,</if>
+			<if test="name != null">name,</if>
+			<if test="sortn != null">sortn,</if>
+		</trim>
+		values
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">#{id},</if>
+			<if test="name != null">#{name},</if>
+			<if test="sortn != null">#{sortn},</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="ProductTags">
+		update product_tags
+		<set>
+			<if test="id != null">id=#{id},</if>
+			<if test="name != null">name=#{name},</if>
+			<if test="sortn != null">sortn=#{sortn},</if>
+		</set>
+		where id = #{id}
+	</update>
+	<delete id="deleteByPrimaryKey" parameterType="ProductTags"><![CDATA[delete from product_tags where id=#{id}
+]]></delete>
+</mapper>

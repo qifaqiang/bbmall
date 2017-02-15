@@ -1,0 +1,113 @@
+package com.wxsoft.xyd.prod.mapper;
+
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.stereotype.Repository;
+
+import com.wxsoft.xyd.prod.model.Product;
+
+/**
+ * @文件名称: ProductMapper.java
+ * @类路径: com/wxltsoft/schoolmgr/system/mapper/
+ * @描述: TODO
+ * @作者：kyz
+ * @公司：wxltsoft
+ * @时间：2015-02-02 20:03:01
+ */
+@Repository
+public interface ProductMapper {
+	// 根据主键删除
+	int deleteByPrimaryKey(Product record);
+
+	// 促销商品列表
+	List<Map<String, Object>> listAjaxPageProductPromotion(Product pro);
+
+	List<Map<String, Object>> listAjaxPageAllProductPromotion(Product pro);
+
+	// 全部插入.
+
+	Map<String, Object> selectFrontByProduct(Product record);
+
+	int insert(Product record);
+
+	// 根据所需插入
+	int insertSelective(Product record);
+
+	// 根据所需更新
+	int updateByPrimaryKeySelective(Product record);
+
+	// 根据主键查询
+	Product selectByPrimaryKey(Integer id);
+
+	// 根据所需查询
+	Product selectByProduct(Product record);
+
+	// 根据所需查询
+	Product selectByProductBooking(Product record);
+
+	// 购物车操作
+	Product selectProductByCart(Integer id);
+
+	// 购物车操作
+	Product selectProductByCartShow(Integer id);
+
+	List<Map<String, Object>> listAjaxPageProduct(Product pro);
+
+	List<Map<String, Object>> listAjaxPageProductList(Product pro);
+
+	// 根据商品ID判断是否在购物车中
+	List<Product> getCarProductVsUserId(Map<String, Object> params);
+
+	// 根据商品ID判断是否在购物车中
+	List<Product> getCangProductVsUserId(Map<String, Object> params);
+
+	// 分页获取
+	List<Map<String, Object>> listPageByProduct(Product clssname);
+
+	List<Product> listPageByProductBooking(Product clssname);
+
+	List<Product> selectProductByCartOrder(Map<String, Object> maps);
+
+	// 获取全部
+	List<Product> getAllByProduct(Product clssname);
+
+	List<Map<String, String>> listPageByVProduct(Product clssname);
+
+	// 商品减库存
+	int updateKuCunJian(Product classname);
+
+	//
+	List<Product> getAllBuyByMap(Map map);
+
+	// 获取分类下面的所有商品 IN 查询
+	List<Product> getAllBuyByCataid(Map map);
+
+	public List<Product> getAllBookingByBook(Product clssname);
+
+	// 商城侧根据分类ID 或者排序 获取商品列表 不包含预售商品
+	public List<Product> getProListByProduct(Product clssname);
+
+	// 前台展示
+	public List<Map<String, Object>> selectProductFrontByShowList(
+			Map<String, Object> map);
+
+	// 前台展示根据基地判断库存
+	public List<Product> getPackageByProductId(String[] ids);
+	
+	public List<Product> getPackageByProdIds(String[] ids);
+
+	// 需要判断状态
+	public List<Product> getStockByProductId(String[] ids);
+
+	// 不判断状态
+	public List<Product> getStockNoCheckStateByProductId(String[] ids);
+
+	// 商品类别详细信息（productlist.html）
+	public List<Map<String, Object>> selectProductList(Product map);
+
+	public Map<String, Object> selectFrontByProductInfo(Product record);
+
+	List<Product> selectTopRecommendProductByCart();
+
+}

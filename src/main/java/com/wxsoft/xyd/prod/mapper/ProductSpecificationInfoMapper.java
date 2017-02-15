@@ -1,0 +1,76 @@
+package com.wxsoft.xyd.prod.mapper;
+
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.stereotype.Repository;
+
+import com.wxsoft.xyd.prod.model.ProductSpecificationInfo;
+
+/**
+ * @文件名称: ProductSpecificationInfoMapper.java
+ * @类路径: com/wxltsoft/schoolmgr/extra/mapper/
+ * @描述: TODO
+ * @作者：kyz
+ * @公司：wxltsoft
+ * @时间：2015-07-16 20:07:27
+ */
+@Repository
+public interface ProductSpecificationInfoMapper {
+	// 根据主键删除
+	int deleteByPrimaryKey(Integer id);
+
+	int deleteByProductId(Integer id);
+
+	// 全部插入
+	int insert(ProductSpecificationInfo record);
+
+	// 根据所需插入
+	int insertSelective(ProductSpecificationInfo record);
+
+	// 根据所需更新
+	int updateByPrimaryKeySelective(ProductSpecificationInfo record);
+
+	// 根据主键查询
+	ProductSpecificationInfo selectByPrimaryKey(Integer id);
+
+	// 根据所需查询
+	ProductSpecificationInfo selectByProductSpecificationInfo(
+			ProductSpecificationInfo record);
+
+	// 分页获取
+	List<ProductSpecificationInfo> listPageByProductSpecificationInfo(
+			ProductSpecificationInfo clssname);
+
+	// 获取全部
+	List<ProductSpecificationInfo> getAllByProductSpecificationInfo(
+			ProductSpecificationInfo clssname);
+	// 获取全部
+	List<ProductSpecificationInfo> getAllByPSIForWeb(
+			ProductSpecificationInfo clssname);
+
+	// 获取字典表最少得规格
+	ProductSpecificationInfo getLowInventorynumber(
+			ProductSpecificationInfo clssname);
+	// 获取最小价格的规格
+	ProductSpecificationInfo getLowPrice(
+			ProductSpecificationInfo clssname);
+
+	// 商品减库存
+	int updateKuCunJian(ProductSpecificationInfo classname);
+
+	// 获取字典表最少得规格 map
+	List<ProductSpecificationInfo> getLowInventorynumberMaps(
+			Map<String, Object> clssname);
+
+	// 获取字典表规格 map
+	List<ProductSpecificationInfo> getInventorynumberMaps(
+			List<Map<String, Object>> clssname);
+	
+	List<ProductSpecificationInfo> listAjaxPageGetSpecProdByCaId(ProductSpecificationInfo psi);
+	
+	List<ProductSpecificationInfo> listAjaxPageGetSpecProdByCompanyId(ProductSpecificationInfo psi);
+	
+	List<ProductSpecificationInfo> getAllByPSI(ProductSpecificationInfo psi);
+
+}

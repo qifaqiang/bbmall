@@ -1,0 +1,62 @@
+package com.wxsoft.xyd.prod.service.impl;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.wxsoft.xyd.prod.mapper.ProductSpecificationMapper;
+import com.wxsoft.xyd.prod.model.ProductSpecification;
+import com.wxsoft.xyd.prod.service.ProductSpecificationService;
+
+@Service("productSpecificationService")
+public class ProductSpecificationServiceImpl implements
+		ProductSpecificationService {
+	@Autowired
+	private ProductSpecificationMapper productSpecificationMapper;
+
+	@Override
+	public int deleteByPrimaryKey(Integer id) {
+		return productSpecificationMapper.deleteByPrimaryKey(id);
+	}
+
+	@Override
+	public int insert(ProductSpecification record) {
+		return productSpecificationMapper.insert(record);
+	}
+
+	@Override
+	public int insertSelective(ProductSpecification record) {
+		return productSpecificationMapper.insertSelective(record);
+	}
+
+	@Override
+	public int updateByPrimaryKeySelective(ProductSpecification record) {
+		return productSpecificationMapper.updateByPrimaryKeySelective(record);
+	}
+
+	@Override
+	public ProductSpecification selectByPrimaryKey(Integer id) {
+		return productSpecificationMapper.selectByPrimaryKey(id);
+	}
+
+	@Override
+	public ProductSpecification selectByProductSpecification(
+			ProductSpecification record) {
+		return productSpecificationMapper.selectByProductSpecification(record);
+	}
+
+	@Override
+	public List<ProductSpecification> listPageByProductSpecification(
+			ProductSpecification clssname) {
+		return productSpecificationMapper
+				.listPageByProductSpecification(clssname);
+	}
+
+	@Override
+	public List<ProductSpecification> getAllByProductSpecification(
+			ProductSpecification clssname) {
+		return productSpecificationMapper
+				.getAllByProductSpecification(clssname);
+	}
+}

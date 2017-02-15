@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>  <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wxsoft.xyd.common.mapper.PromotionProductMapper">
+	<resultMap type="PromotionProduct" id="PromotionProductMap">
+		<id property="id" column="id" />
+		<result property="id" column="id" />
+		<result property="prodId" column="prod_id" />
+		<result property="promotionId" column="promotion_id" />
+	</resultMap>
+	<select id="selectByPrimaryKey" parameterType="Integer" resultMap="PromotionProductMap"><![CDATA[  SELECT id,prod_id,promotion_id FROM promotion_product tmp WHERE tmp.id = #{id} ]]>
+	</select>
+	<select id="selectByPromotionProduct" parameterType="PromotionProduct" resultMap="PromotionProductMap">
+		SELECT id,prod_id,promotion_id FROM promotion_product tmp
+		<where>
+			<if test="id != null"> AND id = #{id} </if>
+			<if test="prodId != null"> AND prod_id = #{prodId} </if>
+			<if test="promotionId != null"> AND promotion_id = #{promotionId} </if>
+		</where>
+	</select>
+	<select id="listPageByPromotionProduct" parameterType="PromotionProduct" resultMap="PromotionProductMap">
+		SELECT id,prod_id,promotion_id from promotion_product tmp
+		<where>
+			<if test="id != null"> AND id = #{id} </if>
+			<if test="prodId != null"> AND prod_id = #{prodId} </if>
+			<if test="promotionId != null"> AND promotion_id = #{promotionId} </if>
+		</where>
+		ORDER BY id DESC
+	</select>
+	<select id="listAjaxPagePromotionProduct" parameterType="PromotionProduct" resultMap="PromotionProductMap">
+		SELECT id,prod_id,promotion_id from promotion_product tmp
+		<where>
+			<if test="id != null"> AND id = #{id} </if>
+			<if test="prodId != null"> AND prod_id = #{prodId} </if>
+			<if test="promotionId != null"> AND promotion_id = #{promotionId} </if>
+		</where>
+		ORDER BY id DESC
+	</select>
+	<select id="listAjaxPagePromotionSelected" parameterType="PromotionProduct"  resultType="Map">
+		SELECT prm.prod_id,prm.promotion_id,pro.id,pro.name,pro.picuri,pro.price from promotion_product prm,product pro
+		where   prm.prod_id=pro.id and prm.promotion_id= #{id} 
+	</select>
+	<select id="getAllByPromotionProductVsInTime" parameterType="Integer" resultMap="com.wxsoft.xyd.common.mapper.PromotionActivityMapper.PromotionActivityMap">
+		SELECT tmp.* from promotion_activity tmp left join
+		promotion_product pp on pp.promotion_id=tmp.id
+		where pp.prod_id=#{id} and now() between tmp.start_time and tmp.end_time
+		ORDER BY tmp.need_price
+	</select>
+
+	<select id="getAllByProdIdVsInTime" resultType="java.util.HashMap">
+		SELECT tmp.*,GROUP_CONCAT(pp.prod_id) products FROM promotion_activity tmp LEFT JOIN
+		promotion_product pp ON pp.promotion_id=tmp.id
+		WHERE pp.prod_id
+		IN
+		<foreach collection="array" index="index" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+		AND NOW() BETWEEN tmp.start_time AND tmp.end_time
+		GROUP BY(tmp.id)
+		ORDER BY tmp.need_price
+
+	</select>
+	<select id="getAllByPromotionProduct" parameterType="PromotionProduct" resultMap="PromotionProductMap">
+		SELECT id,prod_id,promotion_id from promotion_product tmp
+		<where>
+			<if test="id != null"> AND id = #{id} </if>
+			<if test="prodId != null"> AND prod_id = #{prodId} </if>
+			<if test="promotionId != null"> AND promotion_id = #{promotionId} </if>
+		</where>
+		ORDER BY id DESC
+	</select>
+	<insert id="insertSelective" parameterType="PromotionProduct">
+		INSERT INTO promotion_product
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">id,</if>
+			<if test="prodId != null">prod_id,</if>
+			<if test="promotionId != null">promotion_id,</if>
+		</trim>
+		values
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">#{id},</if>
+			<if test="prodId != null">#{prodId},</if>
+			<if test="promotionId != null">#{promotionId},</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="PromotionProduct">
+		update promotion_product
+		<set>
+			<if test="id != null">id=#{id},</if>
+			<if test="prodId != null">prod_id=#{prodId},</if>
+			<if test="promotionId != null">promotion_id=#{promotionId},</if>
+		</set>
+		where id = #{id}
+	</update>
+	<delete id="deleteByPrimaryKey" parameterType="PromotionProduct"><![CDATA[delete from promotion_product where id=#{id}
+]]></delete>
+	<delete id="deleteByPrimary" parameterType="PromotionProduct"><![CDATA[delete from promotion_product where promotion_id=#{promotionId}
+]]></delete>
+</mapper>

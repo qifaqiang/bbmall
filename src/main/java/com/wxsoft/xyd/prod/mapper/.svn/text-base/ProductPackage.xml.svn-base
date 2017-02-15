@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>  <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wxsoft.xyd.prod.mapper.ProductPackageMapper">
+	<resultMap type="ProductPackage" id="ProductPackageMap">
+		<id property="id" column="id" />
+		<result property="id" column="id" />
+		<result property="prodBaseicId" column="prod_baseic_id" />
+		<result property="inventorynumber" column="inventorynumber" />
+		<result property="prodId" column="prod_id" />
+	</resultMap>
+	<select id="selectByPrimaryKey" parameterType="Integer"
+		resultMap="ProductPackageMap"><![CDATA[  SELECT id,prod_baseic_id,inventorynumber,prod_id FROM product_package tmp WHERE tmp.id = #{id} ]]>
+	</select>
+	<select id="selectByProductId" parameterType="Integer"
+		resultMap="ProductPackageMap"><![CDATA[  SELECT id,prod_baseic_id,inventorynumber,prod_id FROM product_package tmp WHERE tmp.prod_id = #{id} ]]>
+	</select>
+	<select id="selectByProductPackage" parameterType="ProductPackage"
+		resultMap="ProductPackageMap">
+		SELECT id,prod_baseic_id,inventorynumber,prod_id FROM product_package
+		tmp
+		<where>
+			<if test="id != null"> AND id = #{id} </if>
+			<if test="prodBaseicId != null"> AND prod_baseic_id = #{prodBaseicId} </if>
+			<if test="inventorynumber != null"> AND inventorynumber = #{inventorynumber} </if>
+			<if test="prodId != null"> AND prod_id = #{prodId} </if>
+		</where>
+	</select>
+	<select id="listPageByProductPackage" parameterType="ProductPackage"
+		resultMap="ProductPackageMap">
+		SELECT id,prod_baseic_id,inventorynumber,prod_id from product_package
+		tmp
+		<where>
+			<if test="id != null"> AND id = #{id} </if>
+			<if test="prodBaseicId != null"> AND prod_baseic_id = #{prodBaseicId} </if>
+			<if test="inventorynumber != null"> AND inventorynumber = #{inventorynumber} </if>
+			<if test="prodId != null"> AND prod_id = #{prodId} </if>
+		</where>
+		ORDER BY id DESC
+	</select>
+	<select id="getAllByProductPackage" parameterType="ProductPackage"
+		resultMap="ProductPackageMap">
+		SELECT id,prod_baseic_id,inventorynumber,prod_id from product_package
+		tmp
+		<where>
+			<if test="id != null"> AND id = #{id} </if>
+			<if test="prodBaseicId != null"> AND prod_baseic_id = #{prodBaseicId} </if>
+			<if test="inventorynumber != null"> AND inventorynumber = #{inventorynumber} </if>
+			<if test="prodId != null"> AND prod_id = #{prodId} </if>
+		</where>
+		ORDER BY id DESC
+	</select>
+	<insert id="insertSelective" parameterType="ProductPackage">
+		INSERT INTO product_package
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">id,</if>
+			<if test="prodBaseicId != null">prod_baseic_id,</if>
+			<if test="inventorynumber != null">inventorynumber,</if>
+			<if test="prodId != null">prod_id,</if>
+		</trim>
+		values
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">#{id},</if>
+			<if test="prodBaseicId != null">#{prodBaseicId},</if>
+			<if test="inventorynumber != null">#{inventorynumber},</if>
+			<if test="prodId != null">#{prodId},</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="ProductPackage">
+		update product_package
+		<set>
+			<if test="id != null">id=#{id},</if>
+			<if test="prodBaseicId != null">prod_baseic_id=#{prodBaseicId},</if>
+			<if test="inventorynumber != null">inventorynumber=#{inventorynumber},</if>
+			<if test="prodId != null">prod_id=#{prodId},</if>
+		</set>
+		where id = #{id}
+	</update>
+	<delete id="deleteByPrimaryKey" parameterType="ProductPackage"><![CDATA[delete from product_package where id=#{id}
+]]></delete>
+	<delete id="deleteByProdId" parameterType="Integer"><![CDATA[delete from product_package where prod_id=#{id}
+]]></delete>
+</mapper>

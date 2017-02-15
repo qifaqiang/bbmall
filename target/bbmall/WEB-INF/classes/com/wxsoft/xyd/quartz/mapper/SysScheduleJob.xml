@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8" ?>  <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wxsoft.xyd.quartz.mapper.SysScheduleJobMapper">
+	<resultMap type="SysScheduleJob" id="SysScheduleJobMap">
+		<id property="jobId" column="job_id" />
+		<result property="jobId" column="job_id" />
+		<result property="jobName" column="job_name" />
+		<result property="jobGroupName" column="job_group_name" />
+		<result property="jobStatus" column="job_status" />
+		<result property="cronExpression" column="cron_expression" />
+		<result property="description" column="description" />
+		<result property="beanClass" column="bean_class" />
+		<result property="isConcurrent" column="is_concurrent" />
+		<result property="springId" column="spring_id" />
+		<result property="methodName" column="method_name" />
+		<result property="createTime" column="create_time" />
+		<result property="updateTime" column="update_time" />
+		<result property="name" column="name" />
+	</resultMap>
+	<select id="selectByPrimaryKey" parameterType="Integer"
+		resultMap="SysScheduleJobMap"><![CDATA[  SELECT job_id,job_name,job_group_name,job_status,cron_expression,description,bean_class,is_concurrent,spring_id,method_name,create_time,update_time,name FROM sys_schedule_job tmp WHERE tmp.job_id = #{id} ]]>
+	</select>
+	<select id="selectBySysScheduleJob" parameterType="SysScheduleJob" resultMap="SysScheduleJobMap">
+		SELECT job_id,job_name,job_group_name,job_status,cron_expression,description,bean_class,is_concurrent,spring_id,method_name,create_time,update_time,name FROM sys_schedule_job tmp
+		<where>
+			<if test="jobId != null"> AND job_id = #{jobId} </if>
+			<if test="jobName != null"> AND job_name = #{jobName} </if>
+			<if test="jobGroupName != null"> AND job_group_name = #{jobGroupName} </if>
+			<if test="jobStatus != null"> AND job_status = #{jobStatus} </if>
+			<if test="cronExpression != null"> AND cron_expression = #{cronExpression} </if>
+			<if test="description != null"> AND description = #{description} </if>
+			<if test="beanClass != null"> AND bean_class = #{beanClass} </if>
+			<if test="isConcurrent != null"> AND is_concurrent = #{isConcurrent} </if>
+			<if test="springId != null"> AND spring_id = #{springId} </if>
+			<if test="methodName != null"> AND method_name = #{methodName} </if>
+			<if test="createTime != null"> AND create_time = #{createTime} </if>
+			<if test="updateTime != null"> AND update_time = #{updateTime} </if>
+			<if test="name != null"> AND name = #{name} </if>
+ 		</where>
+	</select>
+	<select id="listPageBySysScheduleJob" parameterType="SysScheduleJob"
+		resultMap="SysScheduleJobMap">
+		SELECT job_id,job_name,job_group_name,job_status,cron_expression,description,bean_class,is_concurrent,spring_id,method_name,DATE_FORMAT(create_time,'%Y-%m-%d %T') as create_time,update_time,name from sys_schedule_job tmp
+		<where>
+			<if test="jobId != null"> AND job_id = #{jobId} </if>
+			<if test="jobName != null"> AND job_name = #{jobName} </if>
+			<if test="jobGroupName != null"> AND job_group_name = #{jobGroupName} </if>
+			<if test="jobStatus != null"> AND job_status = #{jobStatus} </if>
+			<if test="cronExpression != null"> AND cron_expression = #{cronExpression} </if>
+			<if test="description != null"> AND description = #{description} </if>
+			<if test="beanClass != null"> AND bean_class = #{beanClass} </if>
+			<if test="isConcurrent != null"> AND is_concurrent = #{isConcurrent} </if>
+			<if test="springId != null"> AND spring_id = #{springId} </if>
+			<if test="methodName != null"> AND method_name = #{methodName} </if>
+			<if test="createTime != null"> AND create_time = #{createTime} </if>
+			<if test="updateTime != null"> AND update_time = #{updateTime} </if>
+			<if test="name != null"> AND name like '%${name}%' </if>
+ 		</where>
+ 		 ORDER BY job_id DESC
+	</select>
+	<select id="getAllBySysScheduleJob" parameterType="SysScheduleJob" resultMap="SysScheduleJobMap">
+		SELECT job_id,job_name,job_group_name,job_status,cron_expression,description,bean_class,is_concurrent,spring_id,method_name,create_time,update_time,name from sys_schedule_job tmp
+		<where>
+			<if test="jobId != null"> AND job_id = #{jobId} </if>
+			<if test="jobName != null"> AND job_name = #{jobName} </if>
+			<if test="jobGroupName != null"> AND job_group_name = #{jobGroupName} </if>
+			<if test="jobStatus != null"> AND job_status in ${jobStatus} </if>
+			<if test="cronExpression != null"> AND cron_expression = #{cronExpression} </if>
+			<if test="description != null"> AND description = #{description} </if>
+			<if test="beanClass != null"> AND bean_class = #{beanClass} </if>
+			<if test="isConcurrent != null"> AND is_concurrent = #{isConcurrent} </if>
+			<if test="springId != null"> AND spring_id = #{springId} </if>
+			<if test="methodName != null"> AND method_name = #{methodName} </if>
+			<if test="createTime != null"> AND create_time = #{createTime} </if>
+			<if test="updateTime != null"> AND update_time = #{updateTime} </if>
+ 		</where>
+ 	    ORDER BY job_id DESC
+	</select>
+	<insert id="insertSelective" parameterType="SysScheduleJob">
+		INSERT INTO sys_schedule_job
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="jobId != null">job_id,</if>
+			<if test="jobName != null">job_name,</if>
+			<if test="jobGroupName != null">job_group_name,</if>
+			<if test="jobStatus != null">job_status,</if>
+			<if test="cronExpression != null">cron_expression,</if>
+			<if test="description != null">description,</if>
+			<if test="beanClass != null">bean_class,</if>
+			<if test="isConcurrent != null">is_concurrent,</if>
+			<if test="springId != null">spring_id,</if>
+			<if test="methodName != null">method_name,</if>
+			<if test="createTime != null">create_time,</if>
+			<if test="updateTime != null">update_time,</if>
+			<if test="companyId != null">company_id,</if>
+			<if test="name != null">name,</if>
+		</trim>
+		values
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="jobId != null">#{jobId},</if>
+			<if test="jobName != null">#{jobName},</if>
+			<if test="jobGroupName != null">#{jobGroupName},</if>
+			<if test="jobStatus != null">#{jobStatus},</if>
+			<if test="cronExpression != null">#{cronExpression},</if>
+			<if test="description != null">#{description},</if>
+			<if test="beanClass != null">#{beanClass},</if>
+			<if test="isConcurrent != null">#{isConcurrent},</if>
+			<if test="springId != null">#{springId},</if>
+			<if test="methodName != null">#{methodName},</if>
+			<if test="createTime != null">#{createTime},</if>
+			<if test="updateTime != null">#{updateTime},</if>
+			<if test="companyId != null">#{companyId},</if>
+			<if test="name != null">#{name},</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="SysScheduleJob">
+		update sys_schedule_job
+		<set>
+			<if test="jobId != null">job_id=#{jobId},</if>
+			<if test="jobName != null">job_name=#{jobName},</if>
+			<if test="jobGroupName != null">job_group_name=#{jobGroupName},</if>
+			<if test="jobStatus != null">job_status=#{jobStatus},</if>
+			<if test="cronExpression != null">cron_expression=#{cronExpression},</if>
+			<if test="description != null">description=#{description},</if>
+			<if test="beanClass != null">bean_class=#{beanClass},</if>
+			<if test="isConcurrent != null">is_concurrent=#{isConcurrent},</if>
+			<if test="springId != null">spring_id=#{springId},</if>
+			<if test="methodName != null">method_name=#{methodName},</if>
+			<if test="createTime != null">create_time=#{createTime},</if>
+			<if test="updateTime != null">update_time=#{updateTime},</if>
+			<if test="companyId != null">company_id=#{companyId},</if>
+			<if test="name != null">name=#{name},</if>
+		</set>
+		where job_id = #{jobId}
+	</update>
+	<delete id="deleteByPrimaryKey" parameterType="SysScheduleJob"><![CDATA[delete from sys_schedule_job where job_id=#{id}
+]]></delete>
+
+	<!-- 自动确认收获定时任务 -->
+	<select id="updateAutoAcceptOrder">
+		{CALL auto_accept_order(@a)}
+	</select>
+	<!-- 自动取消订单定时任务 -->
+	<select id="updateAutoCancelOrder">
+		{CALL auto_cancel_order()}
+	</select>
+	<!-- 自动清理验证码定时任务 -->
+	<select id="updateAutoClearSms">
+		{CALL auto_clear_sms(@a)}
+	</select>
+	<!-- 优惠券自动失效定时任务 -->
+	<select id="updateAutoCouponsoverdue">
+		{CALL auto_coupons_overdue(@a)}
+	</select>
+	<!-- 自动完成订单定时任务 -->
+	<select id="updateAutoOverOrder" resultType="map">
+		{CALL auto_over_order()}
+	</select>
+</mapper>

@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8" ?>  <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wxsoft.xyd.prod.mapper.ProductSpecificationInfoMapper">
+	<resultMap type="ProductSpecificationInfo" id="productSpecificationInfoMap">
+		<id property="id" column="id" />
+		<result property="id" column="id" />
+		<result property="specId" column="spec_id" />
+		<result property="value" column="value" />
+		<result property="price" column="price" />
+		<result property="inventorynumber" column="inventorynumber" />
+		<result property="marketPrice" column="market_price" />
+		<result property="productId" column="product_id" />
+		<result property="delFlag" column="del_flag" />
+		<result property="productName" column="product_name" />
+		<result property="type" column="type" />
+		<result property="stockId" column="stock_id" />
+		<result property="inventorycount" column="inventorycount" />
+	</resultMap>
+	
+	<resultMap type="ProductSpecificationInfo" id="productSpecificationInfoMoreMap" extends="productSpecificationInfoMap">
+		<collection property="specInfoDetailList" column="id"
+			select="com.wxsoft.xyd.prod.mapper.ProductSpecificationInfoDetailMapper.selectBySpecInfoId"></collection>
+	</resultMap>
+	
+	<resultMap type="ProductSpecificationInfo" id="PSInfoMoreForWebMap" extends="productSpecificationInfoMap">
+		<collection property="specInfoDetailList" column="id"
+			select="com.wxsoft.xyd.prod.mapper.ProductSpecificationInfoDetailMapper.selectBySpecInfoIdForweb"></collection>
+	</resultMap>
+	
+	<select id="selectByPrimaryKey" parameterType="Integer"
+		resultMap="productSpecificationInfoMap"><![CDATA[  SELECT id,spec_id,value,price,inventorynumber,market_price,product_id from product_specification_info tmp WHERE tmp.del_flag='0' and tmp.id = #{id}  ]]>
+	</select>
+
+	<update id="updateKuCunJian" parameterType="ProductSpecificationInfo">
+		update
+		product_specification_info set
+		inventorynumber =
+		inventorynumber-#{inventorynumber} where id = #{id}
+		and
+		(inventorynumber-#{inventorynumber})>0
+	</update>
+
+	<select id="selectByProductSpecificationInfo" parameterType="ProductSpecificationInfo"
+		resultMap="productSpecificationInfoMap">
+		SELECT id,spec_id,value,price,inventorynumber,market_price,product_id
+		from product_specification_info tmp WHERE
+		<if test="id != null">id = #{id} and </if>
+		<if test="specId != null">spec_id = #{specId} and </if>
+		<if test="value != null">value = #{value} and </if>
+		<if test="price != null">price = #{price} and </if>
+		<if test="inventorynumber != null">inventorynumber = #{inventorynumber} and </if>
+		<if test="marketPrice != null">market_price = #{marketPrice} and </if>
+		<if test="productId != null">product_id = #{productId} and </if>
+		1=1
+	</select>
+
+	<select id="getLowInventorynumber" parameterType="ProductSpecificationInfo"
+		resultMap="productSpecificationInfoMap">
+		SELECT id,spec_id,value,price,inventorynumber,market_price,product_id
+		from product_specification_info tmp WHERE
+		<if test="productId != null">product_id = #{productId} and </if>
+		<if test="delFlag != null">del_flag = #{delFlag} and </if>
+		1=1 order by inventorynumber asc limit 1
+	</select>
+
+	<select id="getLowPrice" parameterType="ProductSpecificationInfo"
+		resultMap="productSpecificationInfoMap">
+		SELECT id,spec_id,value,price,inventorynumber,market_price,product_id
+		from product_specification_info tmp WHERE
+		<if test="productId != null">product_id = #{productId} and </if>
+		<if test="delFlag != null">del_flag = #{delFlag} and </if>
+		1=1 order by IF(ISNULL(price),1,0),price asc limit 1
+	</select>
+	
+	<select id="getLowInventorynumberMaps" parameterType="map"
+		resultMap="productSpecificationInfoMap">
+		select id,spec_id,value,price,inventorynumber,market_price,product_id
+		from product_specification_info a where a.del_flag='0' and a.product_id in
+		<foreach item="item" index="index" collection="tempProdID"
+			open="(" separator="," close=")">
+			#{item}
+		</foreach>
+		and inventorynumber=(select min(inventorynumber) from
+		product_specification_info where product_id=a.product_id)
+	</select>
+
+	<select id="getInventorynumberMaps" parameterType="java.util.List"
+		resultMap="productSpecificationInfoMap">
+		<foreach item="item" index="index" collection="list" open="("
+			separator=")union all(" close=")">
+			select
+			id,spec_id,value,price,inventorynumber,market_price,product_id from
+			product_specification_info a where a.del_flag='0' and a.id =#{item.specId} and
+			product_id=#{item.prodId}
+		</foreach>
+	</select>
+
+	<select id="listPageByProductSpecificationInfo" parameterType="ProductSpecificationInfo"
+		resultMap="productSpecificationInfoMap">
+		SELECT id,spec_id,value,price,inventorynumber,market_price,product_id
+		from product_specification_info tmp WHERE
+		<if test="id != null">id = #{id} and </if>
+		<if test="specId != null">spec_id = #{specId} and </if>
+		<if test="value != null">value = #{value} and </if>
+		<if test="price != null">price = #{price} and </if>
+		<if test="inventorynumber != null">inventorynumber = #{inventorynumber} and </if>
+		<if test="marketPrice != null">market_price = #{marketPrice} and </if>
+		<if test="productId != null">product_id = #{productId} and </if>
+		<if test="delFlag != null">del_flag = #{delFlag} and </if>
+		1=1
+	</select>
+	<select id="getAllByProductSpecificationInfo" parameterType="ProductSpecificationInfo"
+		resultMap="productSpecificationInfoMoreMap">
+		SELECT id,spec_id,value,price,inventorynumber,market_price,product_id
+		from product_specification_info tmp WHERE
+		<if test="id != null">id = #{id} and </if>
+		<if test="specId != null">spec_id = #{specId} and </if>
+		<if test="value != null">value = #{value} and </if>
+		<if test="price != null">price = #{price} and </if>
+		<if test="inventorynumber != null">inventorynumber = #{inventorynumber} and </if>
+		<if test="marketPrice != null">market_price = #{marketPrice} and </if>
+		<if test="productId != null">product_id = #{productId} and </if>
+		<if test="delFlag != null">del_flag = #{delFlag} and </if>
+		1=1
+	</select>
+	
+	<select id="getAllByPSIForWeb" parameterType="ProductSpecificationInfo"
+		resultMap="PSInfoMoreForWebMap">
+		SELECT id,spec_id,value,price,inventorynumber,market_price,product_id
+		from product_specification_info tmp WHERE
+		<if test="id != null">id = #{id} and </if>
+		<if test="specId != null">spec_id = #{specId} and </if>
+		<if test="value != null">value = #{value} and </if>
+		<if test="price != null">price = #{price} and </if>
+		<if test="inventorynumber != null">inventorynumber = #{inventorynumber} and </if>
+		<if test="marketPrice != null">market_price = #{marketPrice} and </if>
+		<if test="productId != null">product_id = #{productId} and </if>
+		<if test="delFlag != null">del_flag = #{delFlag} and </if>
+		1=1
+	</select>
+	<insert id="insertSelective" parameterType="ProductSpecificationInfo"
+			useGeneratedKeys="true" keyProperty="id">
+		insert into product_specification_info
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">id,</if>
+			<if test="specId != null">spec_id,</if>
+			<if test="value != null">value,</if>
+			<if test="price != null">price,</if>
+			<if test="inventorynumber != null">inventorynumber,</if>
+			<if test="marketPrice != null">market_price,</if>
+			<if test="productId != null">product_id,</if>
+			<if test="delFlag != null">del_flag,</if>
+		</trim>
+		values
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">#{id},</if>
+			<if test="specId != null">#{specId},</if>
+			<if test="value != null">#{value},</if>
+			<if test="price != null">#{price},</if>
+			<if test="inventorynumber != null">#{inventorynumber},</if>
+			<if test="marketPrice != null">#{marketPrice},</if>
+			<if test="productId != null">#{productId},</if>
+			<if test="delFlag != null">#{delFlag},</if>
+		</trim>
+	</insert>
+	<insert id="insert" parameterType="ProductSpecificationInfo"><![CDATA[insert into product_specification_info( 
+id,spec_id,value,price,inventorynumber,market_price,product_id) values (#{id},#{specId},#{value},#{price},#{inventorynumber},#{marketPrice},#{productId})
+]]></insert>
+	<update id="updateByPrimaryKeySelective" parameterType="ProductSpecificationInfo">
+		update product_specification_info
+		<set>
+			<if test="id != null">id = #{id},</if>
+			<if test="specId != null">spec_id = #{specId},</if>
+			<if test="value != null">value = #{value},</if>
+			<if test="price != null">price = #{price},</if>
+			<if test="inventorynumber != null">inventorynumber = #{inventorynumber},</if>
+			<if test="marketPrice != null">market_price = #{marketPrice},</if>
+			<if test="productId != null">product_id = #{productId},</if>
+		</set>
+		where id = #{id}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="ProductSpecificationInfo"><![CDATA[update product_specification_info set 
+id=#{id},spec_id=#{specId},value=#{value},price=#{price},inventorynumber=#{inventorynumber},market_price=#{marketPrice},product_id=#{productId} where id = #{id}
+]]></update>
+	<delete id="deleteByPrimaryKey" parameterType="ProductSpecificationInfo"><![CDATA[update product_specification_info set del_flag = '1' where id=#{id} 
+]]></delete>
+
+	<delete id="deleteByProductId" parameterType="integer"><![CDATA[update product_specification_info set del_flag = '1' where product_id=#{id} 
+]]></delete>
+
+	<select id="listAjaxPageGetSpecProdByCaId" parameterType="ProductSpecificationInfo" resultMap="productSpecificationInfoMoreMap">
+		(SELECT psi.id,psi.price,psi.market_price,psi.product_id,p.name as product_name,p.unit,1 as type FROM product_specification_info psi 
+		LEFT JOIN product p ON psi.product_id = p.id 
+		WHERE psi.del_flag = '0' AND p.del_flag = 0 AND p.sell_status = 1 AND p.is_specification = 1 AND p.type = 0 AND p.catalog_id_2 = #{catalogId})
+		UNION
+		(SELECT 0 as id,p.price,p.market_price,p.id as product_id,p.name as product_name,p.unit,0 as type from product p
+		where p.del_flag = 0 AND p.sell_status = 1  AND p.is_specification = 0 AND p.type = 0 AND p.catalog_id_2 = #{catalogId})
+	</select>
+	
+	<select id="listAjaxPageGetSpecProdByCompanyId" parameterType="ProductSpecificationInfo" resultMap="productSpecificationInfoMoreMap">
+		SELECT a.id,a.price,a.market_price,a.product_id,a.product_name,a.unit,a.type,a.stock_id,a.inventorycount 
+		FROM 
+		(
+			(
+				SELECT t.id,t.price,t.market_price,t.product_id,t.product_name,t.unit,t.type,m.stock_id,IFNULL(m.inventorycount,0) as inventorycount FROM
+				(
+					SELECT psi.id,psi.price,psi.market_price,psi.product_id,p.name as product_name,p.unit,1 as type FROM product_specification_info psi 
+						LEFT JOIN product p ON psi.product_id = p.id 
+						WHERE psi.del_flag = '0' AND p.del_flag = 0 AND p.sell_status = 1  AND p.is_specification = 1 AND p.type = 0
+				) t 
+				LEFT JOIN 
+				(
+					SELECT psk.id as stock_id,psk.inventorycount,psk.specification_info_id,psk.product_id FROM product_specification_stock psk 	
+					WHERE psk.type = 1 AND psk.company_id = #{companyId}
+				) m
+				on t.id = m.specification_info_id
+			)
+			UNION
+			(
+				SELECT n.id,n.price,n.market_price,n.product_id,n.product_name,n.unit,n.type,p.stock_id,IFNULL(p.inventorycount,0) as inventorycount FROM
+				(
+					SELECT 0 as id,p.price,p.market_price,p.id as product_id,p.name as product_name,p.unit,0 as type from product p
+					where p.del_flag = 0 AND p.sell_status = 1 AND p.is_specification = 0 AND p.type = 0
+				) n
+				LEFT JOIN 
+				(
+					SELECT psk.id as stock_id,psk.inventorycount,psk.specification_info_id,psk.product_id FROM product_specification_stock psk 	
+					WHERE psk.type = 0 AND psk.company_id = #{companyId}
+				) p
+				on n.product_id = p.product_id
+			)
+		) a ORDER BY a.id,a.product_id
+	</select>
+	
+	<select id="getAllByPSI" parameterType="ProductSpecificationInfo" resultMap="productSpecificationInfoMoreMap">
+		(SELECT psi.id,psi.price,psi.market_price,psi.product_id,p.name as product_name,p.unit,1 as type FROM product_specification_info psi 
+		LEFT JOIN product p ON psi.product_id = p.id 
+		WHERE psi.del_flag = '0' AND p.del_flag = 0 AND p.sell_status = 1 AND p.is_specification = 1 AND p.type = 0)
+		UNION
+		(SELECT 0 as id,p.price,p.market_price,p.id as product_id,p.name as product_name,p.unit,0 as type from product p
+		where p.del_flag = 0 AND p.sell_status = 1 AND (p.is_specification = 0 or p.is_specification IS NULL) )
+	</select>
+</mapper>

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>  <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wxsoft.xyd.common.mapper.UserCollectionMapper">
+	<resultMap type="UserCollection" id="userCollectionMap">
+		<id property="id" column="id" />
+		<result property="id" column="id" />
+		<result property="userId" column="user_id" />
+		<result property="prodId" column="prod_id" />
+		<result property="addTime" column="add_time" />
+	</resultMap>
+	<resultMap id="userCollectionMapMore" extends="userCollectionMap" type="UserCollection">
+		<association property="p" column="prod_id" select="com.wxsoft.xyd.prod.mapper.ProductMapper.selectByPrimaryKey"></association>
+	</resultMap>
+	<select id="selectByPrimaryKey" parameterType="Integer" resultMap="userCollectionMap"><![CDATA[  SELECT id,user_id,prod_id,add_time from user_collection tmp WHERE tmp.id = #{id} ]]>
+	</select>
+	<select id="selectByUserCollection" parameterType="UserCollection" resultMap="userCollectionMap">
+		SELECT id,user_id,prod_id,add_time from user_collection tmp WHERE
+		<if test="id != null">id = #{id} and </if>
+		<if test="userId != null">user_id = #{userId} and </if>
+		<if test="prodId != null">prod_id = #{prodId} and </if>
+		<if test="addTime != null">add_time = #{addTime} and </if>
+		1=1
+	</select>
+	<select id="listPageByUserCollection" parameterType="UserCollection" resultMap="userCollectionMap">
+		SELECT id,user_id,prod_id,add_time from user_collection tmp WHERE
+		<if test="id != null">id = #{id} and </if>
+		<if test="userId != null">user_id = #{userId} and </if>
+		<if test="prodId != null">prod_id = #{prodId} and </if>
+		<if test="addTime != null">add_time = #{addTime} and </if>
+		1=1
+	</select>
+	<select id="listAjaxPageByUserCollection" parameterType="UserCollection" resultType="map">
+		select us.id,pro.id proId,pro.name,pro.price,pro.picuri,pro.company_id,pro.specid from user_collection us,product pro
+		where us.user_id=#{userId} and pro.id = us.prod_id
+	</select>
+	<select id="getByUserCollection" parameterType="UserCollection" resultType="map">
+		select us.id,pro.id proId,pro.name,pro.price,pro.picuri,pro.company_id,pro.specid from user_collection us,product pro
+		where us.user_id=#{userId} and pro.id = us.prod_id
+	</select>
+	<select id="listByUserCollection" parameterType="UserCollection" resultType="map">
+		select us.id,pro.id proId,pro.name,pro.price,pro.picuri,pro.company_id,pro.specid from user_collection us,product pro
+		where us.user_id=#{userId} and pro.id = us.prod_id
+	</select>
+	<select id="getAllByUserCollection" parameterType="UserCollection" resultMap="userCollectionMapMore">
+		SELECT id,user_id,prod_id,add_time from user_collection tmp WHERE
+		<if test="id != null">id = #{id} and </if>
+		<if test="userId != null">user_id = #{userId} and </if>
+		<if test="prodId != null">prod_id = #{prodId} and </if>
+		<if test="addTime != null">add_time = #{addTime} and </if>
+		1=1
+	</select>
+	<select id="getAllProByUserId" parameterType="Integer" resultType="Map">
+		select us.id,pro.id proId,pro.name,pro.price,pro.picuri,pro.company_id,pro.specid from user_collection us,product pro
+		where us.user_id=#{userId} and pro.id = us.prod_id 
+	</select>
+	<insert id="insertSelective" parameterType="UserCollection">
+		insert into user_collection
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">id,</if>
+			<if test="userId != null">user_id,</if>
+			<if test="prodId != null">prod_id,</if>
+			add_time
+		</trim>
+		value
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">#{id},</if>
+			<if test="userId != null">#{userId},</if>
+			<if test="prodId != null">#{prodId},</if>
+			now()
+		</trim>
+	</insert>
+	<insert id="insert" parameterType="UserCollection"><![CDATA[insert into user_collection( 
+id,user_id,prod_id,add_time) values (#{id},#{userId},#{prodId},#{addTime})
+]]></insert>
+	<update id="updateByPrimaryKeySelective" parameterType="UserCollection">
+		update user_collection
+		<set>
+			<if test="id != null">id = #{id},</if>
+			<if test="userId != null">user_id = #{userId},</if>
+			<if test="prodId != null">prod_id = #{prodId},</if>
+			<if test="addTime != null">add_time = #{addTime},</if>
+		</set>
+		where id = #{id}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="UserCollection"><![CDATA[update user_collection set 
+id=#{id},user_id=#{userId},prod_id=#{prodId},add_time=#{addTime} where id = #{id}
+]]></update>
+	<delete id="deleteByPrimaryKey" parameterType="UserCollection"><![CDATA[delete from user_collection where id=#{id} 
+]]></delete>
+<delete id="deleteByPrimary" parameterType="UserCollection"><![CDATA[delete from user_collection where prod_id=#{id} 
+]]></delete>
+</mapper>

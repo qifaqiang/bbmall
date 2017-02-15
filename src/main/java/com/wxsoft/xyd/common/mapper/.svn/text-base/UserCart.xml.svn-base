@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8" ?>  <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wxsoft.xyd.common.mapper.UserCartMapper">
+	<resultMap type="UserCart" id="userCartMap">
+		<id property="id" column="id" />
+		<result property="id" column="id" />
+		<result property="userId" column="user_id" />
+		<result property="prodId" column="prod_id" />
+		<result property="addTime" column="add_time" />
+		<result property="count" column="count" />
+		<result property="specId" column="spec_id" />
+	   
+	</resultMap>
+	<resultMap type="UserCart" id="userCartMapMore" extends="userCartMap">
+		<association property="product"
+			select="com.wxsoft.xyd.prod.mapper.ProductMapper.selectProductByCartShow"
+			column="prod_id"></association>
+	</resultMap>
+	<select id="selectByPrimaryKey" parameterType="Integer"
+		resultMap="userCartMap"><![CDATA[  SELECT id,user_id,prod_id,add_time,spec_id,count from user_cart tmp WHERE tmp.id = #{id} ]]>
+	</select>
+	<select id="selectByUserCart" parameterType="UserCart"
+		resultMap="userCartMap">
+		SELECT id,user_id,prod_id,add_time,count from user_cart tmp WHERE
+		<if test="id != null">id = #{id} and </if>
+		<if test="userId != null">user_id = #{userId} and </if>
+		<if test="prodId != null">prod_id = #{prodId} and </if>
+		<if test="specId != null">spec_id = #{specId} and </if>
+		1=1
+	</select>
+
+	<select id="selectCountByUser" parameterType="Integer"
+		resultType="integer">
+		SELECT ifnull(sum(count),0) as count from user_cart tmp WHERE user_id
+		= #{userId}
+	</select>
+
+
+	<!-- 根据用户选择的id查询 -->
+	<select id="getUserCartByids" resultType="java.util.HashMap">
+		SELECT
+		tmp.id,tmp.user_id,tmp.prod_id,tmp.add_time,prod.unit,tmp.count,tmp.spec_id
+		,prod.`name`,prod.`picuri`,ifnull(psf.`price`,prod.`price`) as price,psf.`inventorynumber` FROM
+		user_cart tmp LEFT JOIN product prod ON tmp.`prod_id`=prod.`id`
+		LEFT JOIN product_specification_info psf ON psf.id=tmp.`spec_id`
+		WHERE
+		tmp.id IN
+		<foreach collection="array" index="index" item="item" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+		order by tmp.prod_id
+	</select>
+
+	<select id="selectByIsCart" resultMap="userCartMap">
+		SELECT id,user_id,prod_id,count,spec_id from user_cart tmp WHERE
+		tmp.user_id =
+		#{userId} and tmp.prod_id in
+		<foreach item="item" index="index" collection="prods" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+	</select>
+	<select id="getUserCart" parameterType="UserCart" resultType="java.util.HashMap">
+		SELECT
+		tmp.id,tmp.user_id,tmp.prod_id,tmp.add_time,prod.unit,tmp.count,tmp.spec_id
+		,prod.`name`,prod.`picuri`,ifnull(psf.`price`,prod.`price`) as price,psf.`inventorynumber` FROM
+		user_cart tmp LEFT JOIN product prod ON tmp.`prod_id`=prod.`id`
+		LEFT JOIN product_specification_info psf ON psf.id=tmp.`spec_id`
+		WHERE
+		tmp.user_id=#{userId}  and prod.sell_status=1 order by tmp.prod_id 
+	</select>
+
+
+	<select id="listPageByUserCart" parameterType="UserCart"
+		resultMap="userCartMap">
+		SELECT id,user_id,prod_id,add_time,count,spec_id from user_cart tmp
+		WHERE
+		<if test="id != null">id = #{id} and </if>
+		<if test="userId != null">user_id = #{userId} and </if>
+		<if test="prodId != null">prod_id = #{prodId} and </if>
+		<if test="addTime != null">add_time = #{addTime} and </if>
+		<if test="count != null">count = #{count} and </if>
+		<if test="specId != null">spec_id = #{specId} and </if>
+		1=1
+	</select>
+	<select id="getAllByUserCart" parameterType="UserCart"
+		resultMap="userCartMapMore">
+		SELECT id,user_id,prod_id,add_time,count,spec_id from user_cart tmp
+		WHERE
+		<if test="id != null">id = #{id} and </if>
+		<if test="userId != null">user_id = #{userId} and </if>
+		<if test="prodId != null">prod_id = #{prodId} and </if>
+		<if test="addTime != null">add_time = #{addTime} and </if>
+		<if test="count != null">count = #{count} and </if>
+		<if test="specId != null">spec_id = #{specId} and </if>
+		1=1
+	</select>
+	<insert id="insertSelective" parameterType="UserCart"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into user_cart
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">id,</if>
+			<if test="userId != null">user_id,</if>
+			<if test="prodId != null">prod_id,</if>
+			<if test="count != null">count,</if>
+			<if test="specId != null">spec_id,</if>
+			add_time
+		</trim>
+		value
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">#{id},</if>
+			<if test="userId != null">#{userId},</if>
+			<if test="prodId != null">#{prodId},</if>
+			<if test="count != null">#{count},</if>
+			<if test="specId != null">#{specId},</if>
+			now()
+		</trim>
+	</insert>
+	<insert id="insert" parameterType="UserCart" useGeneratedKeys="true"
+		keyProperty="id"><![CDATA[insert into user_cart( 
+id,user_id,prod_id,add_time,count) values (#{id},#{userId},#{prodId},#{addTime},#{count})
+]]></insert>
+	<update id="updateByPrimaryKeySelective" parameterType="UserCart">
+		update user_cart
+		<set>
+			<if test="id != null">id = #{id},</if>
+			<if test="userId != null">user_id = #{userId},</if>
+			<if test="prodId != null">prod_id = #{prodId},</if>
+			<if test="addTime != null">add_time = #{addTime},</if>
+			<if test="count != null">count = #{count},</if>
+			<if test="specId != null">spec_id =#{specId},</if>
+		</set>
+		where id = #{id}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="UserCart"><![CDATA[update user_cart set 
+id=#{id},user_id=#{userId},prod_id=#{prodId},add_time=#{addTime},count=#{count},spec_id=#{specId} where id = #{id}
+]]></update>
+	<delete id="deleteByPrimaryKey" parameterType="UserCart"><![CDATA[delete from user_cart where user_id=#{userId} and id=#{id}
+]]></delete>
+ 
+
+ <!--批量删除 -->
+   <delete id="deleteUserCartBetach">
+   delete from user_cart where id in
+      <foreach collection="array" index="index" item="item" 
+   open="(" separator="," close=")">
+      #{item}
+    </foreach>
+   
+   
+   </delete>
+   
+
+
+
+
+
+
+
+
+
+</mapper>

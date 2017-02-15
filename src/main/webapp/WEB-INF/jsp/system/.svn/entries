@@ -1,0 +1,236 @@
+10
+
+dir
+7665
+svn://42.121.129.188/repos/trunk/xyd/WebRoot/WEB-INF/jsp/system
+svn://42.121.129.188/repos
+
+
+
+2016-04-06T08:35:57.169383Z
+7338
+kyz
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+42403b8e-ba5f-489c-9906-e8dd922b5820
+
+ad
+dir
+
+baseStore
+dir
+
+catalog
+dir
+
+company
+dir
+
+companyStockinRecord
+dir
+
+error.jsp
+file
+
+
+
+
+2016-04-18T01:24:32.892000Z
+cad4ffd7b6799c421923d5ba2dfac428
+2015-11-18T05:47:46.140646Z
+2904
+kyz
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+849
+
+foot.jsp
+file
+
+
+
+
+2016-04-18T01:24:33.834000Z
+7950276a3348cc1e51a1f4c86adf3b4c
+2016-01-21T01:17:41.085342Z
+5764
+kyz
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+4465
+
+login.jsp
+file
+
+
+
+
+2016-04-18T01:24:33.848000Z
+cb1c52ac7dbf12b16217a2a593fcbaab
+2016-01-21T01:17:41.085342Z
+5764
+kyz
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+7181
+
+main.jsp
+file
+
+
+
+
+2016-04-18T01:24:32.154000Z
+8b33b2c9664308c6dcc6b4cf05d1159d
+2016-03-21T02:50:06.490126Z
+6958
+kyz
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+13813
+
+orders
+dir
+
+product
+dir
+
+promotion
+dir
+
+rollPic
+dir
+
+statistical
+dir
+
+sysCoupons
+dir
+
+sysFeedback
+dir
+
+sysNews
+dir
+
+sysNewsCatalog
+dir
+
+sysNotice
+dir
+
+sysProportion
+dir
+
+sysSearchhot
+dir
+
+top.jsp
+file
+7829
+
+
+
+
+cb7072034247c129926a644bdaa785a0
+2016-04-27T10:06:04.478591Z
+7829
+kyz
+
+user
+dir
+
+userComment
+dir
+
+userrole
+dir
+

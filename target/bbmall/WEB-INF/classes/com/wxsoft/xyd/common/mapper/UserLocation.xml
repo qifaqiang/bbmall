@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8" ?>  <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wxsoft.xyd.common.mapper.UserLocationMapper">
+	<resultMap type="UserLocation" id="userLocationMap">
+		<id property="id" column="id" />
+		<result property="id" column="id" />
+		<result property="userid" column="userid" />
+		<result property="consignee" column="consignee" />
+		<result property="country" column="country" />
+		<result property="provinceId" column="province_id" />
+		<result property="cityId" column="city_id" />
+		<result property="areaId" column="area_id" />
+		<result property="location" column="location" />
+		<result property="mobile" column="mobile" />
+		<result property="status" column="status" />
+		<result property="regionName" column="region_name" />
+		<result property="zipcode" column="zipcode" />
+		<result property="building" column="building" />
+		<result property="created" column="created" />
+	</resultMap>
+	<select id="selectByPrimaryKey" parameterType="Integer" resultMap="userLocationMap"><![CDATA[  SELECT id,userid,consignee,country,province_id,city_id,area_id,location,mobile,status,region_name,zipcode,building,created from user_location tmp WHERE tmp.id = #{id} ]]>
+	</select>
+	<select id="selectByUserLocation" parameterType="UserLocation" resultMap="userLocationMap">
+		SELECT
+		id,userid,consignee,country,province_id,city_id,area_id,location,mobile,status,region_name,zipcode,building,created
+		from user_location tmp
+		WHERE
+		<if test="id != null">id = #{id} and </if>
+		<if test="userid != null">userid = #{userid} and </if>
+		<if test="consignee != null">consignee = #{consignee} and </if>
+		<if test="country != null">country = #{country} and </if>
+		<if test="provinceId != null">province_id = #{provinceId} and </if>
+		<if test="cityId != null">city_id = #{cityId} and </if>
+		<if test="areaId != null">area_id = #{areaId} and </if>
+		<if test="location != null">location = #{location} and </if>
+		<if test="mobile != null">mobile = #{mobile} and </if>
+		<if test="status != null">status = #{status} and </if>
+		<if test="regionName != null">region_name = #{regionName} and </if>
+		<if test="zipcode != null">zipcode = #{zipcode} and </if>
+		<if test="building != null">building = #{building} and </if>
+		<if test="created != null">created = #{created} and </if>
+		1=1
+	</select>
+	<select id="selectById" parameterType="UserLocation" resultMap="userLocationMap">
+		SELECT
+		id,userid,consignee,country,province_id,city_id,area_id,location,mobile,status,region_name,zipcode,building,created
+		from user_location tmp
+		WHERE
+		<if test="id != null">id = #{id} and </if>
+		<if test="userid != null">userid = #{userid} and </if>
+		<if test="consignee != null">consignee = #{consignee} and </if>
+		<if test="country != null">country = #{country} and </if>
+		<if test="provinceId != null">province_id = #{provinceId} and </if>
+		<if test="cityId != null">city_id = #{cityId} and </if>
+		<if test="areaId != null">area_id = #{areaId} and </if>
+		<if test="location != null">location = #{location} and </if>
+		<if test="mobile != null">mobile = #{mobile} and </if>
+		<if test="status != null">status = #{status} and </if>
+		<if test="regionName != null">region_name = #{regionName} and </if>
+		<if test="zipcode != null">zipcode = #{zipcode} and </if>
+		<if test="building != null">building = #{building} and </if>
+		<if test="created != null">created = #{created} and </if>
+		1=1
+	</select>
+
+	<select id="selectByUserLocationOrStatus" parameterType="UserLocation" resultMap="userLocationMap">
+		SELECT
+		id,userid,consignee,country,location,mobile,status,region_name,zipcode,building,created
+		from user_location tmp WHERE
+
+		<if test="userid != null">userid = #{userid} and status=#{status} </if>
+
+	</select>
+	<select id="listAjaxPageByUserLocation" parameterType="UserLocation" resultMap="userLocationMap">
+		SELECT
+		id,userid,consignee,country,province_id,city_id,area_id,location,mobile,status,region_name,zipcode,building,created
+		from user_location tmp
+		WHERE
+		<if test="id != null">id = #{id} and </if>
+		<if test="userid != null">userid = #{userid} and </if>
+		<if test="consignee != null">consignee = #{consignee} and </if>
+		<if test="country != null">country = #{country} and </if>
+		<if test="provinceId != null">province_id = #{provinceId} and </if>
+		<if test="cityId != null">city_id = #{cityId} and </if>
+		<if test="areaId != null">area_id = #{areaId} and </if>
+		<if test="location != null">location = #{location} and </if>
+		<if test="mobile != null">mobile = #{mobile} and </if>
+		<if test="status != null">status = #{status} and </if>
+		<if test="regionName != null">region_name = #{regionName} and </if>
+		<if test="zipcode != null">zipcode = #{zipcode} and </if>
+		<if test="building != null">building = #{building} and </if>
+		<if test="created != null">created = #{created} and </if>
+		1=1
+		order by status desc
+	</select>
+	<select id="getAllByUserLocation" parameterType="UserLocation" resultMap="userLocationMap">
+		SELECT
+		id,userid,consignee,country,province_id,city_id,area_id,location,mobile,status,region_name,zipcode,building,created
+		from user_location tmp
+		WHERE
+		<if test="id != null">id = #{id} and </if>
+		<if test="userid != null">userid = #{userid} and </if>
+		<if test="consignee != null">consignee = #{consignee} and </if>
+		<if test="country != null">country = #{country} and </if>
+		<if test="provinceId != null">province_id = #{provinceId} and </if>
+		<if test="cityId != null">city_id = #{cityId} and </if>
+		<if test="areaId != null">area_id = #{areaId} and </if>
+		<if test="location != null">location = #{location} and </if>
+		<if test="mobile != null">mobile = #{mobile} and </if>
+		<if test="status != null">status = #{status} and </if>
+		<if test="regionName != null">region_name = #{regionName} and </if>
+		<if test="zipcode != null">zipcode = #{zipcode} and </if>
+		<if test="building != null">building = #{building} and </if>
+		<if test="created != null">created = #{created} and </if>
+		1=1
+		order by created desc
+	</select>
+	<insert id="insertSelective" parameterType="UserLocation">
+		insert into user_location
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">id,</if>
+			<if test="userid != null">userid,</if>
+			<if test="consignee != null">consignee,</if>
+			<if test="country != null">country,</if>
+			<if test="provinceId != null">province_id,</if>
+			<if test="cityId != null">city_id,</if>
+			<if test="areaId != null">area_id,</if>
+			<if test="location != null">location,</if>
+			<if test="mobile != null">mobile,</if>
+			<if test="status != null">status,</if>
+			<if test="regionName != null">region_name,</if>
+			<if test="zipcode != null">zipcode,</if>
+			<if test="building != null">building,</if>
+			created
+		</trim>
+		value
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">#{id},</if>
+			<if test="userid != null">#{userid},</if>
+			<if test="consignee != null">#{consignee},</if>
+			<if test="country != null">#{country},</if>
+			<if test="provinceId != null">#{provinceId},</if>
+			<if test="cityId != null">#{cityId},</if>
+			<if test="cityId != null">#{areaId},</if>
+			<if test="location != null">#{location},</if>
+			<if test="mobile != null">#{mobile},</if>
+			<if test="status != null">#{status},</if>
+			<if test="regionName != null">#{regionName},</if>
+			<if test="zipcode != null">#{zipcode},</if>
+			<if test="building != null">#{building},</if>
+			now()
+		</trim>
+	</insert>
+	<insert id="insert" parameterType="UserLocation"><![CDATA[insert into user_location( 
+id,userid,consignee,country,province_id,city_id,areaId,location,mobile,status,region_name,zipcode,building,created) values (#{id},#{userid},#{consignee},#{country},#{province_id},#{cityId},#{areaId},#{location},#{mobile},#{status},#{regionName},#{zipcode},#{building},#{created})
+]]></insert>
+	<update id="updateByPrimaryKeySelective" parameterType="UserLocation">
+		update user_location
+		<set>
+			<if test="id != null">id = #{id},</if>
+			<if test="userid != null">userid = #{userid},</if>
+			<if test="consignee != null">consignee = #{consignee},</if>
+			<if test="country != null">country = #{country},</if>
+			<if test="provinceId != null">province_id = #{provinceId},</if>
+			<if test="cityId != null">city_id = #{cityId},</if>
+			<if test="areaId != null">area_id = #{areaId},</if>
+			<if test="location != null">location = #{location},</if>
+			<if test="mobile != null">mobile = #{mobile},</if>
+			<if test="status != null">status = #{status},</if>
+			<if test="regionName != null">region_name = #{regionName},</if>
+			<if test="zipcode != null">zipcode = #{zipcode},</if>
+			<if test="building != null">building = #{building},</if>
+			<if test="created != null">created = #{created}</if>
+		</set>
+		where id = #{id}
+	</update>
+	<update id="updateStatus" parameterType="UserLocation">
+		update user_location
+		<set>
+			<if test="status != null">status = #{status} </if>
+		</set>
+		where userid=#{userid} and id &lt;&gt;#{id}
+	</update>
+	<update id="updateBySetDefault" parameterType="Integer">
+		update user_location
+		set status = 0 where userid = #{id}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="UserLocation"><![CDATA[update user_location set 
+id=#{id},userid=#{userid},consignee=#{consignee},country=#{country},province_id=#{provinceId},city_id=#{cityId},area_id=#{areaId},location=#{location},mobile=#{mobile},status=#{status},region_name=#{regionName},zipcode=#{zipcode},building=#{building},created=#{created} where id = #{id}
+]]></update>
+	<delete id="deleteByPrimaryKey" parameterType="UserLocation"><![CDATA[delete from user_location where id=#{id} 
+]]></delete>
+</mapper>

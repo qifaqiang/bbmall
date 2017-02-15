@@ -1,0 +1,56 @@
+package com.wxsoft.xyd.prod.service.impl;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import java.util.List;
+import com.wxsoft.xyd.prod.model.ProductPackage;
+import com.wxsoft.xyd.prod.mapper.ProductPackageMapper;
+import com.wxsoft.xyd.prod.service.ProductPackageService;
+
+/**
+ * 礼盒包Service
+ * 
+ * @author kyz
+ * 
+ */
+@Service("productPackageService")
+public class ProductPackageServiceImpl implements ProductPackageService {
+
+	@Autowired
+	private ProductPackageMapper productPackageMapper;
+
+	@Override
+	public int deleteByPrimaryKey(Integer id) {
+		return productPackageMapper.deleteByPrimaryKey(id);
+	}
+
+	@Override
+	public int insertSelective(ProductPackage record) {
+		return productPackageMapper.insertSelective(record);
+	}
+
+	@Override
+	public int updateByPrimaryKeySelective(ProductPackage record) {
+		return productPackageMapper.updateByPrimaryKeySelective(record);
+	}
+
+	@Override
+	public ProductPackage selectByPrimaryKey(Integer id) {
+		return productPackageMapper.selectByPrimaryKey(id);
+	}
+
+	@Override
+	public ProductPackage selectByProductPackage(ProductPackage record) {
+		return productPackageMapper.selectByProductPackage(record);
+	}
+
+	@Override
+	public List<ProductPackage> listPageByProductPackage(ProductPackage clssname) {
+		return productPackageMapper.listPageByProductPackage(clssname);
+	}
+
+	@Override
+	public List<ProductPackage> getAllByProductPackage(ProductPackage clssname) {
+		return productPackageMapper.getAllByProductPackage(clssname);
+	}
+}

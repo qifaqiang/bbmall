@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wxsoft.xyd.system.mapper.CompanyMapper">
+	<!-- 表字段的声明，便于在后面直接使用，提取共用字段 -->
+	<sql id="userColumns">company_id, company_name,company_des,company_contact,
+		mobile,street_id,address,
+		login,isdel,addtime,xpostion,ypostion,province_id,city_id,area_id,region_name,send_price,charge_send_price
+	</sql>
+	<!-- 从数据库到java实体对象映射声明 -->
+	<resultMap type="Company" id="CompanyAndRoleResultMap">
+		<id column="company_id" property="companyId" />
+		<result column="company_name" property="companyName" />
+		<result column="company_des" property="companyDes" />
+		<result column="company_service" property="companyService" />
+		<result column="company_contact" property="companyContact" />
+		<result column="telephone" property="telephone" />
+		<result column="fax" property="fax" />
+		<result column="mobile" property="mobile" />
+		<result column="email" property="email" />
+		<result column="address" property="address" />
+		<result column="login" property="login" />
+		<result column="passwd" property="passwd" />
+		<result column="isdel" property="isdel" />
+		<result column="addtime" property="addtime" />
+		<result column="xpostion" property="xpostion" />
+		<result column="ypostion" property="ypostion" />
+		<result column="province_id" property="provinceId" />
+		<result column="city_id" property="cityId" />
+		<result column="area_id" property="areaId" />
+		<result column="street_id" property="streetId" />
+		<result column="location" property="location" />
+		<result column="sale_count" property="saleCount" />
+		<result column="region_name" property="regionName" />
+		<result column="send_price" property="sendPrice" />
+		<result column="charge_send_price" property="chargeSendPrice" />
+		<result column="qrcode_url" property="qrcodeUrl" />
+	</resultMap>
+
+	<resultMap type="Company" extends="CompanyAndRoleResultMap"
+		id="BaseResultMapWithRoleName">
+		<association property="userRole" column="company_id"
+			select="com.wxsoft.xyd.system.mapper.UserRoleMapper.selectByUserRoleAssociatedDeUserId">
+		</association>
+	</resultMap>
+
+	<!-- 查询要插入的用户名在company表中不存在 -->
+	<select id="ifExistByLoginName" parameterType="Company"
+		resultMap="CompanyAndRoleResultMap">
+		select
+		*
+		from company where login=#{login}
+		<if test="companyId !=null and companyId != ''">
+			and company_id != #{companyId}
+		</if>
+		limit 0,1
+	</select>
+
+	<!-- 添加新的公司 -->
+	<insert id="insertCompany" parameterType="Company"
+		useGeneratedKeys="true" keyProperty="companyId">
+		insert into company
+		(company_name,company_des,company_service,company_contact,telephone,fax,mobile,email,address,login,passwd,isdel,addtime,xpostion,ypostion,province_id,city_id,area_id,location,region_name,send_price,charge_send_price,street_id,qrcode_url)
+		values
+		(#{companyName},#{companyDes},#{companyService},#{companyContact},#{telephone},#{fax},#{mobile},#{email}
+		,#{address},#{login},#{passwd}
+		,1,now(),#{xpostion},#{ypostion},#{provinceId},#{cityId},#{areaId},#{location},#{regionName},#{sendPrice},#{chargeSendPrice},#{streetId},#{qrcodeUrl})
+	</insert>
+
+	<select id="getUserByNameAndPwd" parameterType="Map"
+		resultMap="BaseResultMapWithRoleName">
+		select u.company_id,u.company_name,u.login,
+		u.passwd
+		from
+		company u where u.login=#{login} and
+		u.passwd=#{passwd} and isdel=1
+	</select>
+
+	<select id="getCompanyByVolFromId" parameterType="string"
+		resultMap="CompanyAndRoleResultMap">
+		select c.company_name,c.company_id from company c where
+		c.xpostion=#{froms}
+	</select>
+
+	<select id="getCompanyWxByCompanyId" parameterType="integer"
+		resultMap="CompanyAndRoleResultMap">
+		select c.company_name,mobile,send_price,charge_send_price
+		from company c where
+		c.company_id=#{companyId}
+	</select>
+
+	<select id="getPayByCompanyID" parameterType="integer"
+		resultMap="CompanyAndRoleResultMap">
+		select c.true_name,c.alipay_account,c.company_id from
+		company c where
+		c.company_id=#{companyId}
+	</select>
+	<resultMap type="Company" id="resultCompanyUserRoleList"
+		extends="CompanyAndRoleResultMap">
+		<association property="userRole" javaType="UserRole">
+			<id property="id" column="id" />
+			<result property="name" column="name" />
+		</association>
+
+	</resultMap>
+
+	<select id="listPageUserCompany" resultMap="resultCompanyUserRoleList">
+		SELECT
+		u.company_id,
+		u.company_name, u.company_contact,
+		u.mobile,uro.id,
+		uro.name,u.address,u.email,
+		u.login,u.isdel,u.addtime
+		FROM
+		company u LEFT
+		JOIN
+		user_role_associated ura ON
+		ura.userid=u.company_id LEFT JOIN
+		user_role uro ON uro.id=ura.roleid
+		where u.company_id !=1 and
+		uro.id!=40
+		<if test="login !=null and login !=''">
+			and login like CONCAT('%',#{login},'%')
+		</if>
+		ORDER BY addtime DESC
+	</select>
+	<!-- 查询基地用户的ID和名称，当rolid=40时候用户为基地用户 -->
+	<select id="selectCompanyName" parameterType="Company"
+		resultMap="CompanyAndRoleResultMap">
+		SELECT c.company_id ,c.company_name
+		FROM company
+		c,user_role_associated u
+		WHERE c.company_id=u.userid AND u.roleid=40
+		ORDER BY company_id;
+	</select>
+
+
+	<select id="listPageByBaseStore" resultMap="resultCompanyUserRoleList">
+		SELECT
+		u.company_id,
+		u.company_name, u.company_des,company_contact,
+		u.mobile,uro.id,u.street_id,
+		uro.name,u.email,
+		u.login,u.isdel,u.addtime,u.address,u.region_name,u.province_id,u.city_id,u.area_id,u.send_price,u.charge_send_price
+		FROM
+		company u LEFT
+		JOIN
+		user_role_associated ura ON
+		ura.userid=u.company_id LEFT JOIN
+		user_role uro ON uro.id=ura.roleid
+		where uro.id =40
+		<if test="login !=null and login !=''">
+			and login like CONCAT('%',#{login},'%')
+		</if>
+		ORDER BY addtime DESC
+	</select>
+
+
+
+
+	<!-- 查询用户角色 -->
+	<select id="selectRoleByCompanyId" resultMap="resultCompanyUserRoleList">
+		SELECT
+		u.company_id,
+		u.company_name, u.company_contact,
+		u.mobile,uro.id,
+		uro.name,u.address,u.email,
+		u.login,u.isdel,u.addtime
+		FROM
+		company u LEFT
+		JOIN
+		user_role_associated ura ON
+		ura.userid=u.company_id LEFT JOIN
+		user_role uro ON uro.id=ura.roleid
+		WHERE u.company_id=#{company_id}
+
+	</select>
+
+	<!-- 查询信息 -->
+	<select id="getCompanyById" parameterType="Integer"
+		resultMap="CompanyAndRoleResultMap">
+		select
+		<include refid="userColumns" />
+		from company where company_id=#{companyId}
+	</select>
+	<!-- 设置禁用 -->
+	<update id="updatesetDisable" parameterType="Company">
+		update company
+		<set>
+			isdel=#{isdel},
+		</set>
+		where
+		company_id=#{companyId}
+	</update>
+
+	<!-- 更新信息 -->
+	<update id="updateCompany" parameterType="Company">
+		update company
+		<set>
+			<if test="companyName !=null and companyName !=''">
+				company_name=#{companyName},
+			</if>
+			<if test="companyDes !=null and companyDes !=''">
+				company_des=#{companyDes},
+			</if>
+			<if test="companyService !=null and companyService !=''">
+				company_service=#{companyService},
+			</if>
+			<if test="companyContact !=null and companyContact !=''">
+				company_contact=#{companyContact},
+			</if>
+			<if test="companyName !=null and companyName !=''">
+				company_name=#{companyName},
+			</if>
+			<if test="mobile !=null and mobile !=''">
+				mobile=#{mobile},
+			</if>
+			<if test="passwd !=null and passwd !=''">
+				passwd=#{passwd},
+			</if>
+			<if test="provinceId !=null and provinceId !=''">
+				province_id=#{provinceId},
+			</if>
+			<if test="cityId !=null and cityId !=''">
+				city_id=#{cityId},
+			</if>
+			<if test="areaId !=null and areaId !=''">
+				area_id=#{areaId},
+			</if>
+			<if test="location !=null and location !=''">
+				location=#{location},
+			</if>
+			<if test="ypostion !=null and ypostion !=''">
+				ypostion=#{ypostion},
+			</if>
+			<if test="xpostion !=null and xpostion !=''">
+				xpostion=#{xpostion},
+			</if>
+			<if test="saleCount !=null and saleCount !=''">
+				sale_count=#{saleCount},
+			</if>
+			<if test="regionName !=null and regionName !=''">
+				region_name=#{regionName},
+			</if>
+			<if test="sendPrice !=null and sendPrice !=''">
+				send_price=#{sendPrice},
+			</if>
+			<if test="chargeSendPrice !=null and chargeSendPrice !=''">
+				charge_send_price=#{chargeSendPrice},
+			</if>
+			<if test="streetId !=null and streetId !=''">
+				street_id=#{streetId},
+			</if>
+			<if test="address !=null and address !=''">
+				address=#{address},
+			</if>
+			<if test="qrcodeUrl !=null and qrcodeUrl !=''">
+				qrcode_url=#{qrcodeUrl},
+			</if>
+		</set>
+		where
+		company_id=#{companyId}
+	</update>
+
+	<!-- 删除资源信息，根据资源编号 -->
+	<delete id="deleteCompany" parameterType="int">
+		delete from company
+		where company_id=#{id}
+	</delete>
+
+	<!-- 查询基地的位置坐标 -->
+	<select id="selectCompanyByXY" parameterType="Integer" resultType="map">
+		SELECT
+		u.company_id,
+		u.company_name,
+		u.region_name,u.address,u.xpostion,u.ypostion,
+		u.mobile
+		FROM
+		company u
+		LEFT
+		JOIN
+		user_role_associated ura ON
+		ura.userid=u.company_id where
+		ura.roleid=40 and u.isdel=1
+		<if test="companyId !=null and companyId !=0"> and u.company_id=#{companyId}</if>
+		<if test="companyId !=null and companyId ==0"> limit 1</if>
+	</select>
+	<!-- 查询基地的位置坐标 -->
+	<select id="selectCompanyByQrcode" parameterType="int"
+		resultType="String">
+		SELECT
+		u.qrcode_url
+		FROM
+		company u
+		where
+		u.company_id=#{id}
+	</select>
+</mapper>

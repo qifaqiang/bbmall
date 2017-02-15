@@ -1,0 +1,216 @@
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<jsp:include page="../top.jsp"></jsp:include>
+<!-- END STYLE CUSTOMIZER -->
+<!-- BEGIN PAGE HEADER-->
+<div class="row">
+	<div class="col-md-12">
+		<!-- BEGIN PAGE TITLE & BREADCRUMB-->
+		<h3 class="page-title">
+			基地库存查询 <small> 列表</small>
+		</h3>
+		<!-- END PAGE TITLE & BREADCRUMB-->
+	</div>
+</div>
+<style>
+.product input {
+	width: 50px;
+}
+
+.listContact_addStock {
+	display: inline-block;
+}
+
+.range {
+	display: inline-block;
+}
+</style>
+<!-- END PAGE HEADER-->
+<!-- BEGIN PAGE CONTENT-->
+<form action="kucunlist.html" method="post" id="kucunlist">
+	<div class="row">
+		<div class="col-md-6" style="width: 100%">
+			<!-- BEGIN SAMPLE TABLE PORTLET-->
+			<div class="portlet box blue">
+				<div class="portlet-title">
+					<div class="caption">
+						<i class=" fa fa-cogs"></i>信息
+					</div>
+				</div>
+				<div class="portlet-body">
+					<div class="input-group"
+						style="text-align: left; margin-bottom: 3px;">
+						<select style="width: 150px; float: right;margin-right: 10px;margin-top: 3px"
+							class="form-control select2me" id="companyList"
+							name="companyList" data-placeholder="选择">
+							<option value="01">--所有--</option>
+							<c:forEach items="${comStockList}" var="p" varStatus="vs">
+								<option value="${p.companyId}"  comNam="${p.companyName}">${p.companyName }</option>
+							</c:forEach>
+						</select> <span id="zuye" style="float:right;height:35px;line-height:35px">基地商户名称:&nbsp;</span>
+						<select style="width: 150px; float: right;margin-right: 10px;margin-top: 3px"
+							class="form-control select2me" id="productBasicList"
+							name="productBasicList" data-placeholder="选择">
+							<option value="01">--所有--</option>
+							<c:forEach items="${nameList}" var="p" varStatus="vs">
+								<option value="${p.id}">${p.name }</option>
+							</c:forEach>
+						</select> <span style="float:right;height:35px;line-height:35px">商品名称:&nbsp;</span>
+						<span class="input-group-btn" onclick="search()"> <a
+							href="javascript:;" class="btn green" id="search"
+							<i class="fa fa-search"></i> 搜索</a>
+						</span>
+					</div>
+					<div class="table-responsive">
+						<table class="table table-bordered table-hover">
+							<thead>
+								<tr>
+									<th style="width:10px;text-align: center" bgcolor="gray"
+										class="start">#</th>
+									<c:forEach items="${nameList}" var="product" varStatus="vs">
+										<th style="width:60px;" class="product  p_${product.id}">${product.name}&nbsp;&nbsp;&nbsp;(${product.unit})</th>
+									</c:forEach>
+								</tr>
+							</thead>
+							<div class="hide" id="hideId">
+								<tbody>
+									<c:choose>
+										<c:when test="${not empty comStockList}">
+											<c:forEach items="${comStockList}" var="product"
+												varStatus="vs">
+												<!-- 得到行的DOM class名称为公司的ID -->
+												<tr class="companyT company_${product.companyId}">
+													<td style="text-align: center;vertical-align: middle"
+														class="companyD companyD_${product.companyId}">${product.companyName}</td>
+													<c:forEach items="${product.companyStock}" var="sub"
+														varStatus="status">
+														<c:forEach items="${nameList}" var="pro" varStatus="pr"
+															begin="${ status.index}" end="${ status.index}">
+															<c:if test="${sub.inventorynumber==null}">
+																<!-- 得到每一列的DOM class名称为商品的ID -->
+																<td class="product  p_${pro.id}">
+																	<div class="${ vs.index + 1}${ status.index + 1}">
+																		&nbsp; <span
+																			class="inv${ vs.index + 1}${ status.index + 1}">0</span>
+																</td>
+															</c:if>
+														</c:forEach>
+														<c:forEach items="${nameList}" var="pro" varStatus="pr"
+															begin="${ status.index}" end="${ status.index}">
+															<c:if test="${sub.inventorynumber !=null}">
+																<!-- 得到DOM class名称为商品的ID -->
+																<td class="product  p_${pro.id}">&nbsp; <span
+																	class="inv${ vs.index + 1}${ status.index + 1}">${sub.inventorynumber}</span>
+																	<span class="required"> </span><br> 
+																</td>
+															</c:if>
+														</c:forEach>
+													</c:forEach>
+												</tr>
+							</c:forEach>
+							</c:when>
+							<c:otherwise>
+								<tr class="main_info">
+									<td colspan="7">没有相关数据</td>
+								</tr>
+							</c:otherwise>
+							</c:choose>
+							</tbody>
+							</div>
+						</table>
+					</div>
+				</div>
+			</div>
+			<!-- END SAMPLE TABLE PORTLET-->
+		</div>
+	</div>
+	<a id="rolId"  value="${rolId}"></a>
+	<a id="companyName"  value="${companyName}"></a>
+	<a id="companyId"  value="${companyId}"></a>
+</form>
+<script>
+	var i = 0;
+	function editProduct(id) {
+		window.location.href = "update.html?id=" + id;
+	}
+	if($("#rolId").attr("value")==40){
+		$("#companyList").val($("#companyId").attr("value"));
+		$("#companyList").hide();
+		$("#zuye").hide();
+		search();
+	}else if($("#rolId").attr("value")==33||$("#rolId").attr("value")==39){
+		
+	}else{
+		$("#companyList").hide();
+		$("#zuye").hide();
+		$(".table-responsive").html("<tr class='main_info'> <td colspan='7'>对不起您没有权限，请联系管理员</td> </tr>");
+	}
+	//设置用户为jinyon
+	$("#search").click(function(){
+			search();
+	});
+	function search() {
+		//得到公司的选值
+		var selectCompany = $("#companyList").find("option:selected")
+				.val();
+		//得到产品的选值
+		var selectProduct = $("#productBasicList").find("option:selected").val();
+		/* if (selectCompany == "01") {
+			$(".companyT").css("display", "");
+		} else {
+			$(".company_" + selectCompany).css("display", "");
+			$(".company_" + selectCompany).siblings().css("display", "none");
+		} */
+
+		//如果公司和产品都不选中的话
+		if (selectProduct == "01" && selectCompany == "01") {
+			$(".product").css("display", "");
+			$(".companyT").css("display", "");
+			$(".companyD").css("display", "");
+		}
+		//如果只选中产品的话
+		if (selectProduct != "01" && selectCompany == "01") {
+			$(".product").css("display", "");
+			$(".companyT").css("display", "");
+			$(".companyD").css("display", "");
+
+			$(".p_" + selectProduct).css("display", "");
+			$(".p_" + selectProduct).siblings().css("display", "none");
+			$(".companyD").css("display", "");
+			$(".start").css("display", "");
+		}
+		//如果只选中公司的话
+		if (selectProduct == "01" && selectCompany != "01") {
+			$(".product").css("display", "");
+			$(".companyT").css("display", "");
+			$(".companyD").css("display", "");
+
+			$(".company_" + selectCompany).css("display", "");
+			$(".company_" + selectCompany).siblings().css("display",
+					"none");
+		}
+		//如果都选中的话
+		if (selectProduct != "01" && selectCompany != "01") {
+			$(".product").css("display", "");
+			$(".companyT").css("display", "");
+			$(".companyD").css("display", "");
+
+			$(".p_" + selectProduct).siblings().css("display", "none");
+			$(".company_" + selectCompany).siblings().css("display",
+					"none");
+			$(".company_" + selectCompany).css("display", "");
+			$(".p_" + selectProduct).css("display", "");
+			$(".companyD").css("display", "");
+			$(".start").css("display", "");
+		}
+
+	}
+</script>
+<!-- END PAGE CONTENT-->
+<jsp:include page="../foot.jsp"></jsp:include>
+<script type="text/javascript"
+	src="${SHOPDOMAIN}/system/theme/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.js"></script>
+<!-- BEGIN PAGE LEVEL STYLES -->
+<link rel="stylesheet" type="text/css"
+	href="${SHOPDOMAIN}/system/theme/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css" />
