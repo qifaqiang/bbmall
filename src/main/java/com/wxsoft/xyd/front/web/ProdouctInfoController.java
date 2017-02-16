@@ -146,8 +146,7 @@ public class ProdouctInfoController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping("/getProductInfoPc")
-	public void getProductInfoPc(HttpServletResponse response, Integer prodId,
-			String companyId, HttpServletRequest request, HttpSession session) {
+	public void getProductInfoPc(HttpServletResponse response, Integer prodId, HttpServletRequest request, HttpSession session) {
 		JSONObject json = new JSONObject();
 		// 获取商品信息
 		Product p = new Product();
@@ -178,15 +177,11 @@ public class ProdouctInfoController extends BaseController {
 			json.put("pc1name", pc1.getName());
 			json.put("pc2id", pc2.getId());
 			json.put("pc2name", pc2.getName());
-			if (Tools.isEmpty(companyId)) {
-				json.put("companyBaseINFO", "productInfo.ER5002");
-			} else {
-				// 获取基地的基本信息
-				Company c = companyService.getCompanyWxByCompanyId(Integer
-						.parseInt(companyId));
-				json.put("sendPrice", c.getSendPrice());
-				json.put("chargeSendPrice", c.getChargeSendPrice());
-			}
+
+			// 获取基地的基本信息
+			Company c = companyService.getCompanyWxByCompanyId( (int)rplist.get("company_id") );
+			json.put("sendPrice", c.getSendPrice());
+			json.put("chargeSendPrice", c.getChargeSendPrice());
 		} else {
 			//商品不存在
 			json.put(BaseConfig.RESCODE, "ER5001");
@@ -196,7 +191,6 @@ public class ProdouctInfoController extends BaseController {
 		try {
 			responseAjax(json, response);
 		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -208,14 +202,10 @@ public class ProdouctInfoController extends BaseController {
 	 */
 	@RequestMapping("/getProductSepcInfo")
 	public void getProductSepcInfo(HttpServletResponse response,
-			String companyId, Integer prodId, HttpServletRequest request,
+			 Integer prodId, HttpServletRequest request,
 			HttpSession session) {
 		JSONObject json = new JSONObject();
-		int companyid = 34;
 		int maxInventory = 0;
-		if (Tools.notEmpty(companyId)) {
-			companyid = Integer.parseInt(companyId);
-		}
 		// 获取商品信息
 		Product p = new Product();
 		p.setId(prodId);
@@ -275,13 +265,15 @@ public class ProdouctInfoController extends BaseController {
 							specname_val += psid.getSpecificationDetailName()+"、";
 						}
 						
-						Map<String, Object> id_val_map = new HashMap<String, Object>();
+						Map<String, Object> id_val_map = new HashMap<>();
 						id_val_map.put("id_val", id_val);
 						id_val_map.put("specname_val",specname_val.length()>0 ? specname_val.substring(0, (specname_val.length()-1)) : specname_val);
 						id_val_map.put("specInfoId", productSpecificationInfo.getId());
 						id_val_map.put("price", productSpecificationInfo.getPrice());
 						id_val_map.put("marketPrice", productSpecificationInfo.getMarketPrice());
-						//获取该基地 该产品 该规格的库存
+						id_val_map.put("inventorycount", productSpecificationInfo.getInventorynumber());
+
+						/*//获取该基地 该产品 该规格的库存
 						ProductSpecificationStock pss_t = new ProductSpecificationStock();
 						pss_t.setCompanyId(companyid);
 						pss_t.setProductId(prodId);
@@ -291,18 +283,26 @@ public class ProdouctInfoController extends BaseController {
 							id_val_map.put("inventorycount", 0);
 						}else{
 							id_val_map.put("inventorycount", pss_t.getInventorycount());
-						}
+						}*/
 						prodSpecInfoList.add(id_val_map);
 					}
 				}
-				//获取该基地里面该产品的总库存
-				ProductSpecificationStock prodTotalStock = new ProductSpecificationStock();
+				//获取该基地里面该产品的总库存  获取该商品的总库存
+				/*ProductSpecificationStock prodTotalStock = new ProductSpecificationStock();
 				prodTotalStock.setCompanyId(companyid);
 				prodTotalStock.setProductId(prodId);
 				prodTotalStock =  productSpecificationStockService.selectProdTotalStock(prodTotalStock);
 				if(null != prodTotalStock && prodTotalStock.getInventorycount() != null){
 					maxInventory = prodTotalStock.getInventorycount();
+				}*/
+				if ( "1".equals( String.valueOf(rplist.get("is_specification")) ) ) {
+					//开启规格
+					maxInventory = productSpecificationInfoService.selectTotalInvcountByProid(prodId);
+				} else {
+					//没有开启规格
+					maxInventory = (int)rplist.get("inventorynumber");
 				}
+
 				json.put("prodSpecList", prodSpecList);
 				json.put("prodSpecDetailList", prodSpecDetailList);
 				json.put("prodSpecInfoList", prodSpecInfoList);
@@ -317,7 +317,7 @@ public class ProdouctInfoController extends BaseController {
 				boolean flag = true;//商品包里面第一个产品
 				for (ProductPackage productPackage : pplist) {
 					ProductSpecificationStock pss_t = new ProductSpecificationStock();
-					pss_t.setCompanyId(companyid);
+//					pss_t.setCompanyId(companyid);
 					pss_t.setSpecificationInfoId(productPackage.getSpecificationInfoId());
 					pss_t.setProductId(productPackage.getProductId());
 					pss_t.setType(productPackage.getType());
@@ -394,7 +394,6 @@ public class ProdouctInfoController extends BaseController {
 		try {
 			responseAjax(json, response);
 		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

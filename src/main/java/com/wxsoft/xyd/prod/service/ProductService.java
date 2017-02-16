@@ -77,7 +77,7 @@ public interface ProductService {
 	
 	// 查询库存信息，如果普通商品，那么判断商品规格是否够库存，返回类型SPEC_***,数量 如果礼盒商品返回P_***,数量
 	public Map<String, Integer> getKuCunByProductIdsVsCompanyIdReturnSpecOrProductid(
-			String prodIds, Integer companyId, String counts, String specIds);
+			String prodIds, String counts, String specIds);
 
 	// 商品类别详细信息（productlist.html）
 	public List<Map<String, Object>> selectProductList(Product pd);

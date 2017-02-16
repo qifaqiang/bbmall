@@ -89,4 +89,9 @@ public class ProductSpecificationInfoServiceImpl implements
 	public List<ProductSpecificationInfo> listAjaxPageGetSpecProdByCompanyId(ProductSpecificationInfo psi) {
 		return productSpecificationInfoMapper.listAjaxPageGetSpecProdByCompanyId(psi);//获取已经开启规格的产品
 	}
+
+    @Override
+    public int selectTotalInvcountByProid(Integer prodId) {
+        return productSpecificationInfoMapper.selectTotalInvcountByProid(prodId);
+    }
 }

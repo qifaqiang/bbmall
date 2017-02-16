@@ -71,76 +71,72 @@ public class ShoppingCart extends BaseController {
 	 * 添加购物车
 	 * 
 	 * @param request
-	 * @param resposne
 	 * @param session
 	 * @throws UnsupportedEncodingException
 	 */
 	@RequestMapping("/addCart")
 	public void addCart(HttpServletRequest request,
 			HttpServletResponse response, HttpSession session, Integer prodId,
-			Integer specId, String companyId, Integer count)
+			Integer specId, Integer count)
 			throws UnsupportedEncodingException {
 		JSONObject json = new JSONObject();
-		int companyid = 0;
-		if (Tools.notEmpty(companyId)) {
-			companyid = Integer.parseInt(companyId);
-		}
 		if (null == count || count < 1) {
 			//添加购物车失败：库存数量不足
 			json.put(BaseConfig.RESCODE, "ER6101");
 			json.put(BaseConfig.RESMESSAGE,
 					BaseConfig.MESSAGE.get("cart.ER6101").toString());
 		}
-		User user = (User) session
-				.getAttribute(SystemConfig.SESSION_FRONT_USER);// 登录用户
+		User user = (User) session.getAttribute(SystemConfig.SESSION_FRONT_USER);// 登录用户
 		if (user == null) {// 用户未登录
 			json.put(BaseConfig.RESCODE, "1");
 			json.put(BaseConfig.RESMESSAGE, BaseConfig.MESSAGE.get("user.ER1025").toString());
 		} else {// 用户已经登录
 			Product p = productService.selectProductByCart(prodId);
 			if (null != p) {
-				if (p.getType() == 1) {// 礼盒
-					UserCart userCart = new UserCart();
-					userCart.setUserId(user.getId());
-					userCart.setProdId(prodId);
-					userCart.setSpecId(null);
-					UserCart userCartInfo = userCartService
-							.selectByUserCart(userCart);// 登录用户的购物车和该商品的id
+				if (p.getType() == 1) {
+					// 礼盒
+//					UserCart userCart = new UserCart();
+//					userCart.setUserId(user.getId());
+//					userCart.setProdId(prodId);
+//					userCart.setSpecId(null);
+//					UserCart userCartInfo = userCartService
+//							.selectByUserCart(userCart);// 登录用户的购物车和该商品的id
+//
+//					if (null != userCartInfo) {// 购物车中存在当前的商品
+//						Map<String, Integer> mapTemp = productService
+//								.getKuCunByProductIdsVsCompanyIdReturnSpecOrProductid(
+//										prodId + "", companyid,
+//										(userCartInfo.getCount() + count) + "",
+//										"");
+//						if (null != mapTemp && mapTemp.size() > 0) {
+//							//购物车添加失败
+//							json.put(BaseConfig.RESCODE, "ER6001");
+//							json.put(BaseConfig.RESMESSAGE, BaseConfig.MESSAGE
+//									.get("cart.ER6001").toString());
+//						} else {
+//							userCartInfo.setCount(userCartInfo.getCount()
+//									+ count);
+//							if (userCartService
+//									.updateByPrimaryKeySelective(userCartInfo) > 0) {
+//								json.put(BaseConfig.RESCODE, "0");
+//								json.put(BaseConfig.RESMESSAGE, "success");
+//								responseAjax(json, response);
+//								return;
+//							}
+//						}
+//					} else {// 购物车中没有该商品
+//						userCart.setCount(count);
+//						userCart.setAddTime(new Date());
+//						if (userCartService.insertSelective(userCart) > 0) {
+//							json.put(BaseConfig.RESCODE, "0");
+//							json.put(BaseConfig.RESMESSAGE, "success");
+//							responseAjax(json, response);
+//							return;
+//						}
+//					}
 
-					if (null != userCartInfo) {// 购物车中存在当前的商品
-						Map<String, Integer> mapTemp = productService
-								.getKuCunByProductIdsVsCompanyIdReturnSpecOrProductid(
-										prodId + "", companyid,
-										(userCartInfo.getCount() + count) + "",
-										"");
-						if (null != mapTemp && mapTemp.size() > 0) {
-							//购物车添加失败
-							json.put(BaseConfig.RESCODE, "ER6001");
-							json.put(BaseConfig.RESMESSAGE, BaseConfig.MESSAGE
-									.get("cart.ER6001").toString());
-						} else {
-							userCartInfo.setCount(userCartInfo.getCount()
-									+ count);
-							if (userCartService
-									.updateByPrimaryKeySelective(userCartInfo) > 0) {
-								json.put(BaseConfig.RESCODE, "0");
-								json.put(BaseConfig.RESMESSAGE, "success");
-								responseAjax(json, response);
-								return;
-							}
-						}
-					} else {// 购物车中没有该商品
-						userCart.setCount(count);
-						userCart.setAddTime(new Date());
-						if (userCartService.insertSelective(userCart) > 0) {
-							json.put(BaseConfig.RESCODE, "0");
-							json.put(BaseConfig.RESMESSAGE, "success");
-							responseAjax(json, response);
-							return;
-						}
-					}
-
-				} else {// 普通商品
+				} else {
+					// 普通商品
 					specId = null == specId ? 0 : specId;
 					UserCart userCart = new UserCart();
 					userCart.setUserId(user.getId());
@@ -149,10 +145,11 @@ public class ShoppingCart extends BaseController {
 					UserCart userCartInfo = userCartService
 							.selectByUserCart(userCart);// 登录用户的购物车和该商品的id
 														// 或者规格
-					if (null != userCartInfo) {// 购物车中存在当前规格的商品
+					if (null != userCartInfo) {
+						// 购物车中存在当前规格的商品
 						Map<String, Integer> mapTemp = productService
 								.getKuCunByProductIdsVsCompanyIdReturnSpecOrProductid(
-										prodId + "", companyid,
+										prodId + "",
 										(userCartInfo.getCount() + count) + "",
 										specId + "");
 						if (null != mapTemp && mapTemp.size() > 0) {
@@ -179,10 +176,11 @@ public class ShoppingCart extends BaseController {
 								return;
 							}
 						}
-					} else {// 购物车中没有该商品
+					} else {
+						// 购物车中没有该商品
 						Map<String, Integer> mapTemp = productService
 								.getKuCunByProductIdsVsCompanyIdReturnSpecOrProductid(
-										prodId + "", companyid, (count) + "",
+										prodId + "",  (count) + "",
 										specId + "");
 						if (null != mapTemp && mapTemp.size() > 0) {
 							//购物车添加失败
@@ -217,9 +215,6 @@ public class ShoppingCart extends BaseController {
 				json.put(BaseConfig.RESMESSAGE,
 						BaseConfig.MESSAGE.get("productInfo.ER5001").toString());
 			}
-			// json.put(BaseConfig.RESCODE, "ER9999");
-			// json.put(BaseConfig.RESMESSAGE, BaseConfig.MESSAGE.get("ER9999")
-			// .toString());
 		}
 		try {
 			responseAjax(json, response);
@@ -232,23 +227,18 @@ public class ShoppingCart extends BaseController {
 	 * 添加购物车
 	 * 
 	 * @param request
-	 * @param resposne
 	 * @param session
 	 * @throws UnsupportedEncodingException
 	 */
 	@RequestMapping("/addCarts")
 	public void addCarts(HttpServletRequest request,
 			HttpServletResponse response, HttpSession session, Integer prodId,
-			Integer specId, String companyId, Integer count)
+			Integer specId,  Integer count)
 			throws UnsupportedEncodingException {
 		JSONObject json = new JSONObject();
 		// 根据商品id查询商品的名称
 		Product pro = productService.selectByPrimaryKey(prodId);
 		String proName = pro.getName();
-		int companyid = 0;
-		if (Tools.notEmpty(companyId)) {
-			companyid = Integer.parseInt(companyId);
-		}
 		if (null == count || count < 1) {
 			//添加购物车失败：库存数量不足
 			json.put(BaseConfig.RESCODE, "ER6101");
@@ -274,7 +264,7 @@ public class ShoppingCart extends BaseController {
 					if (null != userCartInfo) {// 购物车中存在当前的商品
 						Map<String, Integer> mapTemp = productService
 								.getKuCunByProductIdsVsCompanyIdReturnSpecOrProductid(
-										prodId + "", companyid,
+										prodId + "",
 										(userCartInfo.getCount() + count) + "",
 										"");
 						if (null != mapTemp && mapTemp.size() > 0) {
@@ -316,10 +306,11 @@ public class ShoppingCart extends BaseController {
 					UserCart userCartInfo = userCartService
 							.selectByUserCart(userCart);// 登录用户的购物车和该商品的id
 														// 或者规格
-					if (null != userCartInfo) {// 购物车中存在当前规格的商品
+					if (null != userCartInfo) {
+						// 购物车中存在当前规格的商品
 						Map<String, Integer> mapTemp = productService
 								.getKuCunByProductIdsVsCompanyIdReturnSpecOrProductid(
-										prodId + "", companyid,
+										prodId + "",
 										(userCartInfo.getCount() + count) + "",
 										specId + "");
 						if (null != mapTemp && mapTemp.size() > 0) {
@@ -348,10 +339,11 @@ public class ShoppingCart extends BaseController {
 								return;
 							}
 						}
-					} else {// 购物车中没有该商品
+					} else {
+						// 购物车中没有该商品
 						Map<String, Integer> mapTemp = productService
 								.getKuCunByProductIdsVsCompanyIdReturnSpecOrProductid(
-										prodId + "", companyid, (count) + "",
+										prodId + "", (count) + "",
 										specId + "");
 						if (null != mapTemp && mapTemp.size() > 0) {
 							//添加购物车失败
@@ -404,7 +396,6 @@ public class ShoppingCart extends BaseController {
 	 * 获取当前用户的购物车数量
 	 * 
 	 * @param request
-	 * @param resposne
 	 * @param session
 	 */
 	@RequestMapping("/getCountByUserId")
@@ -434,20 +425,18 @@ public class ShoppingCart extends BaseController {
 	 * 用户的购物车
 	 * 
 	 * @param request
-	 * @param resposne
 	 * @param session
 	 */
 	@RequestMapping("/userCart")
 	public void userCart(HttpServletRequest request,
-			HttpServletResponse response, HttpSession session, String companyId) {
+			HttpServletResponse response, HttpSession session) {
 		JSONObject json = new JSONObject();
-		User user = (User) session
-				.getAttribute(SystemConfig.SESSION_FRONT_USER);// 登录用户
-		if (companyId != null && companyId != "") {
-			Company company = companyService.getCompanyById(Integer
-					.parseInt(companyId));
-			json.put("Company", company);
-		}
+		User user = (User) session.getAttribute(SystemConfig.SESSION_FRONT_USER);// 登录用户
+//		if (companyId != null && companyId != "") {
+//			Company company = companyService.getCompanyById(Integer
+//					.parseInt(companyId));
+//			json.put("Company", company);
+//		}
 
 		if (user == null) {// 用户未登录
 			json.put(BaseConfig.RESCODE, "1");
@@ -509,18 +498,16 @@ public class ShoppingCart extends BaseController {
 
 	@RequestMapping("/ifAboveStock")
 	public void ifAboveStock(HttpServletResponse response, String prodIds,
-			Integer companyId, String counts, String specIds) {
+							 String counts, String specIds) {
 
 		JSONObject json = new JSONObject();
 		Map<String, Integer> map = new HashMap<String, Integer>();
 		map = productService
-				.getKuCunByProductIdsVsCompanyIdReturnSpecOrProductid(prodIds,
-						companyId, counts, specIds);
+				.getKuCunByProductIdsVsCompanyIdReturnSpecOrProductid(prodIds, counts, specIds);
 		json.put("map", map);
 		try {
 			responseAjax(json, response);
 		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -590,13 +577,11 @@ public class ShoppingCart extends BaseController {
 	 * 保存购物车条目到sessson中
 	 * 
 	 * @param session
-	 * @param cartItems
 	 */
 	@RequestMapping("/saveCartItems")
 	public void saveToSessionCartItems(HttpServletResponse response,
-			HttpSession session, String cartItemIds, String companyId) {
+			HttpSession session, String cartItemIds) {
 		session.setAttribute("cartItemIds", cartItemIds);
-		session.setAttribute("companyId", companyId);
 		System.out.println(cartItemIds);
 		JSONObject json = new JSONObject();
 		json.put(BaseConfig.RESCODE, "1");
@@ -604,7 +589,6 @@ public class ShoppingCart extends BaseController {
 		try {
 			responseAjax(json, response);
 		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 

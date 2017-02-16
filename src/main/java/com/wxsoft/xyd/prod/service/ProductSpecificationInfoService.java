@@ -33,4 +33,6 @@ public interface ProductSpecificationInfoService {
 	List<ProductSpecificationInfo> listAjaxPageGetSpecProdByCaId(ProductSpecificationInfo psi);
 	
 	List<ProductSpecificationInfo> listAjaxPageGetSpecProdByCompanyId(ProductSpecificationInfo psi);
+
+    int selectTotalInvcountByProid(Integer prodId);
 }

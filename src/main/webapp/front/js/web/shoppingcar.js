@@ -97,8 +97,7 @@ $("#lingquan").html("购物车");
 				data : {
 					prodId : $(this).attr("prodId"),
 					specId : $(this).attr("specid"),
-					count : 1,
-					companyId : $.cookie("sys_base_companyId")
+					count : 1
 				},
 				async : true,
 				success : function(res) {
@@ -270,9 +269,7 @@ $("#lingquan").html("购物车");
 		//加数量
 		function plus(cartId, productId, count, specId) {
 			var quantity = Number($("#" + cartId + "quantity").val());
-			var companyId = $.cookie('sys_base_companyId');
-
-			var stockMap = isAbolveStock(productId, companyId, quantity + 1,
+			var stockMap = isAbolveStock(productId, quantity + 1,
 					specId);
 
 			if (JSON.stringify(stockMap.map).indexOf("SPEC_") >= 0
@@ -295,12 +292,11 @@ $("#lingquan").html("购物车");
 		//减数量
 		function reduction(cartId, productId, count, specId) {
 			var quantity = Number($("#" + cartId + "quantity").val());
-			var companyId = $.cookie('sys_base_companyId');
 
 			if (quantity == 1 || quantity == 0) {
 				return false;
 			} else {
-				var stockMap = isAbolveStock(productId, companyId,
+				var stockMap = isAbolveStock(productId,
 						quantity - 1, specId);
 
 				if (JSON.stringify(stockMap.map).indexOf("SPEC_") >= 0
@@ -357,7 +353,7 @@ $("#lingquan").html("购物车");
 
 		}
         //判断是否超出库存
-		function isAbolveStock(prodIds, compayId, counts, specIds) {
+		function isAbolveStock(prodIds, counts, specIds) {
 			var stockMap;
 			$.ajax({
 				async : false,
@@ -367,7 +363,6 @@ $("#lingquan").html("购物车");
 
 				data : {
 					"prodIds" : prodIds,
-					"companyId" : compayId,
 					"counts" : counts,
 					"specIds" : specIds
 				},
@@ -381,77 +376,53 @@ $("#lingquan").html("购物车");
 		}
        //初始化购物车
 		function initCart() {
+            //获取购物车数据
+            $.ajax({
+                async : false,
+                cache : false,
+                url : SHOPDOMAIN+"/wap/shopCart/userCart.html",
+                success : function(data) {
+                    var dataInfo = $.parseJSON(data);
+                    if (dataInfo.res_code == "1") {
+                        showMessageAutoTime("您还没有登录", 2500);//提示语
+                        window.location.href = "login.html";
+                    } else if (dataInfo.res_code == "0") {
 
-			var companyId = $.cookie('sys_base_companyId');
+                        var evalText = doT.template($(
+                            "#interpolationtmpl").html());
+                        if (dataInfo.list == null
+                            || dataInfo.list == "") {
+                            $("#topSetAll").hide();
+                            $("#footSetAll").hide();
+                            $("#emptyCart")
+                                .html(
+                                    " <div class='per_noorder'>"
+                                    + " <div class=' per_ per_noorderleft flW'><img src='"+SHOPDOMAIN+"/front/images/web/per_noorder.png' width='104' height='48' alt=''/></div>"
+                                    + "<div class=' per_noorderright flW'>"
+                                    + " <ul>"
+                                    + "<li>SORRY~您的购物车还没有商品哦~</li>"
+                                    + "<li>可以去看看有哪些想买的</li>"
+                                    + " <li><input type='button' onclick='toIndex()' class='per_evaluate_btn' value='随便逛逛'></li>"
+                                    + "</ul>"
+                                    + "</div>");
+                        } else {//登录后初始化购物车
+                            $("#emptyCart").html(" <table width='100%' border='0' cellspacing='0' cellpadding='0'>"+
+                                "<tbody id='shopping-cart'> </tbody></table>");
+                            $("#shopping-cart").html(evalText(dataInfo.list));
+                            $("#shopping-cart")
+                                .append(
+                                    " <div style='clear: both' id='bbbbb'></div>");
+                            intCartT();//初始化购物车
+                            setAll(true);//默认选中所有购物车条目
+                        }
 
-			if (companyId == null || companyId == "") {
-				showMessageAutoTime("为了更好的给您提供服务，请先选择距离您收货地最近的基地", 2500);//提示语
-				window.location.href = SHOPDOMAIN + '/ditu.html';//跳转的地图页
-				return false;
-			} else {//获取购物车数据
-				$
-						.ajax({
-							async : false,
-							cache : false,
-							url : SHOPDOMAIN+"/wap/shopCart/userCart.html",
-							data : {
-								"companyId" : companyId
-							},
-							success : function(data) {
-                               
-								var dataInfo = $.parseJSON(data);
-
-								$("#address")
-										.text(dataInfo.Company.companyName);
-								$("#comSendPrice").text(
-										dataInfo.Company.sendPrice);
-								$("#comSendPriceT").text(
-										dataInfo.Company.sendPrice);
-								$("#comChargeSendPrice").text(
-										dataInfo.Company.chargeSendPrice);
-								if (dataInfo.res_code == "1") {
-									showMessageAutoTime("您还没有登录", 2500);//提示语
-									window.location.href = "login.html";
-								} else if (dataInfo.res_code == "0") {
-
-									var evalText = doT.template($(
-											"#interpolationtmpl").html());
-									if (dataInfo.list == null
-											|| dataInfo.list == "") {
-										$("#topSetAll").hide();
-										$("#footSetAll").hide();
-										$("#emptyCart")
-												.html(
-														" <div class='per_noorder'>"
-																+ " <div class=' per_ per_noorderleft flW'><img src='"+SHOPDOMAIN+"/front/images/web/per_noorder.png' width='104' height='48' alt=''/></div>"
-																+ "<div class=' per_noorderright flW'>"
-																+ " <ul>"
-																+ "<li>SORRY~您的购物车还没有商品哦~</li>"
-																+ "<li>可以去看看有哪些想买的</li>"
-																+ " <li><input type='button' onclick='toIndex()' class='per_evaluate_btn' value='随便逛逛'></li>"
-																+ "</ul>"
-																+ "</div>");
-									} else {//登录后初始化购物车
-										$("#emptyCart").html(" <table width='100%' border='0' cellspacing='0' cellpadding='0'>"+
-												"<tbody id='shopping-cart'> </tbody></table>");
-										$("#shopping-cart").html(evalText(dataInfo.list));
-										$("#shopping-cart")
-												.append(
-														" <div style='clear: both' id='bbbbb'></div>");
-										intCartT();//初始化购物车
-										setAll(true);//默认选中所有购物车条目
-									}
-
-								}
-							}
-						});
-			}
+                    }
+                }
+            });
 
 		}
       //再次初始化购物车
 		function intCartT() {
-			var companyId = $.cookie('sys_base_companyId');
-
 			var prods = "";
 			var counts = "";
 			var specIds = "";
@@ -464,7 +435,7 @@ $("#lingquan").html("购物车");
 
 			});
 
-			var stockMap = isAbolveStock(prods.replace(/,$/g, ""), companyId,
+			var stockMap = isAbolveStock(prods.replace(/,$/g, ""),
 					counts.replace(/,$/g, ""), specIds.replace(/,$/g, ""));//判断是否 超出库存
 
 			if (stockMap != null && stockMap != "" && stockMap.map != null
@@ -523,7 +494,6 @@ $("#lingquan").html("购物车");
 				cartItemIds[index++] = $(this).attr("carId");
 
 			});
-			var companyId = $.cookie('sys_base_companyId');
 
 			if (cartItemIds.length == 0) {
 				showMessageAutoTime("您未选择任何商品,请选择商品进行结算", 1500);
@@ -537,7 +507,6 @@ $("#lingquan").html("购物车");
 				dataType : "json",
 				data : {
 					"cartItemIds" : $("#cartItemIds").val(),
-					companyId : companyId,
 				},
 				success : function(data) {
 					if (data.res_code == "1") {

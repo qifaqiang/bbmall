@@ -139,7 +139,7 @@
 		resultType="map">
 		SELECT
 		tmp.id,tmp.name,origin,tmp.price,note,tmp.descn,tmp.picuri,tmp.status,tmp.weight,tmp.catalog_id_1,tmp.catalog_id_2,
-		tmp.inventorynumber,tmp.unit,tmp.istop,type,tmp.market_price,tmp.sell_status,prod_basic_id,
+		tmp.inventorynumber,tmp.unit,tmp.istop,type,tmp.market_price,tmp.sell_status,prod_basic_id,tmp.company_id,
 		(select max(psi.price) from product_specification_info psi where psi.del_flag =0 AND
 		psi.product_id=tmp.id) as max_price,
 		(select max(psi.market_price) from

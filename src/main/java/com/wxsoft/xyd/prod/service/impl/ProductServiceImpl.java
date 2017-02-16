@@ -518,9 +518,9 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	public Map<String, Integer> getKuCunByProductIdsVsCompanyIdReturnSpecOrProductid(
-			String prodIds, Integer companyId, String counts, String specIds) {
+			String prodIds, String counts, String specIds) {
 		// 放置结果
-		Map<String, Integer> result = new HashMap<String, Integer>();
+		Map<String, Integer> result = new HashMap<>();
 
 		// 临时存放
 		CompanyStock temp = new CompanyStock();
@@ -532,9 +532,11 @@ public class ProductServiceImpl implements ProductService {
 			for(int i=0;i<prodId.length;i++){
 				Product product = productMapper.selectByPrimaryKey(Integer.parseInt(prodId[i]));//
 				if(null != product){
-					if (product.getSellStatus() != 1 || product.getDelFlag() == 1) {// 判断商品状态
+					// 判断商品状态
+					if (product.getSellStatus() != 1 || product.getDelFlag() == 1) {
 						if (product.getType() == 0) {// 普通商品
-							if(null == product.getIsSpecification() || 0== product.getIsSpecification()){//没有启用规格
+							if(null == product.getIsSpecification() || 0== product.getIsSpecification()){
+								//没有启用规格
 								result.put("P_" + product.getId(), 0);
 							}else{
 								result.put("SPEC_" + specId[i], 0);
@@ -543,60 +545,58 @@ public class ProductServiceImpl implements ProductService {
 							result.put("P_" + product.getId(), 0);
 						}
 					} else {
-						if (product.getType() == 0) {// 普通商品
-							if(null == product.getIsSpecification() || product.getIsSpecification()==0){//没有启用规格
-								ProductSpecificationStock pss_t = new ProductSpecificationStock();
-								pss_t.setCompanyId(companyId);
-								pss_t.setProductId(product.getId());
-								pss_t.setType(0);
-								ProductSpecificationStock resultPss = productSpecificationStockMapper.selectByProductSpecificationStock(pss_t);
-								if(null == resultPss || resultPss.getInventorycount() <=0 || Integer.parseInt(count[i]) > resultPss.getInventorycount()){
-									result.put("P_" + product.getId(), resultPss == null? 0 : resultPss.getInventorycount());
+						if (product.getType() == 0) {
+							// 普通商品
+							if(null == product.getIsSpecification() || product.getIsSpecification()==0){
+								//没有启用规格
+								if( product.getInventorynumber() <=0 || Integer.parseInt(count[i]) > product.getInventorynumber() ){
+									result.put("P_" + product.getId(), product.getInventorynumber());
 								}
 							}else{
-								ProductSpecificationStock pss_t = new ProductSpecificationStock();
-								pss_t.setCompanyId(companyId);
-								pss_t.setSpecificationInfoId(Integer.parseInt(specId[i]));
-								pss_t.setProductId(product.getId());
-								pss_t.setType(1);
-								ProductSpecificationStock resultPss = productSpecificationStockMapper.selectByProductSpecificationStock(pss_t);
-								if(null == resultPss || resultPss.getInventorycount() <=0 || Integer.parseInt(count[i]) > resultPss.getInventorycount()){
-									result.put("SPEC_"+specId[i], resultPss == null? 0 : resultPss.getInventorycount());
+								ProductSpecificationInfo psi = new ProductSpecificationInfo();
+								psi.setProductId(product.getId());
+								psi.setId(Integer.parseInt(specId[i]));
+								psi.setDelFlag("0");
+								psi = productSpecificationInfoMapper.selectByProductSpecificationInfo(psi);
+
+								if(null == psi || psi.getInventorynumber() <=0 || Integer.parseInt(count[i]) > psi.getInventorynumber()){
+									result.put("SPEC_"+specId[i], psi == null? 0 : psi.getInventorynumber());
 								}
 							}
 							
-						} else {//礼盒商品
-							ProductPackage pPack = new ProductPackage();
-							pPack.setProdId(product.getId());
-							List<ProductPackage> pplist = productPackageMapper
-									.getAllByProductPackage(pPack);
-							boolean flag = true;//商品包里面第一个产品
-							int maxCount = 0;
-							//跟里面包含的产品的库存来判断该礼盒是否有库存
-							for (ProductPackage productPackage : pplist) {
-								ProductSpecificationStock pss_t = new ProductSpecificationStock();
-								pss_t.setCompanyId(companyId);
-								pss_t.setSpecificationInfoId(productPackage.getSpecificationInfoId());
-								pss_t.setProductId(productPackage.getProductId());
-								pss_t.setType(productPackage.getType());
-								ProductSpecificationStock resultPss = productSpecificationStockMapper.selectByProductSpecificationStock(pss_t);
-								if(resultPss == null || resultPss.getInventorycount() <= 0){
-									maxCount = 0;
-									break;
-								}else{
-									if(flag){
-										flag = false;
-										maxCount = resultPss.getInventorycount();
-									}else{
-										if(resultPss.getInventorycount() < maxCount){
-											maxCount = resultPss.getInventorycount();
-										}
-									}
-								}
-							}
-							if(maxCount == 0 || Integer.parseInt(count[i]) > maxCount){
-								result.put("P_" + product.getId(), maxCount);
-							}
+						} else {
+							//礼盒商品
+//							ProductPackage pPack = new ProductPackage();
+//							pPack.setProdId(product.getId());
+//							List<ProductPackage> pplist = productPackageMapper
+//									.getAllByProductPackage(pPack);
+//							boolean flag = true;//商品包里面第一个产品
+//							int maxCount = 0;
+//							//跟里面包含的产品的库存来判断该礼盒是否有库存
+//							for (ProductPackage productPackage : pplist) {
+//								ProductSpecificationStock pss_t = new ProductSpecificationStock();
+//								pss_t.setCompanyId(companyId);
+//								pss_t.setSpecificationInfoId(productPackage.getSpecificationInfoId());
+//								pss_t.setProductId(productPackage.getProductId());
+//								pss_t.setType(productPackage.getType());
+//								ProductSpecificationStock resultPss = productSpecificationStockMapper.selectByProductSpecificationStock(pss_t);
+//								if(resultPss == null || resultPss.getInventorycount() <= 0){
+//									maxCount = 0;
+//									break;
+//								}else{
+//									if(flag){
+//										flag = false;
+//										maxCount = resultPss.getInventorycount();
+//									}else{
+//										if(resultPss.getInventorycount() < maxCount){
+//											maxCount = resultPss.getInventorycount();
+//										}
+//									}
+//								}
+//							}
+//							if(maxCount == 0 || Integer.parseInt(count[i]) > maxCount){
+//								result.put("P_" + product.getId(), maxCount);
+//							}
 						}
 					}
 
@@ -606,221 +606,6 @@ public class ProductServiceImpl implements ProductService {
 				
 			}
 		}
-		
-		
-//		// 临时存放
-//		CompanyStock temp = new CompanyStock();
-//		String[] prodId = prodIds.split(",");
-//		String[] count = null == counts ? null : counts.split(",");
-//		String[] specId = null == specIds ? null : specIds.split(",");
-//
-//		List<Product> p = productMapper.getStockNoCheckStateByProductId(prodId);// 临时获取所有商品
-//
-//		List<CompanyStock> tempCompanyStock = new ArrayList<CompanyStock>();// 临时存放基地库存
-//		List<ProductSpecificationInfo> tempProductSpecificationInfo = new ArrayList<ProductSpecificationInfo>();// 临时存放商品规格信息
-//		Map<Integer, ProductSpecificationInfo> tempProductSpecificationInfoMap = new HashMap<Integer, ProductSpecificationInfo>();
-//		Map<Integer, CompanyStock> tempCompanyStockMap = new HashMap<Integer, CompanyStock>();
-//		int i = 0;
-//		Set<Integer> tempBasicIds = new HashSet<Integer>();// 临时存放商品字典id
-//		Set<Integer> tempProdID = new HashSet<Integer>();// 临时存放商品id
-//		List<Map<String, Object>> tempSpAll = new ArrayList<Map<String, Object>>();
-//		
-//		Map<String, Integer> tempStockMap = new HashMap<String, Integer>();
-//		Set<String> typespecIdProdId = new HashSet<String>();
-//		int j = 0;
-//		for (Product product : p) {
-//			if (product.getSellStatus() != 1 || product.getDelFlag() == 1) {// 判断商品状态
-//				if (product.getType() == 0) {// 普通商品
-//					if(null == product.getIsSpecification() || 0== product.getIsSpecification()){//没有启用规格
-//						result.put("P_" + product.getId(), 0);
-//					}else{
-//						result.put("SPEC_" + specId[i], 0);
-//					}
-//				} else {// 礼盒包商品
-//					result.put("P_" + product.getId(), 0);
-//				}
-//			} else {
-//				if (product.getType() == 0) {// 普通商品
-//					if (null != specId) {
-//						String key_t ="";
-//						if(null == product.getIsSpecification() || 0== product.getIsSpecification()){//没有启用规格
-//							key_t = "0_0_"+product.getId();
-//						}else{
-//							key_t = "1_"+specId[j]+"_"+product.getId();
-//						}
-//						if(typespecIdProdId.contains(key_t)){
-//							Integer cur_count = tempStockMap.get(key_t);
-//							tempStockMap.put(key_t, cur_count + Integer.parseInt(count[j]));
-//						}else{
-//							typespecIdProdId.add(key_t);
-//							tempStockMap.put(key_t,Integer.parseInt(count[j]));
-//						}
-//					}
-//				} else {//礼盒商品
-//					ProductPackage pPack = new ProductPackage();
-//					pPack.setProdId(product.getId());
-//					List<ProductPackage> pplist = productPackageMapper.getAllByProductPackage(pPack);
-//					product.setProductPackageList(pplist);
-//					for (ProductPackage pp2 : pplist) {
-//						String key_t ="";
-//						if(pp2.getType() == 0){//没有启用规格
-//							key_t = "0_0_"+pp2.getProductId();
-//						}else{
-//							key_t = "1_"+pp2.getSpecificationInfoId()+"_"+pp2.getProductId();
-//						}
-//						if(typespecIdProdId.contains(key_t)){
-//							Integer cur_count = tempStockMap.get(key_t);
-//							tempStockMap.put(key_t, cur_count + Integer.parseInt(count[j]));
-//						}else{
-//							typespecIdProdId.add(key_t);
-//							tempStockMap.put(key_t,Integer.parseInt(count[j]));
-//						}
-//					}
-//				}
-//			}
-//			j++;
-//
-//		}
-//		if (tempStockMap.size() == 0) {
-//			return result;
-//		}
-//		ProductSpecificationStock pss_temp = null;
-//		for (String str : typespecIdProdId) {
-//			pss_temp = new ProductSpecificationStock();
-//			String[] strs = str.split("_");
-//			pss_temp.setType(Integer.parseInt(strs[0]));
-//			pss_temp.setSpecificationInfoId(Integer.parseInt(strs[1]));
-//			pss_temp.setProductId(Integer.parseInt(strs[2]));
-//			pss_temp.setCompanyId(companyId);
-//			Integer buyCount = tempStockMap.get(str);//将要购买的数量
-//			pss_temp.setInventorycount(buyCount);
-//		}
-//		
-//		
-//		
-//		
-//		
-//		Map<String, Object> params = new HashMap<String, Object>(3);
-//		params.put("companyId", companyId);
-//		if(null != tempBasicIds && tempBasicIds.size()>0){
-//			params.put("prodBasicId", tempBasicIds);
-//		}else{
-//			params.put("prodBasicId", null);
-//		}
-//		params.put("tempProdID", tempProdID);
-//		tempCompanyStock = companyStockMapper.selectByCompanyStockMaps(params);// error
-//
-//		for (CompanyStock cStock : tempCompanyStock) {
-//			tempCompanyStockMap.put(cStock.getProdBasicId(), cStock);
-//		}
-//
-//		// 如果規格爲空，那么取出该商品的最小规格还存起来
-//		if (null == specId && tempProdID.size() > 0) {
-//			tempProductSpecificationInfo = productSpecificationInfoMapper
-//					.getLowInventorynumberMaps(params);
-//			for (ProductSpecificationInfo psInfo : tempProductSpecificationInfo) {
-//				tempProductSpecificationInfoMap.put(psInfo.getProductId(),
-//						psInfo);
-//			}
-//		}
-//		// 如果規格不爲空，那么取出该商品的传入规格还存起来
-//		if (null != specId && tempProdID.size() > 0) {
-//			tempProductSpecificationInfo = productSpecificationInfoMapper
-//					.getInventorynumberMaps(tempSpAll);
-//			for (ProductSpecificationInfo psInfo : tempProductSpecificationInfo) {
-//				tempProductSpecificationInfoMap.put(psInfo.getId(), psInfo);
-//			}
-//		}
-//
-//		for (Product product : p) {
-//			if (product.getSellStatus() != 1 || product.getDelFlag() == 1) {// 判断商品状态
-//
-//				if (product.getType() == 0) {// 普通商品
-//					result.put("SPEC_" + specId[i], 0);
-//				} else {// 礼盒包商品
-//					result.put("P_" + product.getId(), 0);
-//				}
-//			} else {
-//				int tempCount = 1;
-//
-//				if (null != count) {
-//					tempCount = Integer.parseInt(count[i]);
-//				}
-//				if (tempCount < 1) {
-//					if (product.getType() == 0) {// 普通商品
-//						result.put("SPEC_" + specId[i], 0);
-//					} else {// 礼盒包商品
-//						result.put("P_" + product.getId(), 0);
-//					}
-//				}
-//				if (product.getType() == 0) {// 普通商品
-//					// 记录临时规格，如果不传规格id 那么查询最小
-//					ProductSpecificationInfo pSpec = null;
-//					temp = tempCompanyStockMap.get(product.getProdBasicsId());
-//					if (null != specId) {// 存在规格id
-//						pSpec = tempProductSpecificationInfoMap.get(Integer
-//								.parseInt(specId[i]));
-//
-//					} else {
-//						pSpec = tempProductSpecificationInfoMap.get(product
-//								.getId());
-//					}
-//
-//					if (null != pSpec) {
-//						if (null != temp
-//								&& (temp.getInventorynumber() - pSpec
-//										.getInventorynumber() * tempCount) >= 0) {// 基地商品库存不足
-//
-//						} else {
-//							if (temp != null) {
-//								int tCount = temp.getInventorynumber()
-//										/ pSpec.getInventorynumber();// 最大库存
-//								result.put("SPEC_" + pSpec.getId(), tCount);
-//							} else {
-//								result.put("SPEC_" + pSpec.getId(), 0);
-//							}
-//						}
-//					} else {
-//						result.put("SPEC_" + specId[i], 0);
-//					}
-//
-//				} else {// 礼盒包商品
-//
-//					List<ProductPackage> pp = product.getProductPackageList();
-//					boolean canSale = true;
-//					List<Integer> tempC = new ArrayList<Integer>();// 礼盒中每一个商品的最大数量
-//
-//					for (ProductPackage productPackage : pp) {
-//						temp = tempCompanyStockMap.get(productPackage
-//								.getProdBaseicId());
-//						// 获取礼盒中每一个字典的id对应的系统库存表
-//						if (canSale
-//								&& null != temp
-//								&& (temp.getInventorynumber() - productPackage
-//										.getInventorynumber() * tempCount) >= 0) {// 基地商品库存不足
-//						} else {
-//							if (null == temp) {
-//								tempC.add(0);
-//								canSale = false;
-//							} else {
-//								int tCount = temp.getInventorynumber()
-//										/ productPackage.getInventorynumber();
-//								tempC.add(tCount);
-//								canSale = false;
-//							}
-//
-//						}
-//					}
-//					if (canSale) {
-//					} else {
-//						result.put("P_" + product.getId(),
-//								tempC.size() > 0 ? Collections.min(tempC) : 0);
-//					}
-//				}
-//			}
-//			i++;
-//		}
-
 		return result;
 	}
 

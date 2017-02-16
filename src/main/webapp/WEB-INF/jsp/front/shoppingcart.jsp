@@ -12,12 +12,12 @@ body{background-color:white}
 </style>
 	<div class="per_return_main">
 		<div class="per_shoptitle">我的购物车</div>
-		<div class="per_choice">
+		<%--<div class="per_choice">
 			所选商品由【<span id="address"></span>】为您配送 满<i id="comSendPrice"></i>(元)免运费；不足<i
 				id="comSendPriceT"></i>(元)，收运费<i id="comChargeSendPrice"></i>(元)。<span
 				class="frW"> <% /**<a href="#" onclick="toditu()"><img
 					src="${SHOPDOMAIN}/front/images/web/arr-r.png" /></a> **/%></span>
-		</div>
+		</div>--%>
 		<div class="per_car_title">
 			<table width="100%" border="0" cellspacing="0" cellpadding="0">
 				<input type="hidden" id="ids">
