@@ -441,7 +441,6 @@ public class ShoppingCart extends BaseController {
 	public void userCart(HttpServletRequest request,
 			HttpServletResponse response, HttpSession session, String companyId) {
 		JSONObject json = new JSONObject();
-		System.out.println(111);
 		User user = (User) session
 				.getAttribute(SystemConfig.SESSION_FRONT_USER);// 登录用户
 		if (companyId != null && companyId != "") {
