@@ -110,4 +110,5 @@ public interface ProductMapper {
 
 	List<Product> selectTopRecommendProductByCart();
 
+    int updateOrderProdDealStock(Product product);
 }

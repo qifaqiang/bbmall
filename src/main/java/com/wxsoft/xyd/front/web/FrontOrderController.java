@@ -161,9 +161,9 @@ public class FrontOrderController extends BaseController {
 				.getAttribute(SystemConfig.SESSION_FRONT_USER);// 获得当前登录用户
 		user = userService.selectByPrimaryKey(user.getId());
 		boolean isFirst = false;// 是否首单
-		if (user.getIsFirstOrder() == 1) {
+		/*if (user.getIsFirstOrder() == 1) {
 			isFirst = true;// 是首单
-		}
+		}*/
 		Map<String, Object> retMap;
 		try {
 			retMap = ordersService.insertAddOrder(cartItems,

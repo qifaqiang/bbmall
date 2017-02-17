@@ -41,7 +41,7 @@
 
 	<select id="selectByProductSpecificationInfo" parameterType="ProductSpecificationInfo"
 		resultMap="productSpecificationInfoMap">
-		SELECT id,spec_id,value,price,inventorynumber,market_price,product_id
+		SELECT id,spec_id,price,inventorynumber,market_price,product_id
 		from product_specification_info tmp WHERE
 		<if test="id != null">id = #{id} and </if>
 		<if test="specId != null">spec_id = #{specId} and </if>
@@ -250,4 +250,11 @@ id=#{id},spec_id=#{specId},value=#{value},price=#{price},inventorynumber=#{inven
 		del_flag = 0
 		AND product_id = #{prodid}
 	</select>
+
+	<update id="updateKuCunJianNew" parameterType="ProductSpecificationInfo">
+		update product_specification_info
+		SET inventorynumber =  inventorynumber + #{inventorynumber}
+		where id = #{id}
+		and (inventorynumber + #{inventorynumber}) >= 0
+	</update>
 </mapper>

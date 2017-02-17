@@ -1226,123 +1226,145 @@ public class OrdersServiceImpl implements OrdersService {
 		 * : specIds.split(",");
 		 */
 		List<Product> p = productMapper.getPackageByProdIds(prodId);
-		Map<String, Product> mapProduct = new HashMap<String, Product>();
+		Map<String, Product> mapProduct = new HashMap<>();
 		for (Product product : p) {
 			mapProduct.put(product.getId() + "", product);
 		}
-		// 临时存放
-		ProductSpecificationStock pss_temp = null;
 		// 记录商品规格 库存扣减失败情况下调用
-		Map<Integer, String> mapRecordProductInfo = new HashMap<Integer, String>();
-		
+		Map<Integer, String> mapRecordProductInfo = new HashMap<>();
+		Map<Integer, String> mapRecordProductInfo2 = new HashMap<>();
+		ProductSpecificationInfo productSpecificationInfo = null;
 		int i = 0;
-		for (String pid : prodId) {
-			Product product = mapProduct.get(pid);
+		if (null != specId) {
+			for (String pid : prodId) {
+				Product product = mapProduct.get(pid);
 
-			int tempCount = 0;
+				int tempCount = 0;
 
-			if (null != count) {
-				tempCount = Integer.parseInt(count[i]);
-			} else {
-				throw new Exception("参数错误");
-			}
+				if (null != count) {
+					tempCount = Integer.parseInt(count[i]);
+				} else {
+					throw new Exception("参数错误");
+				}
 
-			if (product.getType() == 0) {// 普通商品
-				if (null != specId) {// 存在规格id
-					pss_temp = new ProductSpecificationStock();
-					pss_temp.setCompanyId(companyId);
-					pss_temp.setProductId(product.getId());
-					if(null == product.getIsSpecification() || 0 == product.getIsSpecification()){//该商品没有开启规格
-						pss_temp.setSpecificationInfoId(0);
-						pss_temp.setType(0);
-					}else{
-						pss_temp.setSpecificationInfoId(Integer.parseInt(specId[i]));
-						pss_temp.setType(1);
-					}
-					pss_temp = productSpecificationStockMapper.selectByProductSpecificationStock(pss_temp);
-					if (null != pss_temp) {// 基地商品库存
-						int cur_invencount = pss_temp.getInventorycount();
-						
-						pss_temp.setInventorycount(tempCount * -1);
+				if (product.getType() == 0) {
+					// 普通商品
+					if(null == product.getIsSpecification() || 0 == product.getIsSpecification()){
+						//该商品没有开启规格
+						int cur_invencount = product.getInventorynumber();//该商品当前库存
+						product.setInventorynumber(tempCount * -1);
 						// 修改库存
-						if (productSpecificationStockMapper.updateOrderProdDeal(pss_temp) <= 0) {
-							if (!mapRecordProductInfo.containsKey(pss_temp.getId())) {
+						if (productMapper.updateOrderProdDealStock(product) <= 0) {
+							if (!mapRecordProductInfo.containsKey(product.getId())) {
 								throw new Exception("订单创建失败,原因："
 										+ product.getName() + "["
 										+ cur_invencount
 										+ product.getUnit() + "] 库存不足");
-	
+
 							} else {
 								throw new Exception("订单创建失败,原因："
-										+ mapRecordProductInfo.get(pss_temp.getId())
+										+ mapRecordProductInfo.get(product.getId())
 										+ "," + product.getName()+"["+cur_invencount+product.getUnit()+"]"
 										+ "存在冲突导致总购买数量超过系统库存，请分别提交订单！");
 							}
 						}else{
 							//记录一下该规格
-							if(mapRecordProductInfo.containsKey(pss_temp.getId())){
-								mapRecordProductInfo.put(pss_temp.getId(), mapRecordProductInfo.get(pss_temp.getId()) +","+product.getName()+"["+cur_invencount+product.getUnit()+"]");
+							if(mapRecordProductInfo.containsKey(product.getId())){
+								mapRecordProductInfo.put(product.getId(), mapRecordProductInfo.get(product.getId()) +","+product.getName()+"["+cur_invencount+product.getUnit()+"]");
 							}else{
-								mapRecordProductInfo.put(pss_temp.getId(), product.getName()+"["+cur_invencount+product.getUnit()+"]");
+								mapRecordProductInfo.put(product.getId(), product.getName()+"["+cur_invencount+product.getUnit()+"]");
 							}
 						}
-
-					} else {
-						throw new Exception("订单创建失败，原因：商品不存在");
-					}
-				} else {
-					throw new Exception("订单创建失败，原因：商品不存在");
-				}
-			} else {// 礼盒包商品
-				List<ProductPackage> pp = product.getProductPackageList();
-				for (ProductPackage productPackage : pp) {
-					pss_temp = new ProductSpecificationStock();
-					pss_temp.setCompanyId(companyId);
-					pss_temp.setProductId(productPackage.getProductId());
-					if(0 == productPackage.getType()){//该商品没有开启规格
-						pss_temp.setSpecificationInfoId(0);
-						pss_temp.setType(0);
 					}else{
-						pss_temp.setSpecificationInfoId(productPackage.getSpecificationInfoId());
-						pss_temp.setType(1);
-					}
-					pss_temp = productSpecificationStockMapper.selectByProductSpecificationStock(pss_temp);
+						//开启规格了
+						productSpecificationInfo = new ProductSpecificationInfo();
+						productSpecificationInfo.setId(Integer.parseInt(specId[i]));
+						productSpecificationInfo.setProductId(product.getId());
+						productSpecificationInfo.setDelFlag("0");//未删除的
+						productSpecificationInfo = productSpecificationInfoMapper.selectByProductSpecificationInfo(productSpecificationInfo);
+						if ( productSpecificationInfo != null ) {
+							int cur_invencount = productSpecificationInfo.getInventorynumber();//该商品当前库存
+							productSpecificationInfo.setInventorynumber(tempCount * -1);
+							// 修改库存
+							if (productSpecificationInfoMapper.updateKuCunJianNew(productSpecificationInfo) <= 0) {
+								if (!mapRecordProductInfo2.containsKey(productSpecificationInfo.getId())) {
+									throw new Exception("订单创建失败,原因："
+											+ product.getName() + "["
+											+ cur_invencount
+											+ product.getUnit() + "] 库存不足");
 
-					if (null != pss_temp) {// 基地商品库存
-						int cur_invencount = pss_temp.getInventorycount();
-						
-						pss_temp.setInventorycount(tempCount * -1);
-						// 修改库存
-						if (productSpecificationStockMapper.updateOrderProdDeal(pss_temp) <= 0) {
-							if (!mapRecordProductInfo.containsKey(pss_temp.getId())) {
-								throw new Exception("订单创建失败,原因："
-										+ product.getName() + "["
-										+ cur_invencount
-										+ product.getUnit() + "] 库存不足");
-	
-							} else {
-								throw new Exception("订单创建失败,原因："
-										+ mapRecordProductInfo.get(pss_temp.getId())
-										+ "," + product.getName()
-										+ "存在冲突导致总购买数量超过系统库存，请分别提交订单！");
-							}
-						}else{
-							//记录一下该规格
-							if(mapRecordProductInfo.containsKey(pss_temp.getId())){
-								mapRecordProductInfo.put(pss_temp.getId(), mapRecordProductInfo.get(pss_temp.getId()) +","+product.getName());
+								} else {
+									throw new Exception("订单创建失败,原因："
+											+ mapRecordProductInfo2.get(productSpecificationInfo.getId())
+											+ "," + product.getName()+"["+cur_invencount+product.getUnit()+"]"
+											+ "存在冲突导致总购买数量超过系统库存，请分别提交订单！");
+								}
 							}else{
-								mapRecordProductInfo.put(pss_temp.getId(), product.getName());
+								//记录一下该规格
+								if(mapRecordProductInfo2.containsKey(productSpecificationInfo.getId())){
+									mapRecordProductInfo2.put(productSpecificationInfo.getId(), mapRecordProductInfo2.get(productSpecificationInfo.getId()) +","+product.getName()+"["+cur_invencount+product.getUnit()+"]");
+								}else{
+									mapRecordProductInfo2.put(productSpecificationInfo.getId(), product.getName()+"["+cur_invencount+product.getUnit()+"]");
+								}
 							}
+						} else {
+							throw new Exception("订单创建失败，原因：商品 "+product.getName()+" 选择的规格不存在");
 						}
-
-					} else {
-						throw new Exception("订单创建失败，原因：商品不存在");
 					}
-				
-				}
 
+				} else {
+					// 礼盒包商品
+//				List<ProductPackage> pp = product.getProductPackageList();
+//				for (ProductPackage productPackage : pp) {
+//					pss_temp = new ProductSpecificationStock();
+//					pss_temp.setCompanyId(companyId);
+//					pss_temp.setProductId(productPackage.getProductId());
+//					if(0 == productPackage.getType()){//该商品没有开启规格
+//						pss_temp.setSpecificationInfoId(0);
+//						pss_temp.setType(0);
+//					}else{
+//						pss_temp.setSpecificationInfoId(productPackage.getSpecificationInfoId());
+//						pss_temp.setType(1);
+//					}
+//					pss_temp = productSpecificationStockMapper.selectByProductSpecificationStock(pss_temp);
+//
+//					if (null != pss_temp) {// 基地商品库存
+//						int cur_invencount = pss_temp.getInventorycount();
+//
+//						pss_temp.setInventorycount(tempCount * -1);
+//						// 修改库存
+//						if (productSpecificationStockMapper.updateOrderProdDeal(pss_temp) <= 0) {
+//							if (!mapRecordProductInfo.containsKey(pss_temp.getId())) {
+//								throw new Exception("订单创建失败,原因："
+//										+ product.getName() + "["
+//										+ cur_invencount
+//										+ product.getUnit() + "] 库存不足");
+//
+//							} else {
+//								throw new Exception("订单创建失败,原因："
+//										+ mapRecordProductInfo.get(pss_temp.getId())
+//										+ "," + product.getName()
+//										+ "存在冲突导致总购买数量超过系统库存，请分别提交订单！");
+//							}
+//						}else{
+//							//记录一下该规格
+//							if(mapRecordProductInfo.containsKey(pss_temp.getId())){
+//								mapRecordProductInfo.put(pss_temp.getId(), mapRecordProductInfo.get(pss_temp.getId()) +","+product.getName());
+//							}else{
+//								mapRecordProductInfo.put(pss_temp.getId(), product.getName());
+//							}
+//						}
+//
+//					} else {
+//						throw new Exception("订单创建失败，原因：商品不存在");
+//					}
+//				}
+
+				}
+				i++;
 			}
-			i++;
+		} else {
+			throw new Exception("订单创建失败，原因：参数错误");
 		}
 	}
 	

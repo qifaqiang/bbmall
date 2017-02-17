@@ -74,4 +74,6 @@ public interface ProductSpecificationInfoMapper {
 	List<ProductSpecificationInfo> getAllByPSI(ProductSpecificationInfo psi);
 
     int selectTotalInvcountByProid(Integer prodid);
+
+    int updateKuCunJianNew(ProductSpecificationInfo productSpecificationInfo);
 }

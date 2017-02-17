@@ -546,7 +546,7 @@ id=#{id},name=#{name},price=#{price},catalog_id_1 = #{catalogId1},is_subscribe=#
 	</select>
 	
 	<select id="getPackageByProdIds" resultMap="productMapPackage">
-		SELECT p.id,p.name,p.prod_basic_id,p.type,p.is_specification,p.unit FROM
+		SELECT p.id,p.name,p.prod_basic_id,p.type,p.is_specification,p.unit,p.inventorynumber FROM
 		product p
 		where
 		p.del_flag=0 and
@@ -640,5 +640,11 @@ id=#{id},name=#{name},price=#{price},catalog_id_1 = #{catalogId1},is_subscribe=#
 		1=1 and tmp.del_flag=0 order by
 		<if test="orderBy != null"> ${orderBy} </if>
 	</select>
+
+	<update id="updateOrderProdDealStock" parameterType="Product">
+		update product
+		set inventorynumber = inventorynumber + #{inventorynumber}
+		where id = #{id} and (inventorynumber+#{inventorynumber})>=0
+	</update>
 
 </mapper>
