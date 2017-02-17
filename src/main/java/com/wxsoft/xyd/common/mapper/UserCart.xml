@@ -46,7 +46,7 @@
 	<select id="getUserCartByids" resultMap="userCarSpectMap">
 		SELECT
 		tmp.id,tmp.user_id,tmp.prod_id,tmp.add_time,prod.unit,tmp.count,IFNULL(tmp.spec_id,0) as spec_id,IFNULL(tmp.spec_id,0) as specId
-		,prod.`name`,prod.`picuri`,ifnull(psf.`price`,prod.`price`) as price,psf.`inventorynumber`,psf.`value` 
+		,prod.`name`,prod.`picuri`,prod.company_id,ifnull(psf.`price`,prod.`price`) as price,psf.`inventorynumber`,psf.`value`
 		FROM user_cart tmp 
 		LEFT JOIN product prod ON tmp.`prod_id`=prod.`id`
 		LEFT JOIN product_specification_info psf ON psf.id=tmp.`spec_id`

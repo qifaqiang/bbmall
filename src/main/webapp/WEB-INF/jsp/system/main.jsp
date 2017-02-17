@@ -5,9 +5,6 @@
 <!-- BEGIN PAGE HEADER-->
 <h3 class="page-title">
 	概览
-	<c:if test="${not empty sessionRoleId}">
-		<button class="btn btnRef" style="float: right" onclick="sysRefresh()">刷 新 系 统 缓 存</button>
-	</c:if>
 </h3>
 <div class="page-bar">
 	<ul class="page-breadcrumb">
@@ -360,23 +357,6 @@
 	    return y+"-"+(m<10?"0"+m:m)+"-"+(d<10?"0"+d:d)+' 00:00';
 	}
 	
-	function sysRefresh() {
-		$.ajax({
-			url : "${SHOPDOMAIN}/system/sysProportion/sysRefresh.html",
-			type : "post",
-			beforeSend:function(){
-				$(".btnRef").html("刷新中……");
-			},
-			success : function(data) {
-				if (data == "success") {
-					showMessage("刷新成功");
-				} else {
-					showMessage(data);
-				}
-				$(".btnRef").html("刷 新 系 统 缓 存");
-			}
-		});
-	}
 	$(function() {
 		 $("[data-toggle='popover']").popover(); 
 		$.ajax({

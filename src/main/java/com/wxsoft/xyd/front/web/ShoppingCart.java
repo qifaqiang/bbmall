@@ -499,11 +499,8 @@ public class ShoppingCart extends BaseController {
 	@RequestMapping("/ifAboveStock")
 	public void ifAboveStock(HttpServletResponse response, String prodIds,
 							 String counts, String specIds) {
-
 		JSONObject json = new JSONObject();
-		Map<String, Integer> map = new HashMap<String, Integer>();
-		map = productService
-				.getKuCunByProductIdsVsCompanyIdReturnSpecOrProductid(prodIds, counts, specIds);
+		Map<String, Integer> map = productService.getKuCunByProductIdsVsCompanyIdReturnSpecOrProductid(prodIds, counts, specIds);
 		json.put("map", map);
 		try {
 			responseAjax(json, response);
@@ -535,15 +532,16 @@ public class ShoppingCart extends BaseController {
 			for (int i = 0; i < id.length; i++) {
 				cartIds[i] = Integer.parseInt(id[i]);
 			}
-			List<Map<String, Object>> cartList = userCartService
-					.getUserCartByids(cartIds);// 购物车选中条目
+			List<Map<String, Object>> cartList = userCartService.getUserCartByids(cartIds);// 购物车选中条目
 			json.put(BaseConfig.RESLIST, cartList);
+
+			if (cartList != null && cartList.size() > 0 ) {
+				json.put("companyId", cartList.get(0).get("company_id"));
+			}
 		} else {
 			json.put(BaseConfig.RESCODE, "1");
 			json.put(BaseConfig.RESMESSAGE, BaseConfig.MESSAGE.get("user.ER1025").toString());
 		}
-		String companyId = (String) session.getAttribute("companyId");
-		json.put("companyId", companyId);
 
 		if (user != null) {
 			user = userService.selectByPrimaryKey(user.getId());
@@ -553,7 +551,8 @@ public class ShoppingCart extends BaseController {
 			userLocation = userLocationService
 					.selectByUserLocationOrStatus(userLocation);
 			json.put("userLocation", userLocation);
-			if (user.getIsFirstOrder() == 1) {// 判断是首单
+			/*if (user.getIsFirstOrder() == 1) {
+				// 判断是首单
 				SysProportion sysProp = new SysProportion();
 				List<SysProportion> list = sysProportionService
 						.getAllBySysProportion(sysProp);
@@ -561,13 +560,11 @@ public class ShoppingCart extends BaseController {
 					json.put("firstSubstraPrice", list.get(0)
 							.getFirstSubtractPrice().toString());
 				}
-			}
-
+			}*/
 		}
 		try {
 			responseAjax(json, response);
 		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 

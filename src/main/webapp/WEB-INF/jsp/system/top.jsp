@@ -65,7 +65,15 @@
 			<div class="top-menu">
 				<ul class="nav navbar-nav pull-right">
 					<!-- BEGIN NOTIFICATION DROPDOWN -->
-					<li class="dropdown dropdown-user"><a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown"
+					<c:if test="${not empty sessionRoleId}">
+						<li class="dropdown">
+							<a href="javascript:;" onclick="sysRefresh()" class="dropdown-toggle"> <i class="icon-key"></i> <span class="btnRef" style="color: #fffdfd">刷新系统缓存</span>
+							</a>
+						</li>
+					</c:if>
+
+					<li class="dropdown dropdown-user">
+						<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown"
 						data-close-others="true"> <img src="${SHOPDOMAIN}/front/images/people.jpg" class="img-circle hide1" alt=""> <span
 							class="username username-hide-on-mobile"> <c:if test="${empty sessionUser.companyName }">默认用户</c:if> <c:if
 									test="${not empty sessionUser.companyName }">${sessionUser.companyName }</c:if>
@@ -77,9 +85,11 @@
 						</ul></li>
 					<!-- END USER LOGIN DROPDOWN -->
 					<!-- BEGIN QUICK SIDEBAR TOGGLER -->
-					<li class="dropdown dropdown-quick-sidebar-toggler"><a href="${SHOPDOMAIN}/system/logout.html" class="dropdown-toggle"> <i
+					<li class="dropdown dropdown-quick-sidebar-toggler">
+						<a href="${SHOPDOMAIN}/system/logout.html" class="dropdown-toggle"> <i
 							class="icon-logout"></i>
-					</a></li>
+						</a>
+					</li>
 					<!-- END QUICK SIDEBAR TOGGLER -->
 				</ul>
 			</div>
@@ -130,6 +140,24 @@
 		<script>
 			var SHOPDOMAIN = "${SHOPDOMAIN}";
 			var USERIMGSRC = "${USERIMGSRC}";
+
+            function sysRefresh() {
+                $.ajax({
+                    url : "${SHOPDOMAIN}/system/sysProportion/sysRefresh.html",
+                    type : "post",
+                    beforeSend:function(){
+                        $(".btnRef").html("刷新中……");
+                    },
+                    success : function(data) {
+                        if (data == "success") {
+                            showMessage("刷新成功");
+                        } else {
+                            showMessage(data);
+                        }
+                        $(".btnRef").html("刷新系统缓存");
+                    }
+                });
+            }
 		</script>
 		<!-- END SIDEBAR -->
 		<!-- BEGIN CONTENT -->

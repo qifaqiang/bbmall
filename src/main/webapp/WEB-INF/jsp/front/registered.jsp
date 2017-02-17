@@ -29,7 +29,7 @@
 <div id="loginHeader" class="wrapW">
     <div class="loginHeaderL">
         <a href="index.html">
-            <img src="${SHOPDOMAIN}/front/images/web/pcLogo.png" width="210" height="45" alt=""/></a>
+            <img src="${SHOPDOMAIN}/front/images/web/pcLogo.png" width="211" height="98" alt=""/></a>
        &nbsp; 欢迎注册
     </div>
 </div>

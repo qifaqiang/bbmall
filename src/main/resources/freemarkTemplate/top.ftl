@@ -5,7 +5,7 @@
 <div class="wrapW ofW">
     <div class="headerLogoW flW" style="width:295px;">
     	<a href="${SHOPDOMAIN}/index.html">
-        	<img src="${SHOPDOMAIN}/front/images/web/pcLogo.png" width="223" height="52" alt=""/>
+        	<img src="${SHOPDOMAIN}/front/images/web/pcLogo.png" width="211" height="98" alt=""/>
         </a>
     </div>
     <div class="headerSearchW flW">
