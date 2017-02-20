@@ -500,7 +500,6 @@ public class OrderSeleController extends BaseController {
 					}
 					json.put("res_code", "0");
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
 					json.put("res_code", "user.ER1025");
 					json.put("message", "订单取消失败");
 					e.printStackTrace();

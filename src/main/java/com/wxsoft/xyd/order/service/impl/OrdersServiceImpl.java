@@ -1249,7 +1249,7 @@ public class OrdersServiceImpl implements OrdersService {
 
 				if (product.getType() == 0) {
 					// 普通商品
-					if(null == product.getIsSpecification() || 0 == product.getIsSpecification()){
+					if( "0".equals(specId[i]) || null == specId[i] ){
 						//该商品没有开启规格
 						int cur_invencount = product.getInventorynumber();//该商品当前库存
 						product.setInventorynumber(tempCount * -1);
@@ -1376,7 +1376,6 @@ public class OrdersServiceImpl implements OrdersService {
 	public String updateCompayAddProds(Orders order, Integer nowUser,
 			Integer userType, Integer newCompanyId) throws Exception {
 		// 退货基地操作 要增加库存
-
 		String result = null;
 		OrdersDetail od = new OrdersDetail();
 		od.setOrderId(order.getId());
@@ -1400,7 +1399,7 @@ public class OrdersServiceImpl implements OrdersService {
 		String[] count = null == counts ? null : counts.split(",");
 		String[] specId = null == specIds ? null : specIds.split(",");
 		List<Product> p = productMapper.getPackageByProdIds(prodId);
-		Map<String, Product> mapProduct = new HashMap<String, Product>();
+		Map<String, Product> mapProduct = new HashMap<>();
 		for (Product product : p) {
 			mapProduct.put(product.getId() + "", product);
 		}
@@ -1414,37 +1413,39 @@ public class OrdersServiceImpl implements OrdersService {
 			} else {
 				throw new Exception();
 			}
-
-			if (product.getType() == 0) {// 普通商品
-				if (null != specId) {// 存在规格id
-					pss_temp = new ProductSpecificationStock();
-					pss_temp.setCompanyId(companyId);
-					pss_temp.setProductId(product.getId());
-					if(null == product.getIsSpecification() || 0 == product.getIsSpecification()){//该商品没有开启规格
-						pss_temp.setSpecificationInfoId(0);
-						pss_temp.setType(0);
-					}else{
-						pss_temp.setSpecificationInfoId(Integer.parseInt(specId[i]));
-						pss_temp.setType(1);
-					}
-					pss_temp = productSpecificationStockMapper.selectByProductSpecificationStock(pss_temp);
-
-					if (null != pss_temp) {// 基地商品库存
-						pss_temp.setInventorycount(tempCount * +1);
-						// 修改库存
-						if (productSpecificationStockMapper.updateOrderProdDeal(pss_temp) <= 0) {
+			if (product.getType() == 0) {
+				// 普通商品
+				if (null != specId) {
+					ProductSpecificationInfo productSpecificationInfo = null;
+					if ( "0".equals(specId[i]) ) {
+						//该商品购买的时候没有开启规格
+						product.setInventorynumber(tempCount * +1);
+						if (productMapper.updateOrderProdDealStock(product) <= 0) {
 							throw new Exception("增加：" + product.getName());
 						}
-
 					} else {
-						throw new Exception("增加：" + product.getName());
+						//该商品购买的时候开启规格
+						productSpecificationInfo = new ProductSpecificationInfo();
+						productSpecificationInfo.setId(Integer.parseInt(specId[i]));
+						productSpecificationInfo.setProductId(product.getId());
+						productSpecificationInfo.setDelFlag("0");//未删除的
+						productSpecificationInfo = productSpecificationInfoMapper.selectByProductSpecificationInfo(productSpecificationInfo);
+						if ( null != productSpecificationInfo ) {
+							productSpecificationInfo.setInventorynumber(tempCount * +1);
+							// 修改库存
+							if (productSpecificationInfoMapper.updateKuCunJianNew(productSpecificationInfo) <= 0) {
+								throw new Exception("增加：" + product.getName());
+							}
+						} else {
+							throw new Exception("增加：" + product.getName());
+						}
 					}
 				} else {
 					result = "由于商品：" + product.getName() + "中规格不存在，无法恢复库存";
 				}
 
-			} else {// 礼盒包商品
-				
+			} else {
+				/*// 礼盒包商品
 				List<ProductPackage> pp = product.getProductPackageList();
 				for (ProductPackage productPackage : pp) {
 					pss_temp = new ProductSpecificationStock();
@@ -1472,7 +1473,7 @@ public class OrdersServiceImpl implements OrdersService {
 								+ "中部分组合不存在，无法恢复库存";
 					}
 				
-				}
+				}*/
 			}
 			i++;
 		}
@@ -1486,7 +1487,8 @@ public class OrdersServiceImpl implements OrdersService {
 					.getCouponsRecordId());// 暂不考虑优惠券，回滚是否成功
 		}
 
-		if (userType == 1) {// 用户取消订单
+		if (userType == 1) {
+			// 用户取消订单
 			order.setStatus("0");
 			order.setCancelTime(new Date());
 			if (ordersMapper.updateByPrimaryKeySelective(order) > 0) {
@@ -1499,7 +1501,8 @@ public class OrdersServiceImpl implements OrdersService {
 				ol.setLogTime(Tools.date2Str(new Date()));
 				ordersLogMapper.insertSelective(ol);
 			}
-		} else if (userType == 2) {// 管理员取消订单
+		} else if (userType == 2) {
+			// 管理员取消订单
 			order.setStatus("100");
 			order.setCancelTime(new Date());
 			if (ordersMapper.updateByPrimaryKeySelective(order) > 0) {
@@ -1512,7 +1515,8 @@ public class OrdersServiceImpl implements OrdersService {
 				ol.setLogTime(Tools.date2Str(new Date()));
 				ordersLogMapper.insertSelective(ol);
 			}
-		} else if (userType == 3) {// 管理员修改配送基地
+		} else if (userType == 3) {
+			// 管理员修改配送基地
 			// 如果存在那么修改订单归属
 			if (null != newCompanyId && newCompanyId != 0) {
 				order.setCompanyId(newCompanyId);
