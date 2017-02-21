@@ -103,29 +103,19 @@
           }
         //初始化购物车
          function initCart(){
-         
-        	 var companyId=$.cookie('sys_base_companyId');
-       	  		if(companyId==null||companyId==""){
-       				$.dialog('alertHasOk', '', '为了更好的给您提供服务，请先选择距离您收货地最近的基地', 0,
-						function() {
-					window.location.href = SHOPDOMAIN + '/wap/ditu.html';
-						});
-       	 		 }  
-       	    
         	  $.ajax({
         		  cache:false,
         		  async:false,
         		  url:"${SHOPDOMAIN}/wap/shopCart/userCart.html",
-        		  data:{"companyId":companyId},
         		  success:function(data){
-        			  
         			  var dataInfo=$.parseJSON(data);
-        			  $("#address").text(dataInfo.Company.companyName);
+        			  $("#address").text("齐鲁干烘茶城");
         			  if(dataInfo.res_code=="1"){
             			  $.dialogToMap("alertHasOk","","您还没有登录,点击按钮去登录","去登录",0,function(){
                 			  window.location.href="login.html";
                 		  });
-            		  }else if(dataInfo.res_code=="0"){//购物车没有数据
+            		  }else if(dataInfo.res_code=="0"){
+        			      //购物车没有数据
             			  var evalText = doT.template($("#interpolationtmpl").html());
             			  if(dataInfo.list==null||dataInfo.list==""){
             				  $("#shopping-cart").html("  <div class='w-noOrder'>"+
@@ -136,9 +126,10 @@
             			                "<p class='w-guide'>可以去看看有哪些想买的</p>"+
             			                "<button class='w-randomBtn' onclick='window.location.href=\"index.html\"'>随便逛逛</button>"+
             			            "</div>");
-            			  }else{//购物车数据
-            			  $("#shopping-cart").html(evalText(dataInfo.list));
-            			  $("#shopping-cart").append(" <div style='clear: both' id='bbbbb'></div>");
+            			  }else{
+            			      //购物车数据
+            			    $("#shopping-cart").html(evalText(dataInfo.list));
+            			    $("#shopping-cart").append(" <div style='clear: both' id='bbbbb'></div>");
             			 	 intCartT();
             			 	 setAll();
             			  }
@@ -150,7 +141,6 @@
          }
         //再次判断购物车
           function intCartT(){
-        	  var companyId=$.cookie('sys_base_companyId');
         	  var prods="";
         	  var counts="" ;
         	  var specIds="";
@@ -163,7 +153,7 @@
         		   
         	   });
         	     
-        	  var stockMap= isAbolveStock(prods.replace(/,$/g,""),companyId,counts.replace(/,$/g,""),specIds.replace(/,$/g,"")); 
+        	  var stockMap= isAbolveStock(prods.replace(/,$/g,""),null,counts.replace(/,$/g,""),specIds.replace(/,$/g,""));
         	       
         	    if(stockMap!=null&&stockMap!=""&&stockMap.map!=null&&stockMap.map!=""){
         	  var stock=JSON.stringify(stockMap.map);
@@ -239,11 +229,10 @@
          //减数量
          function reduction(cartId,productId,count,specId){
         	var quantity=Number($("#"+cartId+"quantity").text());
-        	 var companyId=$.cookie('sys_base_companyId');
         	 if(quantity==1){
         		 return false;
         	 }else{
-        		 var stockMap= isAbolveStock(productId,companyId,quantity+1,specId); 
+        		 var stockMap= isAbolveStock(productId,null,quantity+1,specId);
         		  
         	 if(JSON.stringify(stockMap.map).indexOf("SPEC_")>=0||JSON.stringify(stockMap.map).indexOf("P_")>=0){
             	 
@@ -267,9 +256,8 @@
          //加数量
          function plus(cartId,productId,count,specId){
         	 var quantity=Number($("#"+cartId+"quantity").text());
-        	 var companyId=$.cookie('sys_base_companyId');
         	 
-        	 var stockMap= isAbolveStock(productId,companyId,quantity+1,specId); 
+        	 var stockMap= isAbolveStock(productId,null,quantity+1,specId);
         	   
              if(JSON.stringify(stockMap.map).indexOf("SPEC_")>=0||JSON.stringify(stockMap.map).indexOf("P_")>=0){
             	 
@@ -406,8 +394,7 @@
 				 url:"${SHOPDOMAIN}/wap/shopCart/ifAboveStock.html",
 		    	 type:"post",
 		    	 dataType:"json",
-		    	 
-		    	 data:{"prodIds":prodIds,"companyId":compayId,"counts":counts,"specIds":specIds},
+		    	 data:{"prodIds":prodIds,"counts":counts,"specIds":specIds},
 		         success:function(data){
 		        	 
 		        	 stockMap=data;
@@ -426,7 +413,6 @@
        var selectedCount= $(".check").children("img").filter(".onChosee").each(function(){
     	   cartItemIds[index++]=$(this).attr("id").replace("subtotal","");
        }) ;
-       var companyId=$.cookie('sys_base_companyId');  
        if(cartItemIds.length==0){
     	   $.dialog("confrim","请选择商品进行结算","您未选择商品",1500);
     	   return false;
@@ -439,9 +425,7 @@
 			type : "post",
 			dataType:"json",
 			data : {
-				"cartItemIds" :  $("#cartItemIds").val(),
-				companyId:companyId, 
-				 
+				"cartItemIds" :  $("#cartItemIds").val()
 			},
 			success : function(
 					data) {

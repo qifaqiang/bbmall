@@ -2,7 +2,7 @@
 <jsp:include page="top.jsp"></jsp:include>
 <link rel="stylesheet" href="${SHOPDOMAIN}/front/css/wap/redBag.css" />
 <script>
-	document.title = "买生鲜上电商平台";
+	document.title = "买生鲜上齐鲁干烘茶城";
 </script>
 <div class="w-main">
 	<img src="" id="shareImg" alt="" /> <input type="hidden"
@@ -163,10 +163,10 @@
 				$("#shareImg").attr("src", USERIMGSRC + conf.picUrl);
 				$("#rdBagCount").val(conf.count);
 				WXshare = {
-					title : "买生鲜上电商平台",
+					title : "买生鲜上齐鲁干烘茶城",
 					link : SHOPDOMAIN + "/wap/redBag.html?ordersn="
 							+ getRequest('ordersn'),
-					desc : '电商平台专享优惠券,可以在店铺中使用',
+					desc : '齐鲁干烘茶城专享优惠券,可以在店铺中使用',
 					imgUrl : USERIMGSRC + conf.picUrl
 				};
 				wx.config({

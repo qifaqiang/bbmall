@@ -140,7 +140,7 @@
 					src="${USERIMGSRC}${sessionFrontUser.picUrl }" /></a>
 			</div>
 			<div class="per_steptxt flW">
-				<h3>电商平台BABY</h3>
+				<h3>齐鲁干烘茶城BABY</h3>
 				<p>
 					优惠券：<a href="mycoupons.html">&nbsp;<span id="cousys"></span></a>
 				</p>

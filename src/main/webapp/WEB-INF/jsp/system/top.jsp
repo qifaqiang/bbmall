@@ -9,7 +9,7 @@
 <!-- BEGIN HEAD -->
 <head>
 <meta charset="utf-8" />
-<title>电商平台 后台管理</title>
+<title>齐鲁干烘茶城 后台管理</title>
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta content="width=device-width, initial-scale=1.0" name="viewport" />
 <meta http-equiv="Content-type" content="text/html; charset=utf-8">
@@ -52,7 +52,7 @@
 		<div class="page-header-inner">
 			<!-- BEGIN LOGO -->
 			<div class="page-logo">
-				<a href="${SHOPDOMAIN}/system/index.html" class="navbar-brand" style="color: white">电商平台管理系统 </a>
+				<a href="${SHOPDOMAIN}/system/index.html" class="navbar-brand" style="color: white">齐鲁干烘茶城管理系统 </a>
 				<div class="menu-toggler sidebar-toggler hide">
 					<!-- DOC: 删除 the above "hide" to enable the sidebar toggler button on header -->
 				</div>

@@ -5,8 +5,8 @@
 <meta http-equiv="pragma" content="no-cache">
 <meta http-equiv="cache-control" content="no-cache">
 <meta http-equiv="expires" content="0">
-<meta http-equiv="keywords" content="电商平台">
-<meta http-equiv="description" content="电商平台">
+<meta http-equiv="keywords" content="齐鲁干烘茶城">
+<meta http-equiv="description" content="齐鲁干烘茶城">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
 <!-- 启用 WebApp 全屏模式（IOS）-->

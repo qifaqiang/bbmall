@@ -534,7 +534,8 @@ public class ProductServiceImpl implements ProductService {
 				if(null != product){
 					// 判断商品状态
 					if (product.getSellStatus() != 1 || product.getDelFlag() == 1) {
-						if (product.getType() == 0) {// 普通商品
+						if (product.getType() == 0) {
+							// 普通商品
 							if(null == product.getIsSpecification() || 0== product.getIsSpecification()){
 								//没有启用规格
 								result.put("P_" + product.getId(), 0);

@@ -7,7 +7,7 @@
 	src="${SHOPDOMAIN}/front/js/jquery.flexslider-min.js"></script>
 <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
 <script>
-	document.title="电商平台";
+	document.title="齐鲁干烘茶城";
 </script>
 <style>body{padding-bottom:86px}</style>
 <div class="w-main">
@@ -21,9 +21,9 @@
 			</div>
 		</a>
 		***/ %>
-		<h1 class="w-address"></h1>
+		<h1 class="w-address">齐鲁干烘茶城</h1>
 		
-		<div class="w-right-icon" onclick="clearCookie()">
+		<div class="w-right-icon">
 			<img src="${SHOPDOMAIN}/front/images/wap/logo.png" height="0.17rem"
 				alt="logo" />
 		</div>
@@ -215,7 +215,7 @@
 	src="http://api.map.baidu.com/api?v=2.0&ak=L7uiBspEEkoroWef6mZEO66e"></script>
 <script type="text/javascript"
 	src="http://developer.baidu.com/map/jsdemo/demo/convertor.js"></script>
-<script src="${SHOPDOMAIN}/front/js/wap/ceju.js"></script>
+<%--<script src="${SHOPDOMAIN}/front/js/wap/ceju.js"></script>--%>
 <jsp:include page="foot.jsp"></jsp:include>
 <script>
 	$(function() {
@@ -289,8 +289,7 @@
 				SHOPDOMAIN + '/interfaces/productcatalogrecommended.html',
 				function(data) {
 					if (data.res_code == '0') {
-						var evalText = doT.template($("#productlisttmpl")
-								.html());
+						var evalText = doT.template($("#productlisttmpl").html());
 						$("#w-content2").html(evalText(data.list));
 						$("img").lazyload({
 							effect : "fadeIn"
@@ -306,34 +305,29 @@
 
 	//检测当前页面中所有商品的库存情况
 	function getKuCunByProductId() {
-		var companyid = $.cookie('sys_base_companyId');
-		if (null != companyid) {
-			var prod = "";
-			$(".w-product").each(function() {
-				prod += $(this).attr("prodId") + ",";
-			})
-
-			$.post(
-					SHOPDOMAIN + '/interfaces/getKuCunByProductId.html',
-					{
-						prodIds : prod,
-						companyId : companyid
-					},
-					function(data) {
-						if (data.res_code == '0') {
-							var tempSoldOut = "<div class='w-soldOut'></div>";
-							$(data.list).each(
-									function(i, item) {
-										$(".w-product" + item).children().eq(0)
-												.append(tempSoldOut);
-									})
-						} else {
-							showMessage(data.message);
-						}
-					}, "json").error(function() {
-				showError();
-			});
-		}
+		var prod = "";
+		$(".w-product").each(function() {
+			prod += $(this).attr("prodId") + ",";
+		})
+		$.post(
+				SHOPDOMAIN + '/interfaces/getKuCunByProductId.html',
+				{
+					prodIds : prod
+				},
+				function(data) {
+					if (data.res_code == '0') {
+						var tempSoldOut = "<div class='w-soldOut'></div>";
+						$(data.list).each(
+								function(i, item) {
+									$(".w-product" + item).children().eq(0)
+											.append(tempSoldOut);
+								})
+					} else {
+						showMessage(data.message);
+					}
+				}, "json").error(function() {
+			showError();
+		});
 	}
 	function sub4(text){
 		return text.substring(0,4);

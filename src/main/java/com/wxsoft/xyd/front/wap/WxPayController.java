@@ -265,7 +265,7 @@ public class WxPayController extends BaseController {
 			parameters.put("appid", SystemConfig.APPID);
 			parameters.put("mch_id", SystemConfig.PARTNER);
 			parameters.put("nonce_str", PayCommonUtil.CreateNoncestr());
-			parameters.put("body", "电商平台订单");
+			parameters.put("body", "齐鲁干烘茶城订单");
 			parameters.put("out_trade_no", order_t2.getTradingCode());
 
 			String free = String

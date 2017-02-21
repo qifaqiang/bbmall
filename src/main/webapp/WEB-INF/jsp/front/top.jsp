@@ -6,7 +6,7 @@
 <meta charset="UTF-8">
 <meta name="renderer" content="webkit|ie-comp|ie-stand">
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-<title>电商平台</title>
+<title>齐鲁干烘茶城</title>
 <!--全局初始化-->
 <link rel="stylesheet" href="${SHOPDOMAIN}/front/css/web/commonW.css" />
 <link rel="stylesheet" href="${SHOPDOMAIN}/front/css/web/globalW.css" />
@@ -40,7 +40,7 @@
 					<a class="colorAbdW pointerW"  href="javaScript:alert('加入收藏夹失败，请使用Ctrl+D快捷键进行添加操作!');">【加入收藏夹】</a>
 				</ul>
 				<ul class="frW">
-					<li>你好，欢迎来到电商平台！</li>
+					<li>你好，欢迎来到齐鲁干烘茶城！</li>
 					<c:if test="${not empty sessionFrontUser}">
 						<li class="pLoginW"><a href="${SHOPDOMAIN}/personalCenter.html">${sessionFrontUser.name}</a></li>
 						<li class="spaceW"></li>

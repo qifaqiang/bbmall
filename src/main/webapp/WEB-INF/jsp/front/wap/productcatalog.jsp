@@ -218,7 +218,7 @@ body {
 		$('#myTab li:eq(1) a').tab('show');
 	});
 	var WXshare = {
-			title :"电商平台",
+			title :"齐鲁干烘茶城",
 			link : SHOPDOMAIN+"/wap/productcatalog.html",
 			desc : '推荐一家好店，快来瞧一瞧',
 			imgUrl:SHOPDOMAIN+"/front/images/whitelogo.png"

@@ -66,7 +66,7 @@ body {background: none}
 </div>
 </script>
 <script>
-document.title="电商平台     促销活动中心"
+document.title="齐鲁干烘茶城     促销活动中心"
 	//首先得到URL传过来的值
 	var url = decodeURI(location.search); //获取url中"?"符后的字串
 	var theRequest = new Object();

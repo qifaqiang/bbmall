@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>电商平台</title>
+<title>齐鲁干烘茶城</title>
 
 </head>
 <body>
@@ -30,11 +30,11 @@
     margin-bottom: 30px;
     font-size: 25px;
     color: #fb9006;
-    font-weight: bold;">恭喜您成为电商平台公益志愿者</h1>
+    font-weight: bold;">恭喜您成为齐鲁干烘茶城公益志愿者</h1>
             <p class="email_1" style="font-size: 16px;
     color: #2c2c2c;
     line-height: 25px;
-    margin-bottom: 30px;">亲爱的${username}，您好！恭喜您成为电商平台公益志愿者！在这里，您可以行使您的志愿者权益，让我们一起为走失人群尽微薄之力！感谢您的参与！</p>
+    margin-bottom: 30px;">亲爱的${username}，您好！恭喜您成为齐鲁干烘茶城公益志愿者！在这里，您可以行使您的志愿者权益，让我们一起为走失人群尽微薄之力！感谢您的参与！</p>
             <p class="email_2" style="font-size: 16px;
     color: #499322;
     line-height: 25px;">您的用户名：${login}</p>
@@ -42,7 +42,7 @@
     color: #499322;
     line-height: 25px;">您的密码：123456</p>
             <p class="email_3" style="font-size: 12px;
-    color: red;">（请牢记您的用户名跟密码，有任何问题请及时与电商平台公益客服联系。）</p>
+    color: red;">（请牢记您的用户名跟密码，有任何问题请及时与齐鲁干烘茶城公益客服联系。）</p>
             <a href="${domain}/system/login.html" class="btn submitBtn email_4"style="background-color: #f49600;
             display: inline-block;
             text-decoration: none;
@@ -69,7 +69,7 @@
             <p class="email_5" style="   font-size: 12px;">如果无法直接登录，请点击以下链接直接登录。<a href="${domain}/system/login.html">${domain}/system/login.html</a></p>
             <hr class="divider" style="    margin-top: 55px;
     margin-bottom: 55px;"/>
-            <h3>电商平台公益团队</h3>
+            <h3>齐鲁干烘茶城公益团队</h3>
             <p class="email_3" style="font-size: 12px;
     color: red;">(这是一封自动产生的Email，请勿自动回复。)</p>
                 <div class="email_6" style="padding-top: 5px;
@@ -78,7 +78,7 @@
                         <img src="${domain}/front/images/erweima.jpg" class="img-responsive border1"
                              alt="" style=" border: 1px solid #b0aeaf;
     margin-bottom: 15px;">
-                        <p>电商平台公益APP扫描下载</p>
+                        <p>齐鲁干烘茶城公益APP扫描下载</p>
                 </div>
         </div>
         </div>

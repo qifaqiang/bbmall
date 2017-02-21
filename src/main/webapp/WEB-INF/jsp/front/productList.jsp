@@ -244,7 +244,7 @@ if(lipi==1){
 	$(".lipin").addClass("active");
 	$(".shouye").removeClass("active");
 }
-document.title="电商平台     商品列表";
+document.title="齐鲁干烘茶城     商品列表";
 	//首先得到URL传过来的值
 	var url = decodeURI(location.search); //获取url中"?"符后的字串
 	var theRequest = new Object();

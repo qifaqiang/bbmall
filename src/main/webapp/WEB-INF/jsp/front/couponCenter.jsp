@@ -7,7 +7,7 @@
 <meta charset="UTF-8">
 <meta name="renderer" content="webkit|ie-comp|ie-stand">
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-<title>电商平台领券中心</title>
+<title>齐鲁干烘茶城领券中心</title>
     <!--全局初始化-->
 <link rel="stylesheet" href="${SHOPDOMAIN}/front/css/web/productList.css" />
 <link rel="stylesheet" href="${SHOPDOMAIN}/front/css/web/Personal.css" />
@@ -102,7 +102,7 @@ body {     background-color: #FFFFFF ;    font-family: "Microsoft YaHei","΢��
 <div style="clear:both"></div>
 </script>
 <script>
-document.title="电商平台     领券中心"
+document.title="齐鲁干烘茶城     领券中心"
 $("#lingquan").html("领券中心");
 $(function() {
 	getlist(1);	

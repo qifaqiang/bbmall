@@ -42,7 +42,7 @@
 <!--底部-->
 <jsp:include page="footShop.jsp"></jsp:include>
 <script>
-document.title="电商平台-微信扫码支付";
+document.title="齐鲁干烘茶城-微信扫码支付";
 </script>
 </body>
 </html>

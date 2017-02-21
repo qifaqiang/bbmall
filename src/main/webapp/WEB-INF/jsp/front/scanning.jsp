@@ -6,7 +6,7 @@
 <meta charset="UTF-8">
 <meta name="renderer" content="webkit|ie-comp|ie-stand">
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-<title>电商平台</title>
+<title>齐鲁干烘茶城</title>
 <!--全局初始化-->
 <link rel="stylesheet" href="${SHOPDOMAIN}/front/css/web/commonW.css" />
 <link rel="stylesheet" href="${SHOPDOMAIN}/front/css/web/globalW.css" />
@@ -28,7 +28,7 @@
 		<div class="loginHeaderL">
 			<a href="index.html"> <img
 				src="${SHOPDOMAIN}/front/images/web/pcLogo.png" width="210"
-				height="45" alt="" /></a> &nbsp; &nbsp; &nbsp;掌上电商平台，购物更便捷！
+				height="45" alt="" /></a> &nbsp; &nbsp; &nbsp;掌上齐鲁干烘茶城，购物更便捷！
 		</div>
 	</div>
 <style>

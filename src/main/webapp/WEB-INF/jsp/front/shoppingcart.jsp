@@ -154,7 +154,7 @@ body{background-color:white}
 	
 	<script src="${SHOPDOMAIN}/front/js/web/shoppingcar.js"></script>
 	<script type="text/javascript">
-	document.title="电商平台-购物车";
+	document.title="齐鲁干烘茶城-购物车";
 		$(document).ready(function() {
 			$('#jsCarousel').jsCarousel({
 				onthumbnailclick : function(src) {

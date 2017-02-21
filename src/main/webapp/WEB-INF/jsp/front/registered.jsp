@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta name="renderer" content="webkit|ie-comp|ie-stand">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>电商平台</title>
+    <title>齐鲁干烘茶城</title>
     <!--全局初始化-->
     <link rel="stylesheet" href="${SHOPDOMAIN}/front/css/web/commonW.css" />
     <link rel="stylesheet" href="${SHOPDOMAIN}/front/css/web/globalW.css" />
@@ -23,7 +23,7 @@
 <script src="${SHOPDOMAIN}/system/js/jquery.form.js"></script>
 <script type="text/javascript"
 	src="${SHOPDOMAIN}/front/js/jquery.cookie.js"></script>
-    <title>电商平台注册</title>
+    <title>齐鲁干烘茶城注册</title>
 </head>
 <body>
 <div id="loginHeader" class="wrapW">

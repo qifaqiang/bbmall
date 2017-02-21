@@ -92,7 +92,7 @@
 <!--右侧悬浮-->
 <jsp:include page="footShop.jsp"></jsp:include>
 <script type="text/javascript">
-	document.title="电商平台-收银台";
+	document.title="齐鲁干烘茶城-收银台";
 	$(function() {
 		$("#submitt")
 				.click(

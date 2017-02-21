@@ -25,10 +25,10 @@ public class SmsUtil {
 		String content = "";
 		switch (type) {
 		case 1:// 注册
-			content = "尊敬的用户，您正在进行电商平台注册，您的验证码是" + params[0] + "，感谢您的支持！";
+			content = "尊敬的用户，您正在进行齐鲁干烘茶城注册，您的验证码是" + params[0] + "，感谢您的支持！";
 			break;
 		case 2:// 找回密码
-			content = "尊敬的用户，您正在进行电商平台找回密码操作，您的验证码是" + params[0] + "，感谢您的支持！";
+			content = "尊敬的用户，您正在进行齐鲁干烘茶城找回密码操作，您的验证码是" + params[0] + "，感谢您的支持！";
 			break;
 		case 3:// 支付提货码
 			content = "尊敬的用户，您的订单" + params[0] + "已被受理，请凭提货码" + params[1]

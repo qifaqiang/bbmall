@@ -87,7 +87,7 @@ public class PayUnionController extends BaseController {
 			if (orders.getStatus().equals("11")) {
 
 				mv.setViewName("front/toPay");
-				String prodname = "电商平台";
+				String prodname = "齐鲁干烘茶城";
 				Orders changeTradingCode = new Orders();
 				changeTradingCode.setId(orders.getId());
 				changeTradingCode.setTradingCode(GenerateNo.payRecordNo());//

@@ -1,7 +1,7 @@
 <%@ page language="java" import="java.util.*" pageEncoding="utf-8"%>
 <jsp:include page="top.jsp"></jsp:include>
 <script type="text/javascript">
-	document.title="买生鲜上电商平台";
+	document.title="买生鲜上齐鲁干烘茶城";
 	var orderId = GetQueryString("ordersn");
 	$("#ordersn").val(orderId);
 	var redBagMobile = localStorage.getItem("redBagMobile");
@@ -160,10 +160,10 @@
 				$("#shareImg").attr("src", USERIMGSRC + conf.picUrl);
 				$("#rdBagCount").val(conf.count);
 				WXshare = {
-					title : "买生鲜上电商平台",
+					title : "买生鲜上齐鲁干烘茶城",
 					link : SHOPDOMAIN + "/wap/redBag.html?ordersn="
 							+ getRequest('ordersn'),
-					desc : '电商平台专享优惠券,可以在店铺中使用',
+					desc : '齐鲁干烘茶城专享优惠券,可以在店铺中使用',
 					imgUrl : USERIMGSRC + conf.picUrl
 				}
 				wx.config({

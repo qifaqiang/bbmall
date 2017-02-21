@@ -1,6 +1,6 @@
 //获取信息
 function getProdInfo() {
-	$.post(SHOPDOMAIN+ '/interfaces/productInfo/getProductInfo.html',{prodId : getRequest("prodId"),companyId:$.cookie("sys_base_companyId")},
+	$.post(SHOPDOMAIN+ '/interfaces/productInfo/getProductInfo.html',{prodId : getRequest("prodId")},
 		function(data) {
 			if (data.res_code == '0') {
 				var evalText = doT.template($(

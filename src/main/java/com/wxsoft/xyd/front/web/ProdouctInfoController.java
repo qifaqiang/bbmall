@@ -99,43 +99,34 @@ public class ProdouctInfoController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping("/getProductInfo")
-	public void getProductInfo(HttpServletResponse response, Integer prodId,
-			String companyId, HttpServletRequest request, HttpSession session) {
+	public void getProductInfo(HttpServletResponse response, Integer prodId, HttpServletRequest request, HttpSession session) {
 		JSONObject json = new JSONObject();
 		// 获取商品信息
 		Product p = new Product();
 		p.setId(prodId);
-		if (Tools.notEmpty(companyId)) {
-			Map<String, Object> rplist = productService
-					.selectFrontByProductInfo(p);
-			if (null != rplist) {// 判断当前商品是否存在
-				json.put(BaseConfig.RESCODE, "0");
-				json.put(BaseConfig.RESMESSAGE, "success");
-				json.put("prod", rplist);
-				List<String> prodImgList = productImageService
-						.getAllByProductImageRMap(prodId);
-				json.put("prodImgList", prodImgList);
-			} else {
-				//商品不存在
-				json.put(BaseConfig.RESCODE, "ER5001");
-				json.put(BaseConfig.RESMESSAGE,
-						BaseConfig.MESSAGE.get("productInfo.ER5001").toString());
-			}
+		Map<String, Object> rplist = productService.selectFrontByProductInfo(p);
+		if (null != rplist) {// 判断当前商品是否存在
+			json.put(BaseConfig.RESCODE, "0");
+			json.put(BaseConfig.RESMESSAGE, "success");
+			json.put("prod", rplist);
+			List<String> prodImgList = productImageService
+					.getAllByProductImageRMap(prodId);
+			json.put("prodImgList", prodImgList);
+
 			// 获取基地的基本信息
-			Company c = companyService.getCompanyWxByCompanyId(Integer
-					.parseInt(companyId));
+			Company c = companyService.getCompanyWxByCompanyId((int)rplist.get("company_id"));
 			json.put("sendPrice", c.getSendPrice());
 			json.put("chargeSendPrice", c.getChargeSendPrice());
+
 		} else {
-			//请先选择基地
-			json.put(BaseConfig.RESCODE, "ER5002");
+			//商品不存在
+			json.put(BaseConfig.RESCODE, "ER5001");
 			json.put(BaseConfig.RESMESSAGE,
-					BaseConfig.MESSAGE.get("productInfo.ER5002").toString());
+					BaseConfig.MESSAGE.get("productInfo.ER5001").toString());
 		}
 		try {
 			responseAjax(json, response);
 		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

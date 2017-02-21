@@ -6,7 +6,7 @@
 <meta charset="UTF-8">
 <meta name="renderer" content="webkit|ie-comp|ie-stand">
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-<title>电商平台找回密码</title>
+<title>齐鲁干烘茶城找回密码</title>
 <!--全局初始化-->
 <script type="text/javascript"
 	src="http://apps.bdimg.com/libs/jquery/1.9.1/jquery.min.js"></script>
@@ -119,7 +119,7 @@
 		<div class="loginsecL">版权所有 ©${SYSPROPORTION.copyrights}</div>
 	</div>
 	<script>
-		document.title = "电商平台    找回密码"
+		document.title = "齐鲁干烘茶城    找回密码"
 		var SHOPDOMAIN = "${SHOPDOMAIN}";
 		var wait = 60;
 		function time(o) {

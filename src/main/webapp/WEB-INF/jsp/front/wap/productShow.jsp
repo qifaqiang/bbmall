@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<title>电商平台</title>
+<title>齐鲁干烘茶城</title>
 <meta charset="utf-8">
 <meta content="" name="description">
 <meta content="" name="keywords">
@@ -61,7 +61,7 @@
 		goodsId : getRequest("prodId"),
 		limit : {
 			"val" : 0,
-			"name" : "电商平台"
+			"name" : "齐鲁干烘茶城"
 		}, //val: 1 只允许粉丝购买
 		attention : {
 			val : 1,
@@ -504,7 +504,7 @@
 	{{}}}
 	</script>
 	<script src="${SHOPDOMAIN}/front/js/jquery.hDialog.js"></script>
-	<script src="${SHOPDOMAIN}/front/js/wap/ceju.js"></script>
+	<%--<script src="${SHOPDOMAIN}/front/js/wap/ceju.js"></script>--%>
 	<script src="${SHOPDOMAIN}/common/productShow/js/goodsInfo.js"></script>
 	
 	<script type="text/javascript"
@@ -515,7 +515,6 @@
 	var detailSpecList = "";
 	var prodType ="";
 	var isSpecification ="";
-
 		$(function() {
 			$("#maxInventory").val("0");
 			$("#prodtype").val("");

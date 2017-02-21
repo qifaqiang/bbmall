@@ -263,7 +263,7 @@ public class IndexController extends BaseController {
 	 */
 	@RequestMapping("/getKuCunByProductId")
 	public void getKuCunByProductId(HttpServletResponse response,
-			String prodIds, Integer companyId, HttpServletRequest request,
+			String prodIds, HttpServletRequest request,
 			HttpSession session) {
 		JSONObject json = new JSONObject();
 		List<Integer> canNotSaleProduct = productService

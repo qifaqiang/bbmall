@@ -72,7 +72,7 @@
 <!--弹窗登陆-->
 	<div class="loginFormP layerLoginBox12" style="display:none;margin:0">
 				<div class="formTitle clearfixW">
-					<span class="formTitleL">电商平台会员</span> <a href="registered.html"><span
+					<span class="formTitleL">齐鲁干烘茶城会员</span> <a href="registered.html"><span
 						class="formTitleR">立即注册</span></a>
 				</div>
 				<form action="${SHOPDOMAIN}/userLogin.html" class="form-horizontal "

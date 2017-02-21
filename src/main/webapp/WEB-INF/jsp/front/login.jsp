@@ -6,7 +6,7 @@
 <meta charset="UTF-8">
 <meta name="renderer" content="webkit|ie-comp|ie-stand">
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-<title>电商平台登录</title>
+<title>齐鲁干烘茶城登录</title>
 <!--全局初始化-->
 <link rel="stylesheet" href="${SHOPDOMAIN}/front/css/web/commonW.css" />
 <link rel="stylesheet" href="${SHOPDOMAIN}/front/css/web/globalW.css" />

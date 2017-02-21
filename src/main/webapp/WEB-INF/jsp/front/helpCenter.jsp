@@ -26,7 +26,7 @@
 					<div class="tabcon">
 						<h4 class="help-tit-l2"></h4>
 						<ul class="help_list">
-						<li style="text-align:center; font-size:40px; font-weight:bold; margin-top:100px;"><a> <b></b>电商平台帮助中心
+						<li style="text-align:center; font-size:40px; font-weight:bold; margin-top:100px;"><a> <b></b>齐鲁干烘茶城帮助中心
 							</a></li>
 						</ul>
 					</div>
@@ -73,7 +73,7 @@
 			</div>
 </script>
 	<script>
-	document.title="电商平台     帮助中心";
+	document.title="齐鲁干烘茶城     帮助中心";
 	$("#lingquan").html("帮助中心");
 	//首先得到URL传过来的值
 	var url = decodeURI(location.search); //获取url中"?"符后的字串

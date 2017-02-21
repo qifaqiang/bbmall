@@ -110,7 +110,7 @@ public class PayAlipayController extends BaseController {
 						String out_trade_no = order_t2.getTradingCode();
 
 						// 订单名称，必填
-						String subject = "电商平台";
+						String subject = "齐鲁干烘茶城";
 
 						// 付款金额，必填
 						String total_fee = new String(String.valueOf(orders
@@ -407,7 +407,7 @@ public class PayAlipayController extends BaseController {
 						String out_trade_no = order_t2.getTradingCode();
 
 						// 订单名称，必填
-						String subject = "电商平台";
+						String subject = "齐鲁干烘茶城";
 
 						// 付款金额，必填
 						String total_fee = new String(String.valueOf(orders

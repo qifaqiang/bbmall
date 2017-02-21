@@ -432,12 +432,6 @@ public class ShoppingCart extends BaseController {
 			HttpServletResponse response, HttpSession session) {
 		JSONObject json = new JSONObject();
 		User user = (User) session.getAttribute(SystemConfig.SESSION_FRONT_USER);// 登录用户
-//		if (companyId != null && companyId != "") {
-//			Company company = companyService.getCompanyById(Integer
-//					.parseInt(companyId));
-//			json.put("Company", company);
-//		}
-
 		if (user == null) {// 用户未登录
 			json.put(BaseConfig.RESCODE, "1");
 			json.put(BaseConfig.RESMESSAGE, BaseConfig.MESSAGE.get("user.ER1025").toString());

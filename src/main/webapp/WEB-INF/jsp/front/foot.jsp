@@ -77,7 +77,7 @@
             <dt class="aboutW">
       <img src="${SHOPDOMAIN}/front/images/web/footer4.png"/>      
             关于我们</dt>
-            <dd><a href="">关于电商平台</a></dd>
+            <dd><a href="">关于齐鲁干烘茶城</a></dd>
             <dd><a href="">联系我们</a></dd>
             <dd><a href="">基地查询</a></dd>
             <dd><a href="">业务合作</a></dd>
