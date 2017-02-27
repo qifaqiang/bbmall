@@ -4,11 +4,7 @@ import java.awt.Image;
 import java.awt.color.ColorSpace;
 import java.awt.image.BufferedImage;
 import java.awt.image.ColorConvertOp;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -908,5 +904,31 @@ public class Tools {
 			}
 		}
 		return res;
+	}
+
+	public static boolean RectangleImage(String imgUrl, byte[] imgBytes, Integer[] widthTemp, Integer[] heightTemp) {
+		boolean flag = false;
+		for (int i = 0; i < widthTemp.length; i++) {
+			try {
+				BufferedImage sourceImg = ImageIO.read(new ByteArrayInputStream(imgBytes));
+				Double height = (double) sourceImg.getHeight();
+				Double width = (double) sourceImg.getWidth();
+				if (width > height) {
+					height = height * (widthTemp[i] / width);
+					width = widthTemp[i] * 1.0;
+				} else {
+					width = width * (heightTemp[i] / height);
+					height = heightTemp[i] * 1.0;
+				}
+				int quality = 500;
+				ThumbNailHelper.createThumbnailByRectangle(imgUrl,
+						width.intValue(), height.intValue(), quality, imgUrl,
+						widthTemp[i], heightTemp[i]);
+				flag = true;
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		return flag;
 	}
 }

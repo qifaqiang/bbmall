@@ -105,12 +105,9 @@
 												+ " </td></tr>");
 					}
 					//alert(dataInfo.list);
-					var evalText = doT.template($("#interpolationtmpl")
-							.html());
+					var evalText = doT.template($("#interpolationtmpl").html());
 					$("#shopping-cart").html(evalText(dataInfo.list));//初始化购物车条目
-					$("#shopping-cart")
-							.append(
-									" <div style='clear: both' id='bbbbb'></div>");
+					$("#shopping-cart").append("<div style='clear: both' id='bbbbb'></div>");
 					getCompanyInfo();//配送费
 					intCartT();
 					getPromotionActivity();//促销活动
