@@ -252,7 +252,7 @@ public class ProdouctInfoController extends BaseController {
 								psd_t.setDetailName(psid.getSpecificationDetailName());
 								prodSpecDetailList.add(psd_t);
 							}
-							id_val += psid.getSpecificatonId()+"_"+psid.getSpecificationDetailId()+"_";
+							id_val += psid.getSpecificatonId()+"_"+psid.getSpecificationDetailId()+";";
 							specname_val += psid.getSpecificationDetailName()+"、";
 						}
 						

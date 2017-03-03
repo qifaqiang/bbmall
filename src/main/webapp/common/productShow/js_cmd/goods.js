@@ -1379,7 +1379,8 @@ define(function(require, exports, module){
 				});
 					**/
 				HTML = '';
-				if(skuData.prodType == 0){//普通商品
+				if(skuData.prodType == 0){
+					//普通商品
 					$.each(skuData.prodSpecList,function(index,item){
 						var detail_spec = "";
 						var cur_main_specid = item.id;

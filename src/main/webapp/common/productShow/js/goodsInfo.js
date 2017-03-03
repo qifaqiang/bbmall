@@ -179,12 +179,8 @@ function chosespec(curv){
      var specLen = mainSpecList.length;
      
      if(specLen > 0){//存在规格
-     	var ck_count = 0;
      	var spec_vt = new Array();
-     	
-     	for(var m = 1;m<= specLen;m++){
-     		ck_count += $("input:radio[name=sku_"+m+"]:checked").length;
-     	}
+     	var ck_count = $(".label_specs:checked").length;
      	
      	if(ck_count == specLen){//所有规格都选中了,开始遍历匹配的规格
      		var price_t = "";
