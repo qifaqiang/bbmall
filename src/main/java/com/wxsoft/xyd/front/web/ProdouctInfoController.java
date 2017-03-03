@@ -85,8 +85,6 @@ public class ProdouctInfoController extends BaseController {
 	@Autowired
 	private ProductSpecificationStockService productSpecificationStockService;
 	@Autowired
-	private CompanyStockService companyStockService;
-	@Autowired
 	private UserCollectionService userCollectionService;
 	@Autowired
 	private PromotionProductService promotionProductService;

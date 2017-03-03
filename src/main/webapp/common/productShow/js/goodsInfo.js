@@ -187,9 +187,10 @@ function chosespec(curv){
      		var count_t = "";
      		var specInfoId_t = "";
      		var marketPrice_t = "";
-     		for(var j = 1;j <= specLen;j++){
-     			spec_vt[(j-1)] = $("input:radio[name=sku_"+j+"]:checked").attr("specid");
-     		}
+
+            $(".label_specs:checked").each(function (n,val) {
+                spec_vt.push($(val).attr("specid"));
+            })
      		
      		$.each(prodSpecInfoList,function(n,val){
      			var spec_id_v = val.id_val;
@@ -245,7 +246,6 @@ function chosespec(curv){
 				$("#label_sku_Stock").html("库存充足");
 				$("#btn_add_shopcart").addClass("on");
 			}
-				
      	}else{
      		
      	}
