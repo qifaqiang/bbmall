@@ -207,9 +207,8 @@
 	window.history.forward(-1);
 	
 	$(function() {//初始化
-		$("#companyBaseName").html($.cookie('sys_company_name'));
-		$
-				.ajax({
+//		$("#companyBaseName").html($.cookie('sys_company_name'));
+		$.ajax({
 					async : false,
 					type : "post",
 					url : "${SHOPDOMAIN}/wap/shopCart/showCartItem.html",
@@ -718,7 +717,7 @@
 
 			data : {
 				"prodIds" : prodIds,
-				"companyId" : compayId,
+//				"companyId" : compayId,
 				"counts" : counts,
 				"specIds" : specIds
 			},

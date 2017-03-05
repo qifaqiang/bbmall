@@ -93,8 +93,8 @@ function goodInfo(){
 		url: APP.urls.goodInfo,
 		dataType: "json",
 		data: {
-		    GoodsId: APP.goodsId,
-		    companyId:$.cookie("sys_base_companyId")
+		    GoodsId: APP.goodsId
+		    // companyId:$.cookie("sys_base_companyId")
 		},
 		async:false,
 		success: function(res){
@@ -252,8 +252,8 @@ $(".appendShopBtn").click(function(){
 		        data: {
 		        	prodId: APP.goodsId,
 		            specId: sepcId,
-		            count: $(".proCount").html(),
-		            companyId:$.cookie("sys_base_companyId")
+		            count: $(".proCount").html()
+		            // companyId:$.cookie("sys_base_companyId")
 		        },
 		        async: true,
 		        success: function (res) {

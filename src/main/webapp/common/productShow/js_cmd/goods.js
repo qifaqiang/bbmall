@@ -44,8 +44,8 @@ define(function(require, exports, module){
 					type: "POST",
 					url: APP.urls.goodInfo,
 					data: {
-					    GoodsId: APP.goodsId,
-					    companyId:$.cookie("sys_base_companyId")
+					    GoodsId: APP.goodsId
+					    // companyId:$.cookie("sys_base_companyId")
 					},
 					async:true,
 					success: function(res){
@@ -395,8 +395,8 @@ define(function(require, exports, module){
 	        data: {
 	        	prodId: APP.goodsId,
 	            specId: sepcId,
-	            count: $("#sku_number").val(),
-	            companyId:$.cookie("sys_base_companyId")
+	            count: $("#sku_number").val()
+	            // companyId:$.cookie("sys_base_companyId")
 	        },
 	        async: true,
 	        success: function (res) {

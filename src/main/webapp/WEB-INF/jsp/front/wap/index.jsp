@@ -210,11 +210,11 @@
 	</script>
 <script type="text/javascript"
 	src="${SHOPDOMAIN}/front/js/wap/wxshare.js"></script>
-<div id="map" style="display:none"></div>
+<%--<div id="map" style="display:none"></div>
 <script type="text/javascript"
 	src="http://api.map.baidu.com/api?v=2.0&ak=L7uiBspEEkoroWef6mZEO66e"></script>
 <script type="text/javascript"
-	src="http://developer.baidu.com/map/jsdemo/demo/convertor.js"></script>
+	src="http://developer.baidu.com/map/jsdemo/demo/convertor.js"></script>--%>
 <%--<script src="${SHOPDOMAIN}/front/js/wap/ceju.js"></script>--%>
 <jsp:include page="foot.jsp"></jsp:include>
 <script>

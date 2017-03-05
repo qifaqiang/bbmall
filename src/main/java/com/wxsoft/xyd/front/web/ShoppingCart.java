@@ -515,8 +515,7 @@ public class ShoppingCart extends BaseController {
 	public void showCartItem(HttpServletRequest request,
 			HttpServletResponse response, HttpSession session) {
 		JSONObject json = new JSONObject();
-		User user = (User) session
-				.getAttribute(SystemConfig.SESSION_FRONT_USER);
+		User user = (User) session.getAttribute(SystemConfig.SESSION_FRONT_USER);
 		String cartItems = (String) session.getAttribute("cartItemIds");
 
 		if (cartItems != null && cartItems != "") {
