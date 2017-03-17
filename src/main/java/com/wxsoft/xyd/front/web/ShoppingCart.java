@@ -142,8 +142,7 @@ public class ShoppingCart extends BaseController {
 					userCart.setUserId(user.getId());
 					userCart.setProdId(prodId);
 					userCart.setSpecId(null == specId ? 0 : specId);
-					UserCart userCartInfo = userCartService
-							.selectByUserCart(userCart);// 登录用户的购物车和该商品的id
+					UserCart userCartInfo = userCartService.selectByUserCart(userCart);// 登录用户的购物车和该商品的id
 														// 或者规格
 					if (null != userCartInfo) {
 						// 购物车中存在当前规格的商品
@@ -537,12 +536,11 @@ public class ShoppingCart extends BaseController {
 		}
 
 		if (user != null) {
-			user = userService.selectByPrimaryKey(user.getId());
+//			user = userService.selectByPrimaryKey(user.getId());
 			UserLocation userLocation = new UserLocation();
 			userLocation.setUserid(user.getId());
 			userLocation.setStatus(true);
-			userLocation = userLocationService
-					.selectByUserLocationOrStatus(userLocation);
+			userLocation = userLocationService.selectByUserLocationOrStatus(userLocation);
 			json.put("userLocation", userLocation);
 			/*if (user.getIsFirstOrder() == 1) {
 				// 判断是首单

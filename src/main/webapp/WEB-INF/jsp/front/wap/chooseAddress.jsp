@@ -42,8 +42,7 @@ document.title = "选择地址";
 				+ id + "&urls=cart-confirmation-order.html";
 	}
 	function editStatus(id) {
-		$
-				.post(
+		$.post(
 						SHOPDOMAIN + '/interfaces/userLocation/upstatus.html',
 						{
 							id : id,

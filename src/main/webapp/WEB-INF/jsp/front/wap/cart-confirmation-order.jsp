@@ -453,8 +453,7 @@
 		var orderPrice = $("#allTotal").text();
 	 
 
-		$
-				.ajax({
+		$.ajax({
 					async : false,
 					url : "${SHOPDOMAIN}/wap/shopCart/getSysCouposRecordByUserId.html",
 					type : "post",
@@ -751,15 +750,13 @@
 			 affectivepay=0;
 		}else{ 
 			var fistPrice=$("#firstSubstraPrice").val();
-			if(fistPrice!=null&&fistPrice!=""){
+			if( fistPrice!=null&&fistPrice!="" ){
 				$("#firstSubstraInfo").show();
 				affectivepay=parseFloat(affectivepay)-parseFloat(fistPrice);
 				if(parseFloat(affectivepay)<=0){
 					affectivepay=0;
 				}
-		       }
-			
-		
+			}
 		}
 		var ifsend = "";
 		if (shipText == "商家配送") {
