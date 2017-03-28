@@ -801,7 +801,6 @@ public class OrdersServiceImpl implements OrdersService {
 	@Override
 	public String updateByOrderReturnSystem(Orders order, OrdersReturn remark)
 			throws Exception {
-		// TODO Auto-generated method stub
 		String result = null;
 		if (remark.getStatus() == 1) {// 审核通过
 			order.setIs_over(1);// 将订单修改结束装填
@@ -810,7 +809,8 @@ public class OrdersServiceImpl implements OrdersService {
 
 		if (ordersMapper.updateByPrimaryKeySelective(order) > 0) {
 			if (returnOrderMapper.updateByPrimaryKeySelective(remark) > 0) {
-				if (remark.getStatus() == 1) {// 审核通过
+				if (remark.getStatus() == 1) {
+					// 审核通过
 					order.setIs_over(1);
 					OrdersLog ol = new OrdersLog();
 					ol.setOperator(order.getCompanyId());
@@ -822,10 +822,44 @@ public class OrdersServiceImpl implements OrdersService {
 					if (ordersLogMapper.insertSelective(ol) > 0) {
 						OrdersDetail od = new OrdersDetail();
 						od.setOrderId(order.getId());
-						List<OrdersDetail> odlist = ordersDetailMapper
-								.getAllByOrdersDetail(od);
+						List<OrdersDetail> odlist = ordersDetailMapper.getAllByOrdersDetail(od);
 
-						String prodIds = "";
+						if ( null != odlist && odlist.size() > 0 ) {
+							Product product = null;
+							ProductSpecificationInfo productSpecificationInfo = null;
+							for (OrdersDetail ordersDetail : odlist ) {
+								int tempCount = ordersDetail.getProdCount().intValue();
+								product = productMapper.selectByPrimaryKey(ordersDetail.getProdId());
+								if ( product.getType() == 0 ) {
+									// 普通商品
+									if ( "0".equals(ordersDetail.getProdSpecId()) ) {
+										//该商品购买的时候没有开启规格
+										product.setInventorynumber(tempCount * +1);
+										if (productMapper.updateOrderProdDealStock(product) <= 0) {
+											throw new Exception("增加：" + product.getName());
+										}
+									} else {
+										//该商品购买的时候开启规格
+										productSpecificationInfo = new ProductSpecificationInfo();
+										productSpecificationInfo.setId(Integer.parseInt(ordersDetail.getProdSpecId()));
+										productSpecificationInfo.setProductId(product.getId());
+										productSpecificationInfo.setDelFlag("0");//未删除的
+										productSpecificationInfo = productSpecificationInfoMapper.selectByProductSpecificationInfo(productSpecificationInfo);
+										if ( null != productSpecificationInfo ) {
+											productSpecificationInfo.setInventorynumber(tempCount * +1);
+											// 修改库存
+											if (productSpecificationInfoMapper.updateKuCunJianNew(productSpecificationInfo) <= 0) {
+												throw new Exception("增加：" + product.getName());
+											}
+										} else {
+											throw new Exception("增加：" + product.getName());
+										}
+									}
+								}
+							}
+						}
+
+						/*String prodIds = "";
 						Integer companyId = order.getCompanyId();
 						String counts = "";
 						String specIds = "";
@@ -865,8 +899,10 @@ public class OrdersServiceImpl implements OrdersService {
 								throw new Exception();
 							}
 
-							if (product.getType() == 0) {// 普通商品
-								if (null != specId) {// 存在规格id
+							if (product.getType() == 0) {
+								// 普通商品
+								if (null != specId) {
+									// 存在规格id
 									pss_temp = new ProductSpecificationStock();
 									pss_temp.setCompanyId(companyId);
 									pss_temp.setProductId(product.getId());
@@ -878,7 +914,8 @@ public class OrdersServiceImpl implements OrdersService {
 										pss_temp.setType(1);
 									}
 									pss_temp = productSpecificationStockMapper.selectByProductSpecificationStock(pss_temp);
-									if (null != pss_temp) {// 基地商品库存
+									if (null != pss_temp) {
+										// 基地商品库存
 										int cur_invencount = pss_temp.getInventorycount();
 										
 										pss_temp.setInventorycount(tempCount * +1);
@@ -967,7 +1004,7 @@ public class OrdersServiceImpl implements OrdersService {
 								}
 							}
 							i++;
-						}
+						}*/
 
 						if (null != order.getCouponsRecordId()
 								&& order.getCouponsRecordId() != 0) {

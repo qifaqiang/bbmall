@@ -292,9 +292,6 @@ public class OrdersControlloer extends BaseController {
 	 * 退货
 	 * 
 	 * @param session
-	 * @param loginname
-	 * @param password
-	 * @param code
 	 * @return
 	 */
 	@RequestMapping(value = "/tuihuo", method = RequestMethod.POST)
