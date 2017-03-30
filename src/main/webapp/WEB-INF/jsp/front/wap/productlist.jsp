@@ -528,11 +528,6 @@ catalogId2name = theRequest['catalogId2name'];
 	
 	$(function() {
 		$.goTop();
-		 var companyId=$.cookie('sys_base_companyId');
-	  	 if(companyId==null||companyId==""){
-				$.dialog('alertHasOk', '', '为了更好的给您提供服务，请先选择距离您收货地最近的基地', 0,
-					function() { window.location.href = SHOPDOMAIN + '/wap/ditu.html'});
-	 	 }  
 		currentNum=1;
 	    if (url.indexOf("?") != -1) {
 	        if(search!=null&&search!=""){
@@ -638,29 +633,26 @@ $(window).scroll(function(){
 	
 //检测当前页面中所有商品的库存情况
 function getKuCunByProductId(prodId) {
-	var companyid = $.cookie('sys_base_companyId');
-	if (null != companyid) {
-		$.post(
-				SHOPDOMAIN + '/interfaces/getKuCunByProductId.html',
-				{
-					prodIds : prodId,
-					companyId : companyid
-				},
-				function(data) {
-					if (data.res_code == '0') {
-						var tempSoldOut = "<a class='w-soldOut'></a>";
-						$(data.list).each(
-								function(i, item) {
-									$(".w-product" + item).children().eq(0)
-									.append(tempSoldOut);
-								});
-					} else {
-						showMessage(data.message);
-					}
-				}, "json").error(function() {
-			showError();
-		});
-	}
+    $.post(
+        SHOPDOMAIN + '/interfaces/getKuCunByProductId.html',
+        {
+            prodIds : prodId,
+            companyId : companyid
+        },
+        function(data) {
+            if (data.res_code == '0') {
+                var tempSoldOut = "<a class='w-soldOut'></a>";
+                $(data.list).each(
+                    function(i, item) {
+                        $(".w-product" + item).children().eq(0)
+                            .append(tempSoldOut);
+                    });
+            } else {
+                showMessage(data.message);
+            }
+        }, "json").error(function() {
+        showError();
+    });
 }
 
 
@@ -671,8 +663,7 @@ $(document).on("click",".sp-cart",function(event){
         data: {
         	prodId: $(this).attr("prodId"),
             specId: $(".w-product"+$(this).attr("prodId")).attr("specid"),
-            count: 1,
-            companyId:$.cookie("sys_base_companyId")
+            count: 1
         },
         async: true,
         success: function (res) {

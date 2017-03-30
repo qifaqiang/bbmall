@@ -137,12 +137,6 @@ body {
 <script>
 	document.title="商品分类";
 	$(function() {
-		 var companyId=$.cookie('sys_base_companyId');
-	  	 if(companyId==null||companyId==""){
-				$.dialog('alertHasOk', '', '为了更好的给您提供服务，请先选择距离您收货地最近的基地', 0,
-					function() { window.location.href = SHOPDOMAIN + '/wap/ditu.html'
-					});
-	 	 }
 		product();
 	});
 
